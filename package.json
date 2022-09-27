@@ -1,0 +1,11 @@
+{
+  "name": "node-js-telegram-bot",
+  "version": "1.0.0",
+  "description": "A CEX Telegram bot using a webapp for TON Rocket",
+  "main": "index.js",
+  "author": "2ico",
+  "license": "MIT",
+  "dependencies": {
+    "telegraf": "^4.9.2"
+  }
+}
