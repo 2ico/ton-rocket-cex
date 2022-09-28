@@ -1,4 +1,4 @@
-import { Telegraf } from "telegraf";
+const { Telegraf } = require('telegraf');
 const DOMAIN = "desolate-savannah-32183.herokuapp.com"
 const PORT = 5000
 
@@ -18,7 +18,7 @@ bot.launch({
     // Optional path to listen for.
     // `bot.secretPathComponent()` will be used by default
     hookPath: '',
-    
+
     // Optional secret to be sent back in a header for security.
     // e.g.: `crypto.randomBytes(64).toString("hex")`
     secretToken: crypto.randomBytes(64).toString("hex"),
