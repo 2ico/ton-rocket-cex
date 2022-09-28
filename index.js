@@ -1,13 +1,13 @@
 const { Telegraf } = require('telegraf');
 const crypto = require('crypto');
-const DOMAIN = "desolate-savannah-32183.herokuapp.com"
+const DOMAIN = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 const PORT = process.env.PORT
 
 require('dotenv').config()
 
 const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
-bot.on("text", ctx => ctx.reply("Hello"));
+bot.on("text", ctx => ctx.reply(`Hello ${ctx.user.name}`));
 
 // Start webhook via launch method (preferred)
 bot.launch({
