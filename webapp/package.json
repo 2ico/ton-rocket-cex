@@ -4,9 +4,5 @@
   "description": "Webapp on CEX Telegram bot for TON Rocket",
   "main": "index.js",
   "author": "2ico",
-  "license": "MIT",
-  "scripts": {
-    "build": "yarn workspaces foreach run build",
-    "start": "yarn workspaces server start"
-  }
+  "license": "MIT"
 }

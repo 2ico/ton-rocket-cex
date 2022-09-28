@@ -5,9 +5,13 @@
   "main": "index.js",
   "author": "2ico",
   "license": "MIT",
+  "packageManager": "yarn@3.2.3",
   "workspaces": [
     "bot",
     "webapp"
   ],
-  "packageManager": "yarn@3.2.3"
+  "scripts": {
+    "build": "yarn workspaces foreach run build",
+    "start": "yarn workspaces server start"
+  }
 }
