@@ -1,17 +1,13 @@
 {
-  "name": "node-js-telegram-bot",
+  "name": "ton-rocket-cex",
   "version": "1.0.0",
   "description": "A CEX Telegram bot using a webapp for TON Rocket",
   "main": "index.js",
   "author": "2ico",
   "license": "MIT",
-  "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
-  },
-  "dependencies": {
-    "crypto": "^1.0.1",
-    "dotenv": "^16.0.2",
-    "telegraf": "^4.9.2"
-  }
+  "workspaces": [
+    "bot",
+    "webapp"
+  ],
+  "packageManager": "yarn@3.2.3"
 }
