@@ -20,7 +20,7 @@ bot.launch({
 
     // Optional path to listen for.
     // `bot.secretPathComponent()` will be used by default
-    hookPath: '',
+    // hookPath: '',
 
     // Optional secret to be sent back in a header for security.
     // e.g.: `crypto.randomBytes(64).toString("hex")`
