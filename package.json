@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "2ico",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
   "dependencies": {
     "telegraf": "^4.9.2"
   }
