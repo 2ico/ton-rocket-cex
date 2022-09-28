@@ -7,7 +7,12 @@ require('dotenv').config()
 
 const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
-bot.on("text", ctx => ctx.reply(`Hello ${ctx.user.name}`));
+bot.on("text", ctx => ctx.reply(`Hello ${ctx.from.first_name}`, {
+    reply_markup: {
+        inline_keyboard: [
+            [{ text: 'Open webapp', web_app: {url: 'https://test123.heroku.com'} }],
+        ]
+    }}));
 
 // Start webhook via launch method (preferred)
 bot.launch({
