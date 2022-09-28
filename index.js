@@ -4,7 +4,6 @@ const DOMAIN = "desolate-savannah-32183.herokuapp.com"
 const PORT = 5000
 
 require('dotenv').config()
-console.log(process.env)
 
 const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
