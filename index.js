@@ -1,4 +1,5 @@
 const { Telegraf } = require('telegraf');
+const crypto = require('crypto');
 const DOMAIN = "desolate-savannah-32183.herokuapp.com"
 const PORT = 5000
 
