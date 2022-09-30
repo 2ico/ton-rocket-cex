@@ -11,7 +11,7 @@ const PORT = process.env.PORT
 
 const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
-bot.on("text", ctx => ctx.reply(`Hello ${ctx.from.first_name}`, {
+bot.on("text", ctx => ctx.reply(`Hello ${ctx.from.first_name}!`, {
     reply_markup: {
         inline_keyboard: [
             [{ text: 'Open webapp', web_app: {url: WEBAPP_URL} }],
