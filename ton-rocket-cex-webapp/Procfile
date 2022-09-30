@@ -1,1 +1,1 @@
-web: yarn build && yarn start
+web: cd ton-rocket-cex-webapp && yarn build && yarn start
