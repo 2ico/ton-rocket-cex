@@ -1,9 +1,12 @@
 import Telegraf from 'telegraf';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config()
+
 const DOMAIN = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 const PORT = process.env.PORT
 
-require('dotenv').config()
+
 
 const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
