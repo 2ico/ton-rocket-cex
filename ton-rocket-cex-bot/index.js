@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 const DOMAIN = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
+const WEBAPP_URL = `https://ton-rocket-cex-webapp.heroku.com`
 const PORT = process.env.PORT
 
 
@@ -13,7 +14,7 @@ const bot = new Telegraf(process.env.BOT_API_TOKEN);
 bot.on("text", ctx => ctx.reply(`Hello ${ctx.from.first_name}`, {
     reply_markup: {
         inline_keyboard: [
-            [{ text: 'Open webapp', web_app: {url: 'https://test123.heroku.com'} }],
+            [{ text: 'Open webapp', web_app: {url: WEBAPP_URL} }],
         ]
     }}));
 
