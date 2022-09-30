@@ -1,5 +1,5 @@
 import Telegraf from 'telegraf';
-const crypto = require('crypto');
+import crypto from 'crypto';
 const DOMAIN = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 const PORT = process.env.PORT
 
