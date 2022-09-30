@@ -1,4 +1,4 @@
-import Telegraf from 'telegraf';
+import { Telegraf } from 'telegraf';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config()
