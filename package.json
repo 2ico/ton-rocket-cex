@@ -12,6 +12,6 @@
   ],
   "scripts": {
     "build": "yarn workspaces foreach run build",
-    "start": "yarn workspaces foreach run start"
+    "start_depr": "yarn workspaces foreach run start"
   }
 }
