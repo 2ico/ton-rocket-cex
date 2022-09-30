@@ -7,11 +7,11 @@
   "license": "MIT",
   "packageManager": "yarn@3.2.3",
   "workspaces": [
-    "bot",
-    "webapp"
+    "ton-rocket-cex-bot",
+    "ton-rocket-cex-webapp"
   ],
   "scripts": {
     "build": "yarn workspaces foreach run build",
-    "start": "yarn workspace ton-rocket-cex-bot start"
+    "start": "yarn workspace foreach run start"
   }
 }

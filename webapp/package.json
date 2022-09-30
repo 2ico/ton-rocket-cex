@@ -1,8 +1,0 @@
-{
-  "name": "ton-rocket-cex-webapp",
-  "version": "1.0.0",
-  "description": "Webapp on CEX Telegram bot for TON Rocket",
-  "main": "index.js",
-  "author": "2ico",
-  "license": "MIT"
-}
