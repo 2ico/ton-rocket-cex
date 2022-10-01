@@ -18,24 +18,24 @@ import React from 'react';
 import telegramHooks from './hooks/telegram';
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
-const {isReady, telegram} = telegramHooks();
 
 
 function App() {
-    return (
-        <div className="App">
-            Test React app !!
+  return (
+    <div className="App">
+            <div>Test React app !!</div>
             <button onClick={toggleMainButton}>
               Toggle Main button
             </button>
         </div>
     )
-}
-
-function toggleMainButton(){
-  if(isReady){
-    telegram.MainButton.show();
   }
+  
+  function toggleMainButton(){
+    const {isReady, telegram} = telegramHooks();
+    if(isReady){
+      telegram.MainButton.show();
+    }
 }
 
 async function validateHash(hash: string) {
