@@ -14,17 +14,34 @@
 
 // export default App
 
-import React from 'react';
+import React, { useState } from 'react';
 import telegramHooks from './hooks/telegram';
+import { useEffect } from "react";
+
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
 
 
 function App() {
+  const {isReady, telegram} = telegramHooks();
+
+  const [userReady, setUserReady] = useState(false);
+
+  useEffect(() => {
+    if (isReady) {
+      telegram.MainButton.setParams({
+        color: "rgb(49, 181, 69)",
+        text: "VIEW ORDER",
+        is_visible: userReady
+      });
+      console.log(userReady);
+    }
+  }, [telegram, isReady, userReady]);
+
   return (
     <div className="App">
             <div>Test React app !!</div>
-            <button onClick={toggleMainButton}>
+            <button onClick={() => setUserReady(!userReady)}>
               Toggle Main button
             </button>
         </div>
