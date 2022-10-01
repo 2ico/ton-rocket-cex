@@ -30,7 +30,6 @@ function App() {
   useEffect(() => {
     if (isReady) {
       telegram.MainButton.setParams({
-        color: "rgb(49, 181, 69)",
         text: "VIEW ORDER",
         is_visible: userReady
       });
