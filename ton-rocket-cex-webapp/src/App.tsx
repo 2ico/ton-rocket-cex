@@ -15,14 +15,27 @@
 // export default App
 
 import React from 'react';
-import { withTelegramWebApp } from 'react-telegram-webapp';
+import telegramHooks from './hooks/telegram';
+// import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
+
+const {isReady, telegram} = telegramHooks();
+
 
 function App() {
     return (
         <div className="App">
             Test React app !!
+            <button onClick={toggleMainButton}>
+              Toggle Main button
+            </button>
         </div>
     )
+}
+
+function toggleMainButton(){
+  if(isReady){
+    telegram.MainButton.show();
+  }
 }
 
 async function validateHash(hash: string) {
@@ -38,6 +51,4 @@ async function validateHash(hash: string) {
     return true;
 }
 
-export default withTelegramWebApp(App, {
-    validateHash
-});
+export default App
