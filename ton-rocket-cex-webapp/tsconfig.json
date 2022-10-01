@@ -15,10 +15,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src", // This must be specified if "paths" is.
+    "baseUrl": "src",
     "paths": {
-      "@hooks/*": ["hooks/*"]
-    },
+      "@/*": ["*"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

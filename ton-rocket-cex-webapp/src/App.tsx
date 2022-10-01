@@ -15,7 +15,7 @@
 // export default App
 
 import React from 'react';
-import telegramHooks from './hooks/telegram';
+import telegramHooks from '@/hooks/telegram';
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
 
@@ -31,8 +31,8 @@ function App() {
     )
   }
   
+  const {isReady, telegram} = telegramHooks();
   function toggleMainButton(){
-    const {isReady, telegram} = telegramHooks();
     if(isReady){
       telegram.MainButton.show();
     }
