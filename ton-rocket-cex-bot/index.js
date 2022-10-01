@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 const DOMAIN = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
-const WEBAPP_URL = `https://ton-rocket-cex-webapp.heroku.com`
+const WEBAPP_URL = `https://ton-rocket-cex-webapp.herokuapp.com`
 const PORT = process.env.PORT
 
 
