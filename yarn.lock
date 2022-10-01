@@ -1663,12 +1663,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-telegram-webapp@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "react-telegram-webapp@npm:0.1.4"
+"react-telegram-webapp@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "react-telegram-webapp@npm:0.1.5"
   peerDependencies:
     react: ">=16"
-  checksum: 50dce1dd932347ac0f8cc3826d9c1a83bde5b7db9df52a3615641fc8d28804121c02b452cedde981b5954c4b92d5a2e50e37ec1f901018d20e43e914eb8a85cd
+  checksum: 0bb6076650f4bec972d8df86a10e419b0ece87af6d15106edbc215a7b7127e7b056e6af412e369fe1aefb749b060c4bc3a2ed5aea8bfe13abf5657c67072401b
   languageName: node
   linkType: hard
 
@@ -1984,7 +1984,7 @@ __metadata:
     "@vitejs/plugin-react": ^2.1.0
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-telegram-webapp: ^0.1.4
+    react-telegram-webapp: ^0.1.5
     typescript: ^4.6.4
     vite: ^3.1.0
   languageName: unknown
