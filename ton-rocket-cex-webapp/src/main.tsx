@@ -11,6 +11,7 @@
 
 
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client';
 import App from './App'
 import './index.css'
@@ -34,7 +35,9 @@ async function validateHash(hash: string) {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
   <TelegramWebApp validateHash={validateHash}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </TelegramWebApp>
   </React.StrictMode>
 );

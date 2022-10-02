@@ -14,44 +14,44 @@
 
 // export default App
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import telegramHooks from './hooks/telegram';
-import { useEffect } from "react";
+import {Query, QueryClient, QueryClientProvider} from 'react-query';
+import Trade from "@/pages/Trade";
+import Settings from "@/pages/Settings";
+import NotFound from "@/pages/NotFound";
 
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
-
+import { Routes, Route } from "react-router-dom";
 
 function App() {
+  const queryClient = new QueryClient();
+
   const {isReady, telegram} = telegramHooks();
 
-  const [userReady, setUserReady] = useState(false);
+  // const [userReady, setUserReady] = useState(false);
 
   useEffect(() => {
     if (isReady) {
       telegram.MainButton.setParams({
         text: "VIEW ORDER",
-        is_visible: userReady
+        is_visible: true
       });
-      console.log(userReady);
     }
-  }, [telegram, isReady, userReady]);
+  }, [telegram, isReady]);
 
   return (
-    <div className="App">
-            <div>Test React app !!</div>
-            <button onClick={() => setUserReady(!userReady)}>
-              Toggle Main button
-            </button>
+     <QueryClientProvider client={queryClient}>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Trade />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </div>
+      </QueryClientProvider>
     )
-  }
-  
-  function toggleMainButton(){
-    const {isReady, telegram} = telegramHooks();
-    if(isReady){
-      telegram.MainButton.show();
-    }
 }
 
 async function validateHash(hash: string) {
