@@ -43,7 +43,7 @@ export default function Trade() {
   
   return (
     <div>
-    <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+    <Box>
       <Tabs
         value={tabValue}
         onChange={handleChange}
