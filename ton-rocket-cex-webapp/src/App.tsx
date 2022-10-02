@@ -20,6 +20,7 @@ import {Query, QueryClient, QueryClientProvider} from 'react-query';
 import Trade from "@/pages/Trade";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import './App.css'
 
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
