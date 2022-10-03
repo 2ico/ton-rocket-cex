@@ -17,10 +17,11 @@ export default function CustomizedInputBase() {
     <Box sx={{mr: 4}}>
     <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '100%'}}>
       {/* <FormHelperText id="search-helper-text">Search pair</FormHelperText> */}
-      <Input
+      <Input 
+        autoFocus
         // value={values.weight}
         // onChange={handleChange('weight')}
-        // placeholder="Search pair"
+        placeholder="Search pair"
         endAdornment={<InputAdornment position="end">ICON</InputAdornment>}
         aria-describedby="TODO"
       />
