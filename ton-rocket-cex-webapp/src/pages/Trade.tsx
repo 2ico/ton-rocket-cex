@@ -1,15 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom'
-import axios from 'axios';
+
+import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Pairs from '@/components/Pairs';
 import { getBaseCurrencies } from "@/api/currencies";
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+
+
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  dir?: string;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
 
 export default function Trade() {
   //TODO if currency is set, setBaseCurrency to that value
+  const theme = useTheme()
   const { currency } = useParams()
   const [tabValue, setTabValue] = useState(0);
   const [baseCurrency, setBaseCurrency] = useState(null);
@@ -29,6 +63,12 @@ export default function Trade() {
     setTabValue(newValue);
     // I wanted to use useEffect but is doesnt work
     setBaseCurrency(baseCurrencies[newValue]);  
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setTabValue(index);
+    //TODO useEffect
+    setBaseCurrency(baseCurrencies[index]);  
   };
 
   
@@ -61,7 +101,17 @@ export default function Trade() {
         ))}
       </Tabs>
     </Box>
-    <Pairs baseCurrency={baseCurrency} />
+    <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={tabValue}
+        onChangeIndex={handleChangeIndex}
+      >
+          {baseCurrencies.map((currency, index): JSX.Element => (
+          <TabPanel value={tabValue} index={index} dir={theme.direction}>
+            <Pairs baseCurrency={baseCurrency} />
+         </TabPanel>
+        ))}
+      </SwipeableViews>
     </div>
   );
 }

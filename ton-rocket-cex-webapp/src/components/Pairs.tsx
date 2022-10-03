@@ -42,7 +42,7 @@ function Pairs(props: { baseCurrency: Currency | null; }) {
   // Show the response if everything is fine
   return (
     <div>
-      <Box>
+      <Box sx={{width: '100%'}}>
       {/* <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
       Available pairs
       </Typography>
