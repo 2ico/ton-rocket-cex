@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import telegramHooks from './hooks/telegram';
 import {Query, QueryClient, QueryClientProvider} from 'react-query';
-import Trade from "@/pages/Currencies";
-import Settings from "@/pages/Settings";
-import NotFound from "@/pages/NotFound";
+import Trade from "@/views/Currencies";
+import Settings from "@/views/Settings";
+import NotFound from "@/views/NotFound";
 import './App.css'
 
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
 import { Routes, Route } from "react-router-dom";
-import Currencies from '@/pages/Currencies';
+import Currencies from '@/views/Currencies';
 
 function App() {
   const queryClient = new QueryClient();
