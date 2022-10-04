@@ -99,6 +99,7 @@ export default function Trade() {
     setSearchQuery(value);
   } 
   const handleSelectionChangePairs = (pair: string | null) => {
+    console.log("setting pair to: "+pair)
     setPair(pair);
   }
   

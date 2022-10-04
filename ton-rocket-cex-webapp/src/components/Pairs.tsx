@@ -52,10 +52,10 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
   return (
     <div>
       <Box sx={{ width: '100%' }}>
-        {/* <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+      {/* <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
       Available pairs
-      </Typography>
-       */}
+      </Typography> */}
+      
         <nav aria-label="currency pairs list">
           <List>
             {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((currency: any): JSX.Element => (
