@@ -22,16 +22,22 @@ const searchFilter = (elem: CurrencyPair, searchQuery: string) => {
 
 function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSelectionChange: any }) {
 
-  const [selectedTradeCurrency, setSelectedTradeCurrency] = useState<string>("");
+  const [selectedTradeCurrency, setSelectedTradeCurrency] = useState<string | null>(null);
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     currencyString: string,
   ) => {
-    setSelectedTradeCurrency(currencyString);
-    //TODO validate tradeCurrency
-    let pair = makeUrlPair(baseCurrency.currency, currencyString)
-    props.onSelectionChange(pair)
+    if(selectedTradeCurrency === currencyString){
+      setSelectedTradeCurrency(null)
+      props.onSelectionChange("")
+    }
+    else {
+      setSelectedTradeCurrency(currencyString);
+      //TODO validate tradeCurrency
+      let pair = makeUrlPair(baseCurrency.currency, currencyString)
+      props.onSelectionChange(pair)
+    }
   };
 
 

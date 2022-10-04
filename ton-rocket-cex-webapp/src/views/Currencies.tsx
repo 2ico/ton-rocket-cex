@@ -10,6 +10,7 @@ import Pairs from '@/components/Pairs';
 import TabPanel from '@/components/TabPanel';
 import { getBaseCurrencies } from "@/api/currencies";
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
 import Typography from '@mui/material/Typography';
 import SearchBar from '@/components/SearchBar';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -25,6 +26,8 @@ export default function Trade() {
   const [tabValue, setTabValue] = useState(0);
   const [baseCurrency, setBaseCurrency] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [pair, setPair] = useState("");
+  let navigate = useNavigate();
   const {isReady, telegram} = telegramHooks();
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
@@ -34,11 +37,13 @@ export default function Trade() {
   }});
 
   const handleMainButton = () => {
+    //TOOD validate pair
     // moveNavigation to /trade/  
+      navigate("/trade/"+pair);
   }
 
   useEffect(() => {
-      if(isReady){
+      if(!isReady) return
         telegram.MainButton.setParams({
           color: telegram.themeParams.button_color,
           text: "Select currency pair",
@@ -46,9 +51,19 @@ export default function Trade() {
           is_active: true,
         });
         telegram.MainButton.onClick(handleMainButton);
-      }
     }, [telegram, isReady]);
   
+    useEffect( () => {
+      if(!isReady) return
+      let isValid = !!pair;
+      if(isValid){
+        console.log("show MainButton")
+        telegram.MainButton.show()
+      }else{
+        console.log("hide MainButton")
+        telegram.MainButton.hide()
+      }
+    }, [pair, isReady]);
 
   //if currency is selected, select right tab
   
@@ -78,12 +93,7 @@ export default function Trade() {
     setSearchQuery(value);
   } 
   const handleSelectionChangePairs = (pair: string) => {
-    //TODO
-    let isValid = !!pair;
-    if(isValid)
-      telegram.MainButton.enable()
-    else
-      telegram.MainButton.disable()
+    setPair(pair);
   }
   
   // useEffect(()=>{
@@ -101,8 +111,8 @@ export default function Trade() {
         value={tabValue}
         onChange={handleChange}
         variant="scrollable"
-        scrollButtons
-        allowScrollButtonsMobile
+        // scrollButtons
+        // allowScrollButtonsMobile
         aria-label="base currencies"
       >
 
