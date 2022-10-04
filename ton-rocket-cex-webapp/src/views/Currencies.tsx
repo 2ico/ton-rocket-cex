@@ -57,7 +57,9 @@ export default function Trade() {
           // @ts-ignore
         // telegram.showPopup({title: "Pair", message: pair})
         if(pair){ 
-          navigate("/trade/"+pair);
+          navigate("/trade/"+pair, 
+            { state: { test: 1 } }
+          );
         }
       }
 

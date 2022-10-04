@@ -218,7 +218,7 @@ function getBaseCurrencies() {
     return wrapWithTimeout(baseCurrencies, 'baseCurrencies not found');
 };
 
-function getOrderbook(baseCurrency: Currency, priceCurrency: Currency) {
+function getOrderbook(baseCurrency: string, priceCurrency: string) {
     const marketPrice = randomMarketPrice(0.420, 6.9)
     const randomAmount = (max: number) => Math.random() * max;
 
@@ -232,6 +232,7 @@ function getOrderbook(baseCurrency: Currency, priceCurrency: Currency) {
     const sellerPrice = monotonicRandomIterator(10, marketPrice, 0.05, 1)
     
     return wrapWithTimeout({
+        "marketPrice" : marketPrice,
         "buyers" : Array.from(buyerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
         "sellers" : Array.from(sellerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
     }, "orderbook not found")

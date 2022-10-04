@@ -31,9 +31,11 @@ interface AmountSelectorProp {
     amountType: string,
     amountState: [number, boolean],
     setAmountState: ([newPrice, isValid]: [number, boolean]) => void,
+    firstUse: boolean,
+    setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState } : AmountSelectorProp) 
+const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, firstUse, setFirstUse } : AmountSelectorProp) 
     : JSX.Element => 
 {
     const [amount, isValid] = amountState
@@ -45,16 +47,17 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState }
     }, [ amount ])
 
     const isAmountValid = (newAmount: number) => {
-        return (0 <= newAmount) && (newAmount <= totalAmount)
+        return (0 < newAmount) && (newAmount <= totalAmount)
     }
 
     const getErrorMessage = () => {
-        if (amountText == "" || amount < 0) return "Amount Invalid"
-        else if (amount > totalAmount) return "Amount exceed your Budget"
-        return ""
+        if (isValid || firstUse) return ""
+        else if (amountText == "" || amount <= 0) return "Amount Invalid"
+        return "Amount exceed your Budget"
     }
 
     const handleTextChange = (text: string) => {
+        setFirstUse(false)
         setAmountText(text)
         if (text !== "") {
             const newAmount = Number(text)
@@ -66,11 +69,13 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState }
     }
 
     const handleButtonChange = (sign: number) => {
+        setFirstUse(false)
         if (amountText !== "")
             setAmountState([amount + sign, isAmountValid(amount + sign)])
     }
 
     const handleSliderChange = (amount: number) => {
+        setFirstUse(false)
         setAmountState([amount, isAmountValid(amount)])
     }
 
@@ -102,7 +107,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState }
                 }}
                 value={amountText}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
-                error = {!isValid}
+                error = {!(isValid || firstUse)}
                 type='number'
                 label={"Amount"}
                 variant="standard"  

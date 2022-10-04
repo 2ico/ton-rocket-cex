@@ -1,4 +1,6 @@
-import {OrderForm} from '@/components/OrderForm';
+import {useLocation} from 'react-router-dom';
+
+import {Order, OrderForm} from '@/components/OrderForm';
 import {getOrderbook} from "@/api/currencies";
 import {Currency} from "@/api/types"
 import { useQuery } from 'react-query';
@@ -37,16 +39,27 @@ const tradeCurrencyTmp : Currency = {
     }
 }
 
+const totalTmp = 100.0
+
+
 export default function Trade() {
     const { pair } = useParams();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+    
+    // const location = useLocation();
+    // location.state.test
+
     const [isValidOrder, setIsValidOrder] = useState(false);
+    
+    const [orderIssued, setOrderIssued] = useState(false);
+    const [firstUse, setFirstUse] = useState(true)
+
     const {isReady, telegram} = telegramHooks();
 
     if(pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
     
+    // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
-    const total = 100.0
 
     //TODO onClose show confirm popup (see DurgerKing)
 
@@ -79,19 +92,15 @@ export default function Trade() {
         }
       }, [isValidOrder, telegram, isReady]);
     
-
-
     const { data, error, isLoading } = useQuery("orderBook", 
-        () => getOrderbook(baseCurrencyTmp, tradeCurrencyTmp), {
+        () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
             // console.log("query")
             // let baseCurrencies = data.data.results;
             // setBaseCurrency(baseCurrencies[0]);
         },
         refetchInterval: 5000, 
-    
     });
-
 
     if (isLoading) 
         return (
@@ -102,19 +111,34 @@ export default function Trade() {
     else if (error) 
         return <div>Error loading orderbook</div>;
    
-    console.log(data.data.results);
+    
+    const result = data.data.results
+    const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]    
+
+    const handleIssueOrder = ({price, amount, orderType, orderAction} : Order, isOrderValid : boolean) => { 
+        if (isOrderValid) {
+            console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
+        }
+        else 
+            setOrderIssued(false)
+            setFirstUse(false)
+    }
 
     return (
         <Box>
         <Typography variant="h4">
             {baseCurrency}/{tradeCurrency}
         </Typography>
+        <button onClick={() => setOrderIssued(true)}> BUY </button>
         <OrderForm 
             baseCurrency={baseCurrency} 
             priceCurrency={tradeCurrency} 
-            totalAmout={total} 
-            defaultPrice={0.0001238}
-            issueOrder = {(e) => {}}
+            totalAmout={totalTmp} 
+            defaultPrice={tradePrice}
+            handleIssueOrder = {handleIssueOrder}
+            orderIssued = {orderIssued}
+            firstUse = {firstUse}
+            setFirstUse = {setFirstUse}
         />
         </Box>
     )

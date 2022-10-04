@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import AmountSelector from '@/components/OrderInputs/AmoutSelector';
-import PriceSelector from '@/components/OrderInputs/PriceSelector';
+import PriceSelector from '@/components/OrderInputs/PriceSelector'
 import Box from '@mui/material/Box';
 
 import {OrderAction, ToggleBuySell} from '@/components/OrderInputs/ToggleBuySell';
@@ -19,15 +19,18 @@ type Props = {
     baseCurrency: string,
     priceCurrency: string,
     defaultPrice: number,
-    issueOrder: (orderState: Order) => void
+    handleIssueOrder: (orderState: Order, isOrderValid: boolean) => void,
+    orderIssued: boolean
+    firstUse: boolean,
+    setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const OrderForm = ({totalAmout, baseCurrency, 
-    priceCurrency, defaultPrice, issueOrder} : Props) 
+    priceCurrency, defaultPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse} : Props) 
     : JSX.Element => 
 {
     // const [amount, setAmount] = useState(0.0)
-    const [[amount, isAmountValid], setAmountState] = useState([0.0, true])
+    const [[amount, isAmountValid], setAmountState] = useState([0.0, false])
     const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
     const [orderAction, setOrderAction] = useState(OrderAction.Buy)
     const [orderType, setOrderType] = useState(OrderType.Limit)
@@ -37,6 +40,12 @@ const OrderForm = ({totalAmout, baseCurrency,
         if(newOrderType == OrderType.Market) 
             setPriceState([defaultPrice, true])
     }
+
+    useEffect(() => {
+        if (!orderIssued) return
+        handleIssueOrder({ price, amount, orderType, orderAction }, 
+            isPriceValid && isAmountValid)
+    }, [ orderIssued ])
 
     return (
         <Box
@@ -62,6 +71,8 @@ const OrderForm = ({totalAmout, baseCurrency,
                 setAmountState={setAmountState}
                 totalAmount={totalAmout} 
                 amountType={priceCurrency}
+                firstUse={firstUse}
+                setFirstUse={setFirstUse}
             />
         </Box>
     )
