@@ -38,6 +38,8 @@ export default function Trade() {
 
   useEffect(() => {
       if(!isReady) return
+        // @ts-ignore
+        telegram.BackButton.hide()
         telegram.MainButton.setParams({
           color: telegram.themeParams.button_color,
           text: "CONTINUE",
