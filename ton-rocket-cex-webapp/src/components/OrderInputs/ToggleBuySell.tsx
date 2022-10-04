@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
 
 enum OrderAction {
     Buy = "Buy",
@@ -14,6 +16,7 @@ type Props = {
 };
 
 function ToggleBuySell({currentValue, handleChange}: Props) {
+    const { t } = useTranslation();
     const handleSelection = (
         event: React.MouseEvent<HTMLElement>,
         newValue: string | null,
@@ -30,10 +33,10 @@ function ToggleBuySell({currentValue, handleChange}: Props) {
             aria-label="text alignment"
         >
             <ToggleButton value="Buy">
-                Buy
+                {t("Buy")}
             </ToggleButton>
             <ToggleButton value="Sell">
-                Sell
+                {t("Sell")}
             </ToggleButton>
         </ToggleButtonGroup>
     );

@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import IncrementButton from './IncrementButton'
 import InputLabel from "@mui/material/InputLabel";
 import TextField from '@mui/material/TextField';
-import { text } from "stream/consumers";
+import { useTranslation } from 'react-i18next';
 
 
 type RangeProp = {
@@ -38,6 +38,7 @@ interface AmountSelectorProp {
 const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, firstUse, setFirstUse } : AmountSelectorProp) 
     : JSX.Element => 
 {
+    const { t } = useTranslation();
     const [amount, isValid] = amountState
     const [amountText, setAmountText] = useState("0")
 
@@ -52,8 +53,8 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
 
     const getErrorMessage = () => {
         if (isValid || firstUse) return ""
-        else if (amountText == "" || amount <= 0) return "Amount Invalid"
-        return "Amount exceed your Budget"
+        else if (amountText == "" || amount <= 0) return t("invalid_amount")
+        return t("amount_exceeds_budget")
     }
 
     const handleTextChange = (text: string) => {
@@ -109,7 +110,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
                 error = {!(isValid || firstUse)}
                 type='number'
-                label={"Amount"}
+                label={t("Amount")}
                 variant="standard"  
                 helperText={getErrorMessage()}
             />
