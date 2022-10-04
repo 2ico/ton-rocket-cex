@@ -36,25 +36,17 @@ export default function Trade() {
     setBaseCurrency(baseCurrencies[0]);
   }});
 
-  const handleMainButton = () => {
-    //TOOD validate pair
-    // moveNavigation to /trade/
-      // @ts-ignore
-      telegram.showPopup({title: "Pair", message: pair})
-      if(pair){ 
-        navigate("/trade/"+pair);
-      }
-  }
+  let handleMainButton = () => {};
 
   useEffect(() => {
       if(!isReady) return
         telegram.MainButton.setParams({
           color: telegram.themeParams.button_color,
-          text: "Select currency pair",
+          text: "CONTINUE",
           is_visible: false,
           is_active: true,
         });
-        telegram.MainButton.onClick(handleMainButton);
+        telegram.MainButton.onClick(handleMainButton)
     }, [telegram, isReady]);
   
     useEffect( () => {
@@ -67,7 +59,17 @@ export default function Trade() {
         console.log("hide MainButton")
         telegram.MainButton.hide()
       }
-    }, [pair, isReady]);
+
+      handleMainButton = () => {
+        //TOOD validate pair
+        // moveNavigation to /trade/
+          // @ts-ignore
+          telegram.showPopup({title: "Pair", message: pair})
+          if(pair){ 
+            navigate("/trade/"+pair);
+          }
+      }
+    }, [pair, telegram, isReady]);
 
   //if currency is selected, select right tab
   
