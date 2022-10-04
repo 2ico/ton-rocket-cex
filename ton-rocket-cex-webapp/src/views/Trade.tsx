@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
 import { Box, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
+import { useEffect } from 'react';
 
 const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
@@ -45,9 +46,13 @@ export default function Trade() {
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
     const total = 100.0
 
-    //TODO show back button
-    // @ts-ignore
-    telegram.BackButton.enable();
+    useEffect(() => {
+        if(isReady){
+            // @ts-ignore
+            telegram.BackButton.enable();
+      }
+      }, [telegram, isReady]);
+    
 
 
 

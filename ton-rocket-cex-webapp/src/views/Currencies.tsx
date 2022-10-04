@@ -59,7 +59,8 @@ export default function Trade() {
       if(isReady){
       telegram.MainButton.setParams({
         color: telegram.themeParams.button_color,
-        text: "Select currency pair"
+        text: "Select currency pair",
+        is_visible: true,
       });
     }
     }, [telegram, isReady]);
