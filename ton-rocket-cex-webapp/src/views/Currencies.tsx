@@ -52,10 +52,8 @@ export default function Trade() {
       const handleMainButton = () => {
         //TOOD validate pair
         // moveNavigation to /trade/
-        console.log("handle Main Button")
-        console.log(pair)
-        // @ts-ignore
-        telegram.showPopup({title: "Pair", message: pair})
+          // @ts-ignore
+        // telegram.showPopup({title: "Pair", message: pair})
         if(pair){ 
           navigate("/trade/"+pair);
         }

@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
 import { Box, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
@@ -39,6 +39,7 @@ const tradeCurrencyTmp : Currency = {
 
 export default function Trade() {
     const { pair } = useParams();
+    let navigate = useNavigate();
     const {isReady, telegram} = telegramHooks();
 
     if(pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
@@ -52,6 +53,8 @@ export default function Trade() {
         if(isReady){
             // @ts-ignore
             telegram.BackButton.show();
+            // @ts-ignore
+            telegram.BackButton.onClick(() => navigate("/"));
       }
       }, [telegram, isReady]);
     
