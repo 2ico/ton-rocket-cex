@@ -10,6 +10,9 @@ import Box from '@mui/material/Box';
 
 import IncrementButton from './IncrementButton'
 import InputLabel from "@mui/material/InputLabel";
+import TextField from '@mui/material/TextField';
+import { text } from "stream/consumers";
+
 
 type RangeProp = {
     value: number,
@@ -19,57 +22,56 @@ type RangeProp = {
 
 const Range = ({ value, max, onChange }: RangeProp) : JSX.Element => 
     <FormControl sx={{ width: "100%" }} variant="standard">
-        <Slider value={value} min = {0} max={max} size="small"
+        <Slider value={value} min = {0} max={max} size="small" step={0.01}
             onChange={(event: Event, newValue : number | number[]) => { onChange(newValue as number) }} />
     </FormControl>
 
 interface AmountSelectorProp {
-    amount: number,
     totalAmount: number,
     amountType: string,
-    setAmount : (newAmount: number) => void 
+    amountState: [number, boolean],
+    setAmountState: ([newPrice, isValid]: [number, boolean]) => void,
 }
 
-const AmountSelector = ({ amount, setAmount, totalAmount, amountType } : AmountSelectorProp) 
+const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState } : AmountSelectorProp) 
     : JSX.Element => 
 {
-    // const [amount, _setAmount] = useState(0)
+    const [amount, isValid] = amountState
     const [amountText, setAmountText] = useState("0")
 
     useEffect(() => {
-        // prevents +/- when input field is invalid
-        if (amount >= 0)
+        if (isValid || amountText !== "")
             setAmountText(amount.toString())
     }, [ amount ])
+
+    const isAmountValid = (newAmount: number) => {
+        return (0 <= newAmount) && (newAmount <= totalAmount)
+    }
+
+    const getErrorMessage = () => {
+        if (amountText == "" || amount < 0) return "Amount Invalid"
+        else if (amount > totalAmount) return "Amount exceed your Budget"
+        return ""
+    }
 
     const handleTextChange = (text: string) => {
         setAmountText(text)
         if (text !== "") {
-            const bounded = Math.min(totalAmount, 
-                Math.max(0, Number(text)))
-                setAmount(bounded)
-
-            // wont allow you to type an amount outside [0, totalAmout]
-            if (bounded != Number(text))
-                setAmountText(bounded.toString())
-        } else {
-            setAmount(-(amount+1))
-            // negative values signal an invalid
-            // input field but one may
-            // retrive the old valid value with Math.abs so
-            // that the slider can still use it
+            const newAmount = Number(text)
+            setAmountState([newAmount, isAmountValid(newAmount)])
         }
-    }   
+        else {
+            setAmountState([amount, false])
+        }
+    }
 
     const handleButtonChange = (sign: number) => {
-        if (amount < 0) return;
-        const bounded = Math.min(totalAmount, 
-            Math.max(0, amount + sign)) // sign*(what?)
-            setAmount(bounded)
+        if (amountText !== "")
+            setAmountState([amount + sign, isAmountValid(amount + sign)])
     }
 
     const handleSliderChange = (amount: number) => {
-        setAmount(amount)
+        setAmountState([amount, isAmountValid(amount)])
     }
 
     return (
@@ -80,39 +82,38 @@ const AmountSelector = ({ amount, setAmount, totalAmount, amountType } : AmountS
             }}
         >
             <FormControl sx={{ width: "100%" }} variant="outlined">
-            <InputLabel> Amount </InputLabel>    
-
-            <Input
-                // defaultValue={"Amount"}
-                
-                startAdornment={
-                    <InputAdornment position="start">
-                        <IncrementButton
-                            onClick={() => handleButtonChange(-1)}
-                            isPlusButton = {false}                   
-                        />
-                    </InputAdornment>
-                }
-                value={amountText}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
-                error = {amount < 0}
-                type='number'
-                endAdornment={
-                    <InputAdornment position="end">
-                        {amountType}
+            <TextField
+                InputProps={{
+                    startAdornment:
+                        <InputAdornment position="start">
+                            <IncrementButton
+                                onClick={() => handleButtonChange(-1)}
+                                isPlusButton = {false}
+                            />
+                        </InputAdornment>,
+                    endAdornment:
+                        <InputAdornment position="end">
+                        {""}
                         <IncrementButton
                             onClick={() => handleButtonChange(1)}
-                            isPlusButton = {true}                   
+                            isPlusButton = {true}       
                         />
-                    </InputAdornment>
-                }
+                        </InputAdornment>
+                }}
+                value={amountText}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
+                error = {!isValid}
+                type='number'
+                label={"Amount"}
+                variant="standard"  
+                helperText={getErrorMessage()}
             />
             </FormControl>
 
             <br />
             
             <Range 
-                value={amount >= 0 ? amount : -(amount+1)}
+                value={amount}
                 max={totalAmount}
                 onChange={handleSliderChange}
             />

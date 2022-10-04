@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import AmountSelector from './OrderInputs/AmoutSelector';
-import PriceSelector from './OrderInputs/PriceSelector';
+import AmountSelector from '@/components/OrderInputs/AmoutSelector';
+import PriceSelector from '@/components/OrderInputs/PriceSelector';
 import Box from '@mui/material/Box';
 
-import {OrderAction, ToggleBuySell} from './OrderInputs/ToggleBuySell';
-import {OrderType, OrderSelector} from './OrderInputs/OrderTypeSelector'
+import {OrderAction, ToggleBuySell} from '@/components/OrderInputs/ToggleBuySell';
+import {OrderType, OrderSelector} from '@/components/OrderInputs/OrderTypeSelector'
 
 type Order = {
     price: number,
@@ -26,10 +26,17 @@ const OrderForm = ({totalAmout, baseCurrency,
     priceCurrency, defaultPrice, issueOrder} : Props) 
     : JSX.Element => 
 {
-    const [amount, setAmount] = useState(0.0)
-    const [price, setPrice] = useState(0.0)
+    // const [amount, setAmount] = useState(0.0)
+    const [[amount, isAmountValid], setAmountState] = useState([0.0, true])
+    const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
     const [orderAction, setOrderAction] = useState(OrderAction.Buy)
     const [orderType, setOrderType] = useState(OrderType.Limit)
+ 
+    const handleOrderTypeChange = (newOrderType : OrderType) => {
+        setOrderType(newOrderType)
+        if(newOrderType == OrderType.Market) 
+            setPriceState([defaultPrice, true])
+    }
 
     return (
         <Box
@@ -38,23 +45,21 @@ const OrderForm = ({totalAmout, baseCurrency,
                 m: 3
             }}
         >
-            <Box>
+            <div>
             <ToggleBuySell currentValue={orderAction} handleChange={setOrderAction} />
-            <OrderSelector currentOrderType={orderType} handleChange={setOrderType} />
-            </Box>
+            <OrderSelector currentOrderType={orderType} handleChange={handleOrderTypeChange} />
+            </div>
 
             <PriceSelector
-                amount={price}
-                setAmount={setPrice}
+                priceState={[price, isPriceValid]}
+                setPriceState={setPriceState}
                 isDisabled={orderType === OrderType.Market}
-                defaultPrice={defaultPrice}
-                defaultText={orderType !== OrderType.Market ? "0" : "Market"}
                 amountType={priceCurrency}
             />
 
             <AmountSelector
-                amount={amount}
-                setAmount={setAmount}
+                amountState={[amount, isAmountValid]}
+                setAmountState={setAmountState}
                 totalAmount={totalAmout} 
                 amountType={priceCurrency}
             />
