@@ -1,5 +1,5 @@
 export default function NotFound() {
     return (
-        <div>Page not found.</div>
+        <div>Page {window.location.pathname} not found.</div>
     );
 }

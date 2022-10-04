@@ -46,6 +46,8 @@ export default function Trade() {
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
     const total = 100.0
 
+    //TODO onClose show confirm popup (see DurgerKing)
+
     useEffect(() => {
         if(isReady){
             // @ts-ignore

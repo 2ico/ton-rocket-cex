@@ -26,7 +26,7 @@ export default function Trade() {
   const [tabValue, setTabValue] = useState(0);
   const [baseCurrency, setBaseCurrency] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [pair, setPair] = useState("");
+  const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
   const {isReady, telegram} = telegramHooks();
   
@@ -38,8 +38,8 @@ export default function Trade() {
 
   const handleMainButton = () => {
     //TOOD validate pair
-    // moveNavigation to /trade/  
-      navigate("/trade/"+pair);
+    // moveNavigation to /trade/
+      if(pair) navigate("/trade/"+pair);
   }
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function Trade() {
     const value = event.target.value;
     setSearchQuery(value);
   } 
-  const handleSelectionChangePairs = (pair: string) => {
+  const handleSelectionChangePairs = (pair: string | null) => {
     setPair(pair);
   }
   
