@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import telegramHooks from './hooks/telegram';
 import {Query, QueryClient, QueryClientProvider} from 'react-query';
-import Trade from "@/views/Currencies";
+import Trade from "@/views/Trade";
 import Settings from "@/views/Settings";
 import NotFound from "@/views/NotFound";
 import './App.css'

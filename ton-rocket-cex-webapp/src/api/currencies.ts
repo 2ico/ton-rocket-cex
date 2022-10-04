@@ -218,7 +218,24 @@ function getBaseCurrencies() {
     return wrapWithTimeout(baseCurrencies, 'baseCurrencies not found');
 };
 
+function getOrderbook(baseCurrency: Currency, priceCurrency: Currency) {
+    const marketPrice = randomMarketPrice(0.420, 6.9)
+    const randomAmount = (max: number) => Math.random() * max;
 
+    function* monotonicRandomIterator(end : number, startValue = 0.0, maxStep = 0.0, sign=1) {
+        for (let i = 0; i < end; i += 1) {
+            startValue += randomAmount(maxStep) * sign
+            yield startValue
+        }
+    }
+    const buyerPrice = monotonicRandomIterator(10, marketPrice, 0.05, -1)
+    const sellerPrice = monotonicRandomIterator(10, marketPrice, 0.05, 1)
+    
+    return wrapWithTimeout({
+        "buyers" : Array.from(buyerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
+        "sellers" : Array.from(sellerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
+    }, "orderbook not found")
+}
 
 // ratesCurrencies(pair) {
 //     url = "/currencies/rate"
@@ -226,4 +243,4 @@ function getBaseCurrencies() {
 // }
 
 
-export { getBaseCurrencies, getAvailablePairs };
+export { getBaseCurrencies, getAvailablePairs, getOrderbook };
