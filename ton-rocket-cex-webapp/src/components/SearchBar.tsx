@@ -8,13 +8,14 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
+import { SxProps, Theme } from '@mui/material';
 
 // import SearchIcon from '@mui/icons-material/Search';
 
-export default function CustomizedInputBase() {
+export default function CustomizedInputBase(props: {sx?: SxProps<Theme>}) {
   return (
 
-    <Box sx={{mr: 4}}>
+    <Box sx={props.sx}>
     <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '100%'}}>
       {/* <FormHelperText id="search-helper-text">Search pair</FormHelperText> */}
       <Input 

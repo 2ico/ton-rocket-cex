@@ -90,11 +90,13 @@ export default function Trade() {
   
   return (
     <Box>
+    <Box position="sticky">
       <Tabs
         value={tabValue}
         onChange={handleChange}
         variant="scrollable"
-        scrollButtons="auto"
+        scrollButtons
+        allowScrollButtonsMobile
         aria-label="base currencies"
       >
 
@@ -106,7 +108,9 @@ export default function Trade() {
           />
         ))}
       </Tabs>
-    <SearchBar />
+    <SearchBar sx={{mr: 4}} />
+    </Box>
+    <Box>
     <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={tabValue}
@@ -118,6 +122,7 @@ export default function Trade() {
          </TabPanel>
         ))}
       </SwipeableViews>
+    </Box>
     </Box>
   );
 }
