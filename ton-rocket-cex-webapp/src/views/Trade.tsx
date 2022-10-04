@@ -5,8 +5,12 @@ import { useQuery } from 'react-query';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import { useParams } from 'react-router-dom';
+import { separateUrlPair } from "@/utils/utils"
+import { Box, Typography } from '@mui/material';
+import telegramHooks from '@/hooks/telegram';
 
-const baseCurrency : Currency = {
+const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
     "name": "TON",
     "minTransfer": 0.00001,
@@ -19,7 +23,7 @@ const baseCurrency : Currency = {
     }
 }
 
-const priceCurrency : Currency = {
+const tradeCurrencyTmp : Currency = {
     "currency": "SCALE",
     "name": "SCALE",
     "minTransfer": 0.00001,
@@ -33,8 +37,22 @@ const priceCurrency : Currency = {
 }
 
 export default function Trade() {
+    const { pair } = useParams();
+    const {isReady, telegram} = telegramHooks();
+
+    if(pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
+    
+    const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
+    const total = 100.0
+
+    //TODO show back button
+    // @ts-ignore
+    telegram.BackButton.enable();
+
+
+
     const { data, error, isLoading } = useQuery("orderBook", 
-        () => getOrderbook(baseCurrency, priceCurrency), {
+        () => getOrderbook(baseCurrencyTmp, tradeCurrencyTmp), {
         onSuccess: (data) => {
             // console.log("query")
             // let baseCurrencies = data.data.results;
@@ -44,9 +62,6 @@ export default function Trade() {
     
     });
 
-    const total : number = 100.0
-    const baseCurr : string = "TON"
-    const priceCurr : string = "BTC"
 
     if (isLoading) 
         return (
@@ -60,12 +75,17 @@ export default function Trade() {
     console.log(data.data.results);
 
     return (
+        <Box>
+        <Typography variant="h4">
+            {baseCurrency}/{tradeCurrency}
+        </Typography>
         <OrderForm 
-            baseCurrency={baseCurr} 
-            priceCurrency={priceCurr} 
+            baseCurrency={baseCurrency} 
+            priceCurrency={tradeCurrency} 
             totalAmout={total} 
             defaultPrice={0.0001238}
             issueOrder = {(e) => {}}
         />
+        </Box>
     )
 }

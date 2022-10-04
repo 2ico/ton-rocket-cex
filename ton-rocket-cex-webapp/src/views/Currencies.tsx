@@ -14,6 +14,8 @@ import SearchBar from '@/components/SearchBar';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
+import telegramHooks from '@/hooks/telegram';
+
 
 
 interface TabPanelProps {
@@ -50,6 +52,19 @@ export default function Trade() {
   const { currency } = useParams()
   const [tabValue, setTabValue] = useState(0);
   const [baseCurrency, setBaseCurrency] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const {isReady, telegram} = telegramHooks();
+  
+  useEffect(() => {
+      if(isReady){
+      telegram.MainButton.setParams({
+        color: telegram.themeParams.button_color,
+        text: "Select currency pair"
+      });
+    }
+    }, [telegram, isReady]);
+  
+
   //if currency is selected, select right tab
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
@@ -78,6 +93,18 @@ export default function Trade() {
     setBaseCurrency(baseCurrencies[index]);  
   };
 
+  const handleChangeSearchBar = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    setSearchQuery(value);
+  } 
+  const handleSelectionChangePairs = (pair: string) => {
+    //TODO
+    let isValid = !!pair;
+    if(isValid)
+      telegram.MainButton.enable()
+    else
+      telegram.MainButton.disable()
+  }
   
   // useEffect(()=>{
   //     baseCurrencies = data.data.results;
@@ -86,7 +113,6 @@ export default function Trade() {
 
   //TODO check if this is good design
   // setBaseCurrency(baseCurrencies[0]);
-  
   
   return (
     <Box>
@@ -108,7 +134,7 @@ export default function Trade() {
           />
         ))}
       </Tabs>
-    <SearchBar sx={{mr: 4}} />
+    <SearchBar sx={{mr: 4}} onChange={handleChangeSearchBar} />
     </Box>
     <Box>
     <SwipeableViews
@@ -118,7 +144,7 @@ export default function Trade() {
         >
           {baseCurrencies.map((currency, index): JSX.Element => (
             <TabPanel value={tabValue} index={index} dir={theme.direction}>
-            <Pairs baseCurrency={baseCurrency} />
+            <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
          </TabPanel>
         ))}
       </SwipeableViews>

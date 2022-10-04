@@ -38,10 +38,10 @@ const OrderForm = ({totalAmout, baseCurrency,
                 m: 3
             }}
         >
-            <div>
+            <Box>
             <ToggleBuySell currentValue={orderAction} handleChange={setOrderAction} />
             <OrderSelector currentOrderType={orderType} handleChange={setOrderType} />
-            </div>
+            </Box>
 
             <PriceSelector
                 amount={price}

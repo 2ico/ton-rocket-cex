@@ -12,7 +12,7 @@ import { SxProps, Theme } from '@mui/material';
 
 // import SearchIcon from '@mui/icons-material/Search';
 
-export default function CustomizedInputBase(props: {sx?: SxProps<Theme>}) {
+export default function SearchBar(props: {sx?: SxProps<Theme>, onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> }) {
   return (
 
     <Box sx={props.sx}>
@@ -21,7 +21,7 @@ export default function CustomizedInputBase(props: {sx?: SxProps<Theme>}) {
       <Input 
         autoFocus
         // value={values.weight}
-        // onChange={handleChange('weight')}
+        onChange={props.onChange}
         placeholder="Search pair"
         endAdornment={<InputAdornment position="end">ICON</InputAdornment>}
         aria-describedby="TODO"

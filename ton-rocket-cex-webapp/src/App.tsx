@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import telegramHooks from './hooks/telegram';
+import telegramHooks from '@/hooks/telegram';
 import {Query, QueryClient, QueryClientProvider} from 'react-query';
 import Trade from "@/views/Trade";
 import Settings from "@/views/Settings";
@@ -18,21 +18,21 @@ function App() {
 
   // const [userReady, setUserReady] = useState(false);
 
-  useEffect(() => {
-    if (isReady) {
-      telegram.MainButton.setParams({
-        text: "VIEW ORDER",
-        is_visible: true
-      });
-    }
-  }, [telegram, isReady]);
+  // useEffect(() => {
+  //   if (isReady) {
+  //     telegram.MainButton.setParams({
+  //       text: "VIEW ORDER",
+  //       is_visible: true
+  //     });
+  //   }
+  // }, [telegram, isReady]);
 
   return (
      <QueryClientProvider client={queryClient}>
         <div className="App">
           <Routes>
             <Route path="/" element={<Currencies />} />
-            <Route path="/trade" element={<Trade />} />
+            <Route path="/trade/:pair" element={<Trade />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
