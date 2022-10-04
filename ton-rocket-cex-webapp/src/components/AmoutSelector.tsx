@@ -53,7 +53,7 @@ const AmountSelector = ({ amount, setAmount, totalAmount, amountType } : AmountS
             if (bounded != Number(text))
                 setAmountText(bounded.toString())
         } else {
-            setAmount(-amount)
+            setAmount(-(amount+1))
             // negative values signal an invalid
             // input field but one may
             // retrive the old valid value with Math.abs so
@@ -112,7 +112,7 @@ const AmountSelector = ({ amount, setAmount, totalAmount, amountType } : AmountS
             <br />
             
             <Range 
-                value={Math.abs(amount)}
+                value={amount >= 0 ? amount : -(amount+1)}
                 max={totalAmount}
                 onChange={handleSliderChange}
             />

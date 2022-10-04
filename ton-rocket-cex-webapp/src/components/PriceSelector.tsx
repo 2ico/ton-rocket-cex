@@ -44,7 +44,7 @@ const PriceSelector = ({ amount, setAmount, amountType, isDisabled, defaultPrice
             if (bounded !== Number(text))
                 setAmountText(bounded.toString())
         } else {
-            setAmount(-amount)
+            setAmount(-(amount+1))
             // negative values signal an invalid
             // input field but one may
             // retrive the old valid value with Math.abs so
@@ -53,6 +53,7 @@ const PriceSelector = ({ amount, setAmount, amountType, isDisabled, defaultPrice
     }   
 
     const handleButtonChange = (sign: number) => {
+        if (amount < 0) return;
         const bounded = Math.max(0, amount + sign) // sign*(what?)
         setAmount(bounded)
     }
