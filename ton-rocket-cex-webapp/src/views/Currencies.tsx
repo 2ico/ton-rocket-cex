@@ -7,6 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Pairs from '@/components/Pairs';
+import TabPanel from '@/components/TabPanel';
 import { getBaseCurrencies } from "@/api/currencies";
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -15,35 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
 import telegramHooks from '@/hooks/telegram';
-
-
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
 
 
 export default function Trade() {
@@ -142,16 +114,19 @@ export default function Trade() {
           />
         ))}
       </Tabs>
-    <SearchBar sx={{mr: 4}} onChange={handleChangeSearchBar} />
+    <SearchBar sx={{mx: 4}} onChange={handleChangeSearchBar} />
     </Box>
     <Box>
     <SwipeableViews
+        marginWidth={0}
+        cellPadding={0}
+        marginHeight={0}
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={tabValue}
         onChangeIndex={handleChangeIndex}
         >
           {baseCurrencies.map((currency, index): JSX.Element => (
-            <TabPanel value={tabValue} index={index} dir={theme.direction}>
+          <TabPanel value={tabValue} index={index} dir={theme.direction}>
             <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
          </TabPanel>
         ))}

@@ -54,7 +54,7 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
           <List>
             {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((currency: any): JSX.Element => (
               <ListItem disablePadding key={currency.currency}     >
-                <ListItemButton component="div"  selected={selectedTradeCurrency === currency.currency}
+                <ListItemButton component="div" sx={{ px: 4}} selected={selectedTradeCurrency === currency.currency}
               onClick={(event) => handleListItemClick(event, currency.currency)} >
                   <ListItemText
                     primary={baseCurrency.name + "/" + currency.name}/>
