@@ -39,7 +39,11 @@ export default function Trade() {
   const handleMainButton = () => {
     //TOOD validate pair
     // moveNavigation to /trade/
-      if(pair) navigate("/trade/"+pair);
+      // @ts-ignore
+      telegram.showPopup({title: "Pair", message: pair})
+      if(pair){ 
+        navigate("/trade/"+pair);
+      }
   }
 
   useEffect(() => {
