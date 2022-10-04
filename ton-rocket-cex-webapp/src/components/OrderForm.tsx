@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import AmountSelector from './AmoutSelector';
-import PriceSelector from './PriceSelector';
+import AmountSelector from './OrderInputs/AmoutSelector';
+import PriceSelector from './OrderInputs/PriceSelector';
 import Box from '@mui/material/Box';
 
-import {OrderAction, ToggleBuySell} from './ToggleBuySell';
-import {OrderType, OrderSelector} from './OrderTypeSelector'
+import {OrderAction, ToggleBuySell} from './OrderInputs/ToggleBuySell';
+import {OrderType, OrderSelector} from './OrderInputs/OrderTypeSelector'
 
 type Order = {
     price: number,
