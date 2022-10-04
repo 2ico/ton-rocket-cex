@@ -55,24 +55,31 @@ export default function Trade() {
   const [searchQuery, setSearchQuery] = useState("");
   const {isReady, telegram} = telegramHooks();
   
-  useEffect(() => {
-      if(isReady){
-      telegram.MainButton.setParams({
-        color: telegram.themeParams.button_color,
-        text: "Select currency pair",
-        is_visible: true,
-      });
-    }
-    }, [telegram, isReady]);
-  
-
-  //if currency is selected, select right tab
-  
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
   onSuccess: (data) => {
     let baseCurrencies = data.data.results;
     setBaseCurrency(baseCurrencies[0]);
   }});
+
+  const handleMainButton = () => {
+    // moveNavigation to /trade/  
+  }
+
+  useEffect(() => {
+      if(isReady){
+        telegram.MainButton.setParams({
+          color: telegram.themeParams.button_color,
+          text: "Select currency pair",
+          is_visible: false,
+          is_active: true,
+        });
+        telegram.MainButton.onClick(handleMainButton);
+      }
+    }, [telegram, isReady]);
+  
+
+  //if currency is selected, select right tab
+  
   
   if (isLoading) return (
     <Backdrop open sx={{ color: '#fff', zIndex: (theme: { zIndex: { drawer: number; }; }) => theme.zIndex.drawer + 1 }} >

@@ -49,7 +49,7 @@ export default function Trade() {
     useEffect(() => {
         if(isReady){
             // @ts-ignore
-            telegram.BackButton.enable();
+            telegram.BackButton.show();
       }
       }, [telegram, isReady]);
     
