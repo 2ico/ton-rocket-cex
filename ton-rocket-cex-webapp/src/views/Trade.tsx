@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
 import { Box, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
@@ -40,6 +40,7 @@ const tradeCurrencyTmp : Currency = {
 export default function Trade() {
     const { pair } = useParams();
     let navigate = useNavigate();
+    const [isValidOrder, setIsValidOrder] = useState(false);
     const {isReady, telegram} = telegramHooks();
 
     if(pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
@@ -50,15 +51,34 @@ export default function Trade() {
     //TODO onClose show confirm popup (see DurgerKing)
 
     useEffect(() => {
-        if(isReady){
-            // @ts-ignore
-            telegram.BackButton.show();
-            // @ts-ignore
-            telegram.BackButton.onClick(() => navigate("/"));
-      }
-      }, [telegram, isReady]);
-    
+        if(!isReady) return
+        // @ts-ignore
+        telegram.BackButton.onClick(() => navigate("/"));
+        // @ts-ignore
+        telegram.BackButton.show();
 
+        telegram.MainButton.setParams({
+            color: "rgb(49, 181, 69)",
+            text: "PLACE ORDER",
+            is_visible: true,
+            is_active: false,
+          });
+      }, [telegram, isReady]);
+
+      useEffect(() => {
+        if(!isReady) return
+
+        if(isValidOrder){
+            telegram.MainButton.onClick(() => {
+                // @ts-ignore
+                telegram.showPopup({title: "Order details", message: "TODO"})
+            })
+            telegram.MainButton.enable()
+        }else{
+            telegram.MainButton.disable();
+        }
+      }, [isValidOrder, telegram, isReady]);
+    
 
 
     const { data, error, isLoading } = useQuery("orderBook", 
