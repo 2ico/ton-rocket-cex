@@ -100,8 +100,8 @@ export default function Trade() {
   };
 
   const handleChangeIndex = (index: number) => {
-    console.log("change index")
     setTabValue(index);
+    setPair(null);
   };
 
   const handleChangeSearchBar = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
