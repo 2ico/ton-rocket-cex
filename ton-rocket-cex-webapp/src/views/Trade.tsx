@@ -14,6 +14,7 @@ import { separateUrlPair } from "@/utils/utils"
 import { Box, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
 import { useEffect, useState } from 'react';
+import Orderbook from '@/components/Orderbook';
 
 const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
@@ -131,7 +132,9 @@ export default function Trade() {
         <Typography variant="h4">
             {baseCurrency}/{tradeCurrency}
         </Typography>
-        <button onClick={() => setOrderIssued(true)}> BUY </button>
+        <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button>
+        <Orderbook/>
+        <hr/>
         <OrderForm 
             baseCurrency={baseCurrency} 
             priceCurrency={tradeCurrency} 

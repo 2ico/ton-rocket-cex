@@ -111,7 +111,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
                 error = {!(isValid || firstUse)}
                 type='number'
-                label={t("Amount")}
+                label={t("amount")}
                 variant="standard"  
                 helperText={getErrorMessage()}
             />

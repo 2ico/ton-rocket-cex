@@ -33,10 +33,10 @@ function ToggleBuySell({currentValue, handleChange}: Props) {
             aria-label="text alignment"
         >
             <ToggleButton value="Buy">
-                {t("Buy")}
+                {t("buy")}
             </ToggleButton>
             <ToggleButton value="Sell">
-                {t("Sell")}
+                {t("sell")}
             </ToggleButton>
         </ToggleButtonGroup>
     );

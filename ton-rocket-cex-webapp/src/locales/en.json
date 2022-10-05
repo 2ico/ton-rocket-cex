@@ -1,5 +1,11 @@
 {
     "invalid_amount": "Invalid amount.",
     "amount_exceeds_budget": "Amount exceeds budget.",
-    "page_x_not_found": "Page {pathname} not found."
+    "page_x_not_found": "Page {pathname} not found.",
+    "buy": "Buy",
+    "sell": "Sell",
+    "price": "Price",
+    "amount": "Amout",
+    "bid": "Bid",
+    "ask": "Ask"
 }

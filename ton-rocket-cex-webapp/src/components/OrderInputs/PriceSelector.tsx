@@ -9,6 +9,7 @@ import IncrementButton from './IncrementButton'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { useThemeProps } from "@mui/system";
+import { useTranslation } from 'react-i18next';
 
 
 interface PriceSelectorProp {
@@ -21,6 +22,7 @@ interface PriceSelectorProp {
 const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : PriceSelectorProp)
     : JSX.Element => 
 {
+    const { t } = useTranslation();
     const [price, isValid] = priceState;
     const [priceText, setPriceText] = useState(price.toString())
 
@@ -45,7 +47,7 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
     }   
 
     const getErrorMessage = () => {
-        if (priceText === "" || price.lessThan(0)) return "Amount Invalid"
+        if (priceText === "" || price.lessThan(0)) return t("invalid_amount")
         return ""
     }
     
@@ -88,7 +90,7 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
                 error = {!isValid || price.lessThan(0)}
                 type='number'
                 variant="standard"
-                label="Price"
+                label={t("price")}
                 helperText={getErrorMessage()}
                 disabled={isDisabled}
             />
