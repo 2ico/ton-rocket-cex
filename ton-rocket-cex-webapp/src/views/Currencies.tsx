@@ -36,6 +36,13 @@ export default function Trade() {
     setBaseCurrency(baseCurrencies[0]);
   }});
 
+  let baseCurrencies : Array<any> | null = null;
+
+  useEffect(() => {
+    if(baseCurrencies == null) return
+    setBaseCurrency(baseCurrencies[tabValue]);
+  }, [tabValue, baseCurrencies])
+
   useEffect(() => {
       if(!isReady) return
         // @ts-ignore
@@ -84,18 +91,17 @@ export default function Trade() {
     </Backdrop>
   );
   if (error) return <div>Error loading currencies</div>;
+
+  baseCurrencies = data.data.results;
   
-  let baseCurrencies : Array<any> = data.data.results;
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
     setTabValue(newValue);
-    // I wanted to use useEffect but is doesnt work
-    setBaseCurrency(baseCurrencies[newValue]);  
+    setPair(null);
   };
 
   const handleChangeIndex = (index: number) => {
+    console.log("change index")
     setTabValue(index);
-    //TODO useEffect
-    setBaseCurrency(baseCurrencies[index]);  
   };
 
   const handleChangeSearchBar = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
@@ -127,7 +133,7 @@ export default function Trade() {
         aria-label="base currencies"
       >
 
-        {baseCurrencies.map((currency, index): JSX.Element => (
+        {baseCurrencies?.map((currency, index): JSX.Element => (
           <Tab
             key={currency.currency}
             label={currency.name}
@@ -146,7 +152,7 @@ export default function Trade() {
         index={tabValue}
         onChangeIndex={handleChangeIndex}
         >
-          {baseCurrencies.map((currency, index): JSX.Element => (
+          {baseCurrencies?.map((currency, index): JSX.Element => (
           <TabPanel value={tabValue} index={index} dir={theme.direction}>
             <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
          </TabPanel>
