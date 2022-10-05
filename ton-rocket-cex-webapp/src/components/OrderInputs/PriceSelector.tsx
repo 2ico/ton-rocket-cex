@@ -1,4 +1,5 @@
 import React, { isValidElement, useEffect, useState } from "react";
+import Decimal from 'decimal.js';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -11,8 +12,8 @@ import { useThemeProps } from "@mui/system";
 
 
 interface PriceSelectorProp {
-    priceState: [number, boolean],
-    setPriceState: ([newPrice, isValid]: [number, boolean]) => void,
+    priceState: [Decimal, boolean],
+    setPriceState: ([newPrice, isValid]: [Decimal, boolean]) => void,
     amountType: string,
     isDisabled: boolean
 }
@@ -23,27 +24,34 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
     const [price, isValid] = priceState;
     const [priceText, setPriceText] = useState(price.toString())
 
+    /*
     useEffect(() => {
         if (isValid)
         setPriceText(price.toString())
     }, [ price, isValid ])
+    */
+
+    useEffect(() => {
+        if (priceText == "" || !price.equals(new Decimal(priceText)))
+            setPriceText(price.toFixed())
+    }, [ price ])
 
     const handleTextChange = (text: string) => {
         setPriceText(text)
         if (text !== "")
-            setPriceState([Number(text), true])
+            setPriceState([new Decimal(Number(text)), true])
         else
             setPriceState([price, false])
     }   
 
     const getErrorMessage = () => {
-        if (priceText === "" || price < 0) return "Amount Invalid"
+        if (priceText === "" || price.lessThan(0)) return "Amount Invalid"
         return ""
     }
-
+    
     const handleButtonChange = (sign: number) => {
         if(isValid)
-            setPriceState([price + sign, true])
+            setPriceState([price.plus(sign), true])
     }
 
     return (
@@ -77,10 +85,10 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
                 }}
                 value={priceText}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
-                error = {!isValid || price < 0}
+                error = {!isValid || price.lessThan(0)}
                 type='number'
                 variant="standard"
-                label="price"
+                label="Price"
                 helperText={getErrorMessage()}
                 disabled={isDisabled}
             />

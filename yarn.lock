@@ -1354,6 +1354,13 @@ axios@latest:
   languageName: node
   linkType: hard
 
+"decimal.js@npm:^10.4.1":
+  version: 10.4.1
+  resolution: "decimal.js@npm:10.4.1"
+  checksum: 5da6dc74af5b73d954741b24d404ef6da07841794d9e51412a2708ec384dd7b4bced3365fb178f4cd119b7ef45f0b34344014a4dc0494c8374c5e746df3cb410
+  languageName: node
+  linkType: hard
+
 "delayed-stream@npm:~1.0.0":
   version: 1.0.0
   resolution: "delayed-stream@npm:1.0.0"
@@ -3143,6 +3150,8 @@ axios@latest:
 "ton-rocket-cex@workspace:.":
   version: 0.0.0-use.local
   resolution: "ton-rocket-cex@workspace:."
+  dependencies:
+    decimal.js: ^10.4.1
   languageName: unknown
   linkType: soft
 

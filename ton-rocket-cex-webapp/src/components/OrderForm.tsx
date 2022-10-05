@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+import Decimal from 'decimal.js';
 import AmountSelector from '@/components/OrderInputs/AmoutSelector';
 import PriceSelector from '@/components/OrderInputs/PriceSelector'
 import Box from '@mui/material/Box';
@@ -8,17 +9,17 @@ import {OrderAction, ToggleBuySell} from '@/components/OrderInputs/ToggleBuySell
 import {OrderType, OrderSelector} from '@/components/OrderInputs/OrderTypeSelector'
 
 type Order = {
-    price: number,
-    amount: number,
+    price: Decimal,
+    amount: Decimal,
     orderType: OrderType
     orderAction: OrderAction
 };
 
 type Props = {
-    totalAmout: number
+    totalAmout: Decimal
     baseCurrency: string,
     priceCurrency: string,
-    defaultPrice: number,
+    defaultPrice: Decimal,
     handleIssueOrder: (orderState: Order, isOrderValid: boolean) => void,
     orderIssued: boolean
     firstUse: boolean,
@@ -30,7 +31,7 @@ const OrderForm = ({totalAmout, baseCurrency,
     : JSX.Element => 
 {
     // const [amount, setAmount] = useState(0.0)
-    const [[amount, isAmountValid], setAmountState] = useState([0.0, false])
+    const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
     const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
     const [orderAction, setOrderAction] = useState(OrderAction.Buy)
     const [orderType, setOrderType] = useState(OrderType.Limit)

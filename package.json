@@ -13,5 +13,8 @@
   "scripts": {
     "build": "yarn workspaces foreach run build",
     "start_depr": "yarn workspaces foreach run start"
+  },
+  "dependencies": {
+    "decimal.js": "^10.4.1"
   }
 }

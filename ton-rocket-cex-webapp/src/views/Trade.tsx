@@ -1,4 +1,6 @@
 import {useLocation} from 'react-router-dom';
+import Decimal from 'decimal.js';
+
 
 import {Order, OrderForm} from '@/components/OrderForm';
 import {getOrderbook} from "@/api/currencies";
@@ -39,7 +41,7 @@ const tradeCurrencyTmp : Currency = {
     }
 }
 
-const totalTmp = 100.0
+const totalTmp = new Decimal(100.0)
 
 
 export default function Trade() {

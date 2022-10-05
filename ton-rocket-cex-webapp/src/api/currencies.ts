@@ -5,6 +5,7 @@
 
 import { AnyRecord } from "dns";
 
+import Decimal from 'decimal.js';
 import {Currency, CurrencyPair} from '@/api/types';
 
 const baseCurrencies: Array<Currency> = [
@@ -219,17 +220,17 @@ function getBaseCurrencies() {
 };
 
 function getOrderbook(baseCurrency: string, priceCurrency: string) {
-    const marketPrice = randomMarketPrice(0.420, 6.9)
-    const randomAmount = (max: number) => Math.random() * max;
+    const marketPrice = new Decimal(randomMarketPrice(0.420, 6.9))
+    const randomAmount = (max: number) => new Decimal(Math.random() * max);
 
-    function* monotonicRandomIterator(end : number, startValue = 0.0, maxStep = 0.0, sign=1) {
-        for (let i = 0; i < end; i += 1) {
-            startValue += randomAmount(maxStep) * sign
+    function* monotonicRandomIterator(end : Decimal, startValue = new Decimal(0.0), maxStep = 0.0, sign=1) {
+        for (let i = 0; end.greaterThan(i); i += 1) {
+            startValue = randomAmount(maxStep).mul(sign).plus(startValue)
             yield startValue
         }
     }
-    const buyerPrice = monotonicRandomIterator(10, marketPrice, 0.05, -1)
-    const sellerPrice = monotonicRandomIterator(10, marketPrice, 0.05, 1)
+    const buyerPrice = monotonicRandomIterator(new Decimal(10), marketPrice, 0.05, -1)
+    const sellerPrice = monotonicRandomIterator(new Decimal(10), marketPrice, 0.05, 1)
     
     return wrapWithTimeout({
         "marketPrice" : marketPrice,

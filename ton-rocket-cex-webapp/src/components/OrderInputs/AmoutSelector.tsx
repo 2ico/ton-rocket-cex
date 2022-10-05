@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Decimal from 'decimal.js';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -15,22 +16,22 @@ import { useTranslation } from 'react-i18next';
 
 
 type RangeProp = {
-    value: number,
-    max: number,
-    onChange: (amount : number) => void,
+    value: Decimal,
+    max: Decimal,
+    onChange: (amount : Decimal) => void,
 }
 
 const Range = ({ value, max, onChange }: RangeProp) : JSX.Element => 
     <FormControl sx={{ width: "100%" }} variant="standard">
-        <Slider value={value} min = {0} max={max} size="small" step={0.01}
-            onChange={(event: Event, newValue : number | number[]) => { onChange(newValue as number) }} />
+        <Slider value={value.toNumber()} min = {0} max={max.toNumber()} size="small" step={0.01}
+            onChange={(event: Event, newValue : number | number[]) => { onChange(new Decimal(newValue as number)) }} />
     </FormControl>
 
 interface AmountSelectorProp {
-    totalAmount: number,
+    totalAmount: Decimal,
     amountType: string,
-    amountState: [number, boolean],
-    setAmountState: ([newPrice, isValid]: [number, boolean]) => void,
+    amountState: [Decimal, boolean],
+    setAmountState: ([newPrice, isValid]: [Decimal, boolean]) => void,
     firstUse: boolean,
     setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -43,17 +44,17 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
     const [amountText, setAmountText] = useState("0")
 
     useEffect(() => {
-        if (isValid || amountText !== "")
-            setAmountText(amount.toString())
+        if (amountText == "" || !amount.equals(new Decimal(amountText)))
+            setAmountText(amount.toFixed())
     }, [ amount ])
 
-    const isAmountValid = (newAmount: number) => {
-        return (0 < newAmount) && (newAmount <= totalAmount)
+    const isAmountValid = (newAmount: Decimal) => {
+        return newAmount.greaterThan(0) && (newAmount.lessThanOrEqualTo(totalAmount))
     }
 
     const getErrorMessage = () => {
         if (isValid || firstUse) return ""
-        else if (amountText == "" || amount <= 0) return t("invalid_amount")
+        else if (amountText == "" || amount.lessThanOrEqualTo(0)) return t("invalid_amount")
         return t("amount_exceeds_budget")
     }
 
@@ -61,7 +62,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
         setFirstUse(false)
         setAmountText(text)
         if (text !== "") {
-            const newAmount = Number(text)
+            const newAmount = new Decimal(Number(text))
             setAmountState([newAmount, isAmountValid(newAmount)])
         }
         else {
@@ -72,10 +73,10 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
     const handleButtonChange = (sign: number) => {
         setFirstUse(false)
         if (amountText !== "")
-            setAmountState([amount + sign, isAmountValid(amount + sign)])
+            setAmountState([amount.plus(sign), isAmountValid(amount.plus(sign))])
     }
 
-    const handleSliderChange = (amount: number) => {
+    const handleSliderChange = (amount: Decimal) => {
         setFirstUse(false)
         setAmountState([amount, isAmountValid(amount)])
     }
