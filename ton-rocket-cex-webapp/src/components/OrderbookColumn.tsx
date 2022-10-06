@@ -42,8 +42,8 @@ export default function OrderbookColumn({tableRow, alignment, orderbookEntries, 
             <TableBody>
                 {orderbookEntries.map((entryPair, index) => (
                     <TableRow key={index}>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[0]].toFixed()}</TableCell>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[1]].toFixed()}</TableCell>
+                        <TableCell align={alignment}>{entryPair[entryToColumnMap[0]].toFixed(2)}</TableCell>
+                        <TableCell align={alignment}>{entryPair[entryToColumnMap[1]].toFixed(2)}</TableCell>
                     </TableRow>
                  ))}                
             </TableBody>

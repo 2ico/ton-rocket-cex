@@ -219,24 +219,108 @@ function getBaseCurrencies() {
     return wrapWithTimeout(baseCurrencies, 'baseCurrencies not found');
 };
 
-function getOrderbook(baseCurrency: string, priceCurrency: string) {
-    const marketPrice = new Decimal(randomMarketPrice(0.420, 6.9))
-    const randomAmount = (max: number) => new Decimal(Math.random() * max);
+type MarketState = {
+    marketPrice: Decimal;
+    precision: Decimal;
+    buyers: {
+        price: Decimal;
+        amount: Decimal;
+    }[];
+    sellers: {
+        price: Decimal;
+        amount: Decimal;
+    }[];
+};
 
-    function* monotonicRandomIterator(end : Decimal, startValue = new Decimal(0.0), maxStep = 0.0, sign=1) {
-        for (let i = 0; end.greaterThan(i); i += 1) {
-            startValue = randomAmount(maxStep).mul(sign).plus(startValue)
-            yield startValue
+function marketGenerator(buyerNumber : number, sellerNumber : number) {
+    const precision = new Decimal(0.01)
+    const defaultMaxOffset = 8000
+    const defaultMaxAmount = new Decimal(100)
+    const defaultMaxMarketPrice = new Decimal(100)
+
+    const randomAmount = (max: Decimal) => new Decimal(max.mul(Math.random()));
+    const randomInteger = (max: number) => Math.floor(Math.random() * Math.random() * max + 1)
+
+    function randomOrder(
+        baseValue: Decimal, 
+        sign: number, 
+        precision: Decimal,
+        maxOffset: number
+    ) {
+        return  {
+            price: baseValue.add(precision.mul(randomInteger(maxOffset)).mul(sign)),
+            amount : randomAmount(defaultMaxAmount)
         }
     }
-    const buyerPrice = monotonicRandomIterator(new Decimal(10), marketPrice, 0.05, -1)
-    const sellerPrice = monotonicRandomIterator(new Decimal(10), marketPrice, 0.05, 1)
-    
-    return wrapWithTimeout({
-        "marketPrice" : marketPrice,
-        "buyers" : Array.from(buyerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
-        "sellers" : Array.from(sellerPrice, (p) => ({"price:" : p, "amount": randomAmount(10)})),
-    }, "orderbook not found")
+
+    function* ordersGenerator(
+        amount: number, 
+        baseValue: Decimal, 
+        sign: number,
+        precision: Decimal,
+        maxOffset: number
+    ) {
+            for (let i = 0; i < amount; i += 1) {
+                yield randomOrder(baseValue, sign, precision, maxOffset)
+        }
+    }
+
+    let marketGlobalState : { [pair: string] : MarketState } = { }
+
+    const updateMarketState = (pair : string) => {
+        if (pair in marketGlobalState) { 
+            // update existing market pair
+            // TEMPORARY STOP UPDATING
+            
+            const marketPrice = marketGlobalState[pair].marketPrice
+            const precision = marketGlobalState[pair].precision
+
+            for (let i = 0; i < Math.sqrt(buyerNumber); i += 1) {
+                const index = Math.floor(Math.random() * buyerNumber);
+                marketGlobalState[pair].buyers[index] = 
+                    randomOrder(marketPrice, -1, precision, defaultMaxOffset)                
+            }
+
+            for (let i = 0; i < Math.sqrt(sellerNumber); i += 1) {
+                const index = Math.floor(Math.random() * sellerNumber);
+                marketGlobalState[pair].sellers[index] = 
+                    randomOrder(marketPrice, 1, precision, defaultMaxOffset)                
+            }
+
+        } else {
+            // generate market pair
+            const marketPrice = randomAmount(defaultMaxMarketPrice).add(precision.mul(defaultMaxOffset))
+            console.log(marketPrice.toNumber())
+            marketGlobalState[pair] = {
+                marketPrice: marketPrice,
+                precision: precision,
+                buyers : Array.from(ordersGenerator(buyerNumber, marketPrice, -1, precision, defaultMaxOffset)),
+                sellers : Array.from(ordersGenerator(sellerNumber, marketPrice, 1, precision, defaultMaxOffset))
+            }
+        }
+
+        // sort entries
+        const currentMarket = marketGlobalState[pair]
+        currentMarket.buyers.sort((
+            {price: lPrice, amount: lAmount}, {price: rPrice, amount: rAmount}) =>
+                (lPrice.minus(rPrice)).toNumber())
+
+        currentMarket.sellers.sort((
+            {price: lPrice, amount: lAmount}, {price: rPrice, amount: rAmount}) =>
+                (lPrice.minus(rPrice)).toNumber())
+
+        return currentMarket
+    }
+
+    return updateMarketState
+}
+
+const myMarket = marketGenerator(20, 20)
+
+function getOrderbook(baseCurrency: string, priceCurrency: string) {
+    return wrapWithTimeout(
+        myMarket(baseCurrency + "-" + priceCurrency),
+        "orderbook not found")
 }
 
 // ratesCurrencies(pair) {

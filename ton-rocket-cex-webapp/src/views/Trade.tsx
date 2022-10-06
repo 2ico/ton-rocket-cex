@@ -98,7 +98,7 @@ export default function Trade() {
     const { data, error, isLoading } = useQuery("orderBook", 
         () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
-            // console.log("query")
+            // console.log(data.data.results)
             // let baseCurrencies = data.data.results;
             // setBaseCurrency(baseCurrencies[0]);
         },
