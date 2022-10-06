@@ -177,8 +177,8 @@ export default function Orderbook()
     };    
 
     const {marketPrice, precision, buyers, sellers} = myMarket("a-b")
-    const aggregateBuyers = aggregate(marketPrice, precision.mul(1), buyers, computeBinIndexBid, -1).reverse()
-    const aggregateSeller = aggregate(marketPrice, precision.mul(1), sellers, computeBinIndexAsk, 1)
+    const aggregateBuyers = aggregate(marketPrice, precision.mul(200), buyers, computeBinIndexBid, -1).reverse()
+    const aggregateSeller = aggregate(marketPrice, precision.mul(200), sellers, computeBinIndexAsk, 1)
 
     // console.log(sellers[sellers.length - 1].price.toNumber())
 
