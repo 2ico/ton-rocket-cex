@@ -3,6 +3,7 @@ import Decimal from 'decimal.js';
 
 
 import {Order, OrderForm} from '@/components/OrderForm';
+import CustomBackdrop from "@/components/CustomBackdrop";
 import {getOrderbook} from "@/api/currencies";
 import {Currency} from "@/api/types"
 import { useQuery } from 'react-query';
@@ -11,7 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import { useNavigate, useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
-import { Box, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
 import { useEffect, useState } from 'react';
 import Orderbook from '@/components/Orderbook';
@@ -106,11 +107,7 @@ export default function Trade() {
     });
 
     if (isLoading) 
-        return (
-            <Backdrop open sx={{ color: '#fff', zIndex: (theme: { zIndex: { drawer: number; }; }) => theme.zIndex.drawer + 1 }} >
-            <CircularProgress color="inherit" />
-            </Backdrop>
-        );
+        return (<CustomBackdrop />);
     else if (error) 
         return <div>Error loading orderbook</div>;
    
@@ -132,19 +129,24 @@ export default function Trade() {
         <Typography variant="h4">
             {baseCurrency}/{tradeCurrency}
         </Typography>
-        <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button>
-        <Orderbook/>
-        <hr/>
-        <OrderForm 
-            baseCurrency={baseCurrency} 
-            priceCurrency={tradeCurrency} 
-            totalAmout={totalTmp} 
-            defaultPrice={tradePrice}
-            handleIssueOrder = {handleIssueOrder}
-            orderIssued = {orderIssued}
-            firstUse = {firstUse}
-            setFirstUse = {setFirstUse}
-        />
+        <Stack sx={{height: "100vh"}} divider={<Divider flexItem/>}>
+            <Box sx={{height: "50vh"}}>
+            {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
+            <Orderbook/>
+            </Box>
+            <Box sx={{height: "50vh"}}>
+            <OrderForm 
+                baseCurrency={baseCurrency} 
+                priceCurrency={tradeCurrency} 
+                totalAmout={totalTmp} 
+                defaultPrice={tradePrice}
+                handleIssueOrder = {handleIssueOrder}
+                orderIssued = {orderIssued}
+                firstUse = {firstUse}
+                setFirstUse = {setFirstUse}
+            />
+            </Box>
+        </Stack>
         </Box>
     )
 }

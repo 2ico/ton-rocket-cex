@@ -51,7 +51,6 @@ const OrderForm = ({totalAmout, baseCurrency,
     return (
         <Box
             sx={{
-                maxWidth: 480,
                 m: 3
             }}
         >

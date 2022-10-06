@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 /* BEGIN: TO BE REMOVED */
 import Decimal from 'decimal.js';
 import { CSSProperties } from '@mui/styled-engine-sc';
+import { Box, Grid } from '@mui/material';
 const randomMarketPrice = (min: number, max: number) => Math.random() * (max - min) + min;
 const randomPriceChange = (min: number, max: number) => Math.random() * (max - min) + min;
 
@@ -210,8 +211,9 @@ export default function Orderbook()
     };    
 
     return (
-        <div>
-        <div style={{width:"45%", marginRight:"10%", float:"left" }}>
+        <Box>
+        <Grid container>
+        <Grid sx={{mr: 2}}>
             <OrderbookColumn 
                 tableRow={generateTableHead("left", ["amount", "bid"])}
                 alignment={"left"}
@@ -219,8 +221,8 @@ export default function Orderbook()
                 entryToColumnMap={{ 0: "amount", 1: "price"}}
                 rowStyle={rowStyleBuyers}
                 />
-        </div>
-        <div style={{width:"45%", float: "right"}}>
+        </Grid>
+        <Grid sx={{mr: 2}}>
             <OrderbookColumn
                 tableRow={generateTableHead("right", ["ask", "amount"])}
                 alignment={"right"}
@@ -228,11 +230,12 @@ export default function Orderbook()
                 entryToColumnMap={{ 0: "price", 1: "amount"}}
                 rowStyle={rowStyleSellers}
             />
-        </div>
+        </Grid>
+        </Grid>
         <button onClick={() => setFlag(!flag)}>
             Activate
         </button>
-        </div>
+        </Box>
     )
 }
 
