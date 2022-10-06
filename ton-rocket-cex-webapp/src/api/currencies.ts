@@ -315,7 +315,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
     return updateMarketState
 }
 
-const myMarket = marketGenerator(20, 20)
+const myMarket = marketGenerator(40, 40)
 
 function getOrderbook(baseCurrency: string, priceCurrency: string) {
     return wrapWithTimeout(
@@ -330,3 +330,4 @@ function getOrderbook(baseCurrency: string, priceCurrency: string) {
 
 
 export { getBaseCurrencies, getAvailablePairs, getOrderbook };
+export type { MarketState };

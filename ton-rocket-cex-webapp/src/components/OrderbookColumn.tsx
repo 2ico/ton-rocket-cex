@@ -18,14 +18,10 @@ interface entryPair {
     amount: Decimal
 }
 
-type DecoratedRowProps = {
-
-};
-
 interface OrderbookComumnProp {
     tableRow: JSX.Element,
     alignment: TableCellProps["align"],
-    orderbookEntries: {price: Decimal; amount: Decimal}[],
+    orderbookEntries: {price: number; amount: number}[],
     entryToColumnMap: { [id: number] : keyof entryPair },
     rowStyle : CSSProperties[]
 }
@@ -48,8 +44,8 @@ function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMa
             <TableBody>
                 {orderbookEntries.map((entryPair, index) => (
                     <TableRow key={index} sx={rowStyle[index]}>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[0]].toFixed(2)}</TableCell>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[1]].toFixed(2)}</TableCell>
+                        <TableCell align={alignment}>{entryPair[entryToColumnMap[0]]}</TableCell>
+                        <TableCell align={alignment}>{entryPair[entryToColumnMap[1]]}</TableCell>
                     </TableRow>
                  ))}                
             </TableBody>
