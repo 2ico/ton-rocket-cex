@@ -11,20 +11,26 @@ import Box from "@mui/material/Box";
 import { useTranslation } from 'react-i18next';
 
 import Decimal from 'decimal.js';
+import { CSSProperties } from "@mui/styled-engine";
 
 interface entryPair {
     price: Decimal,
     amount: Decimal
 }
 
+type DecoratedRowProps = {
+
+};
+
 interface OrderbookComumnProp {
     tableRow: JSX.Element,
     alignment: TableCellProps["align"],
     orderbookEntries: {price: Decimal; amount: Decimal}[],
-    entryToColumnMap: { [id: number] : keyof entryPair }
+    entryToColumnMap: { [id: number] : keyof entryPair },
+    rowStyle : CSSProperties[]
 }
 
-export default function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMap} : OrderbookComumnProp) {
+function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMap, rowStyle} : OrderbookComumnProp) {
     const { t } = useTranslation();
       
     const genGradient = (index: number) => {
@@ -41,7 +47,7 @@ export default function OrderbookColumn({tableRow, alignment, orderbookEntries, 
             </TableHead>
             <TableBody>
                 {orderbookEntries.map((entryPair, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} sx={rowStyle[index]}>
                         <TableCell align={alignment}>{entryPair[entryToColumnMap[0]].toFixed(2)}</TableCell>
                         <TableCell align={alignment}>{entryPair[entryToColumnMap[1]].toFixed(2)}</TableCell>
                     </TableRow>
@@ -51,3 +57,5 @@ export default function OrderbookColumn({tableRow, alignment, orderbookEntries, 
       </TableContainer>
     )
 }
+
+export { OrderbookColumn };
