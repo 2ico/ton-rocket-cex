@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 type ButtonProp = {
     onClick: () => void,
     isPlusButton: boolean,
-    isDisabled?: boolean
+    isDisabled?: boolean,
 }; 
   
 // you can choose annotate the return type so an error is raised if you accidentally return some other type

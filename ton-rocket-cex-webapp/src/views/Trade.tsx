@@ -104,7 +104,7 @@ export default function Trade() {
             // let baseCurrencies = data.data.results;
             // setBaseCurrency(baseCurrencies[0]);
         },
-        refetchInterval: 20000, 
+        refetchInterval: 5000, 
     });
 
     if (isLoading) 
@@ -140,6 +140,8 @@ export default function Trade() {
             marketState={data.data.results}
         />
         <hr/>
+ 
+
         <OrderForm 
             baseCurrency={baseCurrency} 
             priceCurrency={tradeCurrency} 

@@ -10,10 +10,21 @@ import TableRow from "@mui/material/TableRow";
 import {OrderbookColumn} from "@/components/OrderbookColumn";
 import { MarketState } from '@/api/currencies';
 import { CSSProperties } from '@emotion/serialize';
+import IncrementButton from '@/components/OrderInputs/IncrementButton'
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import IconButton, { IconButtonClasses } from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useTranslation } from 'react-i18next';
 
 import Decimal from 'decimal.js';
+
+const sliceEnd: number = 12;
 
 function aggregate(
     marketPrice: Decimal, 
@@ -43,8 +54,9 @@ function aggregate(
     for (const bin of Object.values(bins)) {
         newOrders.push({
             price: computeBinPrice(bin[0]).toNumber(),
-            amount: bin[1].toDecimalPlaces(3).toNumber()
+            amount: bin[1].toDecimalPlaces(2).toNumber()
         })
+        if(newOrders.length > sliceEnd) break;
     }
 
     return newOrders
@@ -63,6 +75,42 @@ const computeTotalAmount = (orders: {
     return orders.reduce((partial, order) => partial.add(order.amount), new Decimal(0.0))
 }
 
+const precisionMultiples = [1, 5, 10, 50, 100, 200, 500]
+
+type AggregationDisplayProps = {
+    index: number,
+    maxIndex: number,
+    setIndex: (newIndex: number) => void,
+    displayText: string,
+};
+
+const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : AggregationDisplayProps) 
+    : JSX.Element => 
+{
+    return (
+        <div style={{float: "left"}}>
+            <div style={{display: "inline-block"}}>
+                <p > Aggregation: </p>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <IconButton color="primary" size="small"
+                    onClick={() => setIndex(Math.max(0, index - 1))}>
+                    <ChevronLeftIcon />
+                </IconButton>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <p> {displayText} </p>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <IconButton color="primary" size="small"
+                    onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}>
+                    <ChevronRightIcon />
+                </IconButton>            
+            </div>
+        </div>
+    )
+}
+
 type Props = {
     updateSignal: boolean,  // useEffect on marketState won't work
     marketState: MarketState
@@ -71,9 +119,11 @@ type Props = {
 export default function Orderbook( {updateSignal, marketState} : Props)
 {
     const { t } = useTranslation();
-    const sliceEnd: number = 12;
 
     const {marketPrice, precision, buyers, sellers} = marketState
+    const aggregationValues = precisionMultiples.map((m) => precision.mul(m))
+    const [aggregationIndex, setAggregationIndex] = useState(0)
+
     const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers).toNumber(), computeTotalAmount(sellers).toNumber()]
 
     const [flag, setFlag] = useState(false)
@@ -97,9 +147,10 @@ export default function Orderbook( {updateSignal, marketState} : Props)
     */
 
     useEffect(() => {
+        const aggregation = aggregationValues[aggregationIndex]
         const [nextAggregateBuyers, nextAggregateSellers] = [
-            aggregate(marketPrice, precision.mul(flag ? 200 : 1), buyers, computeBinIndexBid, -1).reverse(),
-            aggregate(marketPrice, precision.mul(flag ? 200 : 1), sellers, computeBinIndexAsk, 1)
+            aggregate(marketPrice, aggregation, buyers, computeBinIndexBid, -1).reverse(),
+            aggregate(marketPrice, aggregation, sellers, computeBinIndexAsk, 1)
         ]
         setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
         setRowStyle([
@@ -143,9 +194,12 @@ export default function Orderbook( {updateSignal, marketState} : Props)
                 rowStyle={rowStyleSellers}
             />
         </div>
-        <button onClick={() => setFlag(!flag)}>
-            Activate
-        </button>
+        <AggregationDisplay 
+            index={aggregationIndex} 
+            maxIndex={aggregationValues.length}
+            setIndex={setAggregationIndex}
+            displayText={aggregationValues[aggregationIndex].toString()}
+        />
         </div>
     )
 }
