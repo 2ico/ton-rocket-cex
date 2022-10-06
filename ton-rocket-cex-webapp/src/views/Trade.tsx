@@ -104,7 +104,7 @@ export default function Trade() {
             // let baseCurrencies = data.data.results;
             // setBaseCurrency(baseCurrencies[0]);
         },
-        refetchInterval: 5000, 
+        refetchInterval: 60000, 
     });
 
     if (isLoading) 
