@@ -96,9 +96,11 @@ export default function Trade() {
         }
       }, [isValidOrder, telegram, isReady]);
     
+    const [updateSignal, setUpdateSignal] = useState(false)
     const { data, error, isLoading } = useQuery("orderBook", 
         () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
+            setUpdateSignal(!updateSignal)
             // console.log(data.data.results)
             // let baseCurrencies = data.data.results;
             // setBaseCurrency(baseCurrencies[0]);
@@ -132,10 +134,15 @@ export default function Trade() {
         <Stack sx={{height: "100vh"}} divider={<Divider flexItem/>}>
             <Box sx={{height: "50vh"}}>
             {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
-            <Orderbook/>
+            <Orderbook
+            updateSignal={updateSignal}
+            marketState={data.data.results}
+        />
             </Box>
             <Box sx={{height: "50vh"}}>
-            <OrderForm 
+     
+
+        <OrderForm 
                 baseCurrency={baseCurrency} 
                 priceCurrency={tradeCurrency} 
                 totalAmout={totalTmp} 

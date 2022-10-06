@@ -8,120 +8,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import {OrderbookColumn} from "@/components/OrderbookColumn";
+import { MarketState } from '@/api/currencies';
+import { CSSProperties } from '@emotion/serialize';
+import IncrementButton from '@/components/OrderInputs/IncrementButton'
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import IconButton, { IconButtonClasses } from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useTranslation } from 'react-i18next';
 
-/* BEGIN: TO BE REMOVED */
 import Decimal from 'decimal.js';
-import { CSSProperties } from '@mui/styled-engine-sc';
 import { Box, Grid } from '@mui/material';
 const randomMarketPrice = (min: number, max: number) => Math.random() * (max - min) + min;
 const randomPriceChange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-interface Pair {
-    price: Decimal,
-    amount: Decimal
-}
-
-type MarketState = {
-    marketPrice: Decimal;
-    precision: Decimal;
-    buyers: {
-        price: Decimal;
-        amount: Decimal;
-    }[];
-    sellers: {
-        price: Decimal;
-        amount: Decimal;
-    }[];
-};
-
-function marketGenerator(buyerNumber : number, sellerNumber : number) {
-    const precision = new Decimal(0.01)
-    const defaultMaxOffset = 8000
-    const defaultMaxAmount = new Decimal(100)
-    const defaultMaxMarketPrice = new Decimal(100)
-
-    const randomAmount = (max: Decimal) => new Decimal(max.mul(Math.random()));
-    const randomInteger = (max: number) => Math.floor(Math.random() * Math.random() * max + 1)
-
-    function randomOrder(
-        baseValue: Decimal, 
-        sign: number, 
-        precision: Decimal,
-        maxOffset: number
-    ) {
-        return  {
-            price: baseValue.add(precision.mul(randomInteger(maxOffset)).mul(sign)),
-            amount : randomAmount(defaultMaxAmount)
-        }
-    }
-
-    function* ordersGenerator(
-        amount: number, 
-        baseValue: Decimal, 
-        sign: number,
-        precision: Decimal,
-        maxOffset: number
-    ) {
-            for (let i = 0; i < amount; i += 1) {
-                yield randomOrder(baseValue, sign, precision, maxOffset)
-        }
-    }
-
-    let marketGlobalState : { [pair: string] : MarketState } = { }
-
-    const updateMarketState = (pair : string) => {
-        if (pair in marketGlobalState) { 
-            // update existing market pair
-            // TEMPORARY STOP UPDATING
-            
-            const marketPrice = marketGlobalState[pair].marketPrice
-            const precision = marketGlobalState[pair].precision
-
-            for (let i = 0; i < Math.sqrt(buyerNumber); i += 1) {
-                const index = Math.floor(Math.random() * buyerNumber);
-                marketGlobalState[pair].buyers[index] = 
-                    randomOrder(marketPrice, -1, precision, defaultMaxOffset)                
-            }
-
-            for (let i = 0; i < Math.sqrt(sellerNumber); i += 1) {
-                const index = Math.floor(Math.random() * sellerNumber);
-                marketGlobalState[pair].sellers[index] = 
-                    randomOrder(marketPrice, 1, precision, defaultMaxOffset)                
-            }
-
-        } else {
-            // generate market pair
-            const marketPrice = randomAmount(defaultMaxMarketPrice).add(precision.mul(defaultMaxOffset))
-            console.log(marketPrice.toNumber())
-            marketGlobalState[pair] = {
-                marketPrice: marketPrice,
-                precision: precision,
-                buyers : Array.from(ordersGenerator(buyerNumber, marketPrice, -1, precision, defaultMaxOffset)),
-                sellers : Array.from(ordersGenerator(sellerNumber, marketPrice, 1, precision, defaultMaxOffset))
-            }
-        }
-
-        // sort entries
-        const currentMarket = marketGlobalState[pair]
-        currentMarket.buyers.sort((
-            {price: lPrice, amount: lAmount}, {price: rPrice, amount: rAmount}) =>
-                (lPrice.minus(rPrice)).toNumber())
-
-        currentMarket.sellers.sort((
-            {price: lPrice, amount: lAmount}, {price: rPrice, amount: rAmount}) =>
-                (lPrice.minus(rPrice)).toNumber())
-
-        return currentMarket
-    }
-
-    return updateMarketState
-}
-
-const myMarket = marketGenerator(20, 20)
-
-/* TO BE REMOVED END */
+const sliceEnd: number = 12;
 
 function aggregate(
     marketPrice: Decimal, 
@@ -143,14 +48,17 @@ function aggregate(
         }
     }
 
-    const computeBinPrice = (index: number) => marketPrice.add(aggregateStep.mul(index).mul(sign))
+    const adjustedMarketPrice = new Decimal(0.0).add(
+        new Decimal(computeBinIndex(marketPrice, new Decimal(0.0), aggregateStep)).mul(aggregateStep))
+    const computeBinPrice = (index: number) => adjustedMarketPrice.add(aggregateStep.mul(index).mul(sign))
 
     const newOrders = []
     for (const bin of Object.values(bins)) {
         newOrders.push({
-            price: computeBinPrice(bin[0]),
-            amount: bin[1]
+            price: computeBinPrice(bin[0]).toNumber(),
+            amount: bin[1].toDecimalPlaces(2).toNumber()
         })
+        if(newOrders.length > sliceEnd) break;
     }
 
     return newOrders
@@ -169,36 +77,94 @@ const computeTotalAmount = (orders: {
     return orders.reduce((partial, order) => partial.add(order.amount), new Decimal(0.0))
 }
 
-export default function Orderbook()
+const precisionMultiples = [1, 5, 10, 50, 100, 200, 500]
+
+type AggregationDisplayProps = {
+    index: number,
+    maxIndex: number,
+    setIndex: (newIndex: number) => void,
+    displayText: string,
+};
+
+const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : AggregationDisplayProps) 
+    : JSX.Element => 
+{
+    return (
+        <div style={{float: "left"}}>
+            <div style={{display: "inline-block"}}>
+                <p > Aggregation: </p>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <IconButton color="primary" size="small"
+                    onClick={() => setIndex(Math.max(0, index - 1))}>
+                    <ChevronLeftIcon />
+                </IconButton>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <p> {displayText} </p>
+            </div>
+            <div style={{display: "inline-block"}}>
+                <IconButton color="primary" size="small"
+                    onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}>
+                    <ChevronRightIcon />
+                </IconButton>            
+            </div>
+        </div>
+    )
+}
+
+type Props = {
+    updateSignal: boolean,  // useEffect on marketState won't work
+    marketState: MarketState
+};
+
+export default function Orderbook( {updateSignal, marketState} : Props)
 {
     const { t } = useTranslation();
 
-    const {marketPrice, precision, buyers, sellers} = myMarket("a-b")
-    const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers), computeTotalAmount(sellers)]
+    const {marketPrice, precision, buyers, sellers} = marketState
+    const aggregationValues = precisionMultiples.map((m) => precision.mul(m))
+    const [aggregationIndex, setAggregationIndex] = useState(0)
+
+    const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers).toNumber(), computeTotalAmount(sellers).toNumber()]
 
     const [flag, setFlag] = useState(false)
-    const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState([ buyers, sellers ])
+    const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
+        [{ price: number, amount: number }[], { price: number, amount: number }[]]>([[], []])
     const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
         [CSSProperties[], CSSProperties[]]>([[], []])
-    
-    useEffect(() => {
-        setAggregateOrders([
+
+    /*
+    const [aggregateBuyers, aggregateSellers] = [ 
             aggregate(marketPrice, precision.mul(flag ? 200 : 1), buyers, computeBinIndexBid, -1).reverse(),
-            aggregate(marketPrice, precision.mul(flag ? 200 : 1), sellers, computeBinIndexAsk, 1)
-        ])
-    }, [ flag ])
+            aggregate(marketPrice, precision.mul(flag ? 200 : 1), sellers, computeBinIndexAsk, 1)]
+    const [rowStyleBuyers, rowStyleSellers] = [
+        aggregateBuyers.map(({price, amount}) => {
+            const per = String(new Decimal(100.0).sub(amount.div(totalAmountBuyers).mul(100)));
+            return { background: `linear-gradient(90deg, #FFFFFF ${per}%, #08FF6B ${per}%)` }
+        }),
+        aggregateSellers.map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
+            String(amount.div(totalAmountSellers).mul(100))}%, #FFFFFF 0%)`
+        }))]
+    */
 
     useEffect(() => {
+        const aggregation = aggregationValues[aggregationIndex]
+        const [nextAggregateBuyers, nextAggregateSellers] = [
+            aggregate(marketPrice, aggregation, buyers, computeBinIndexBid, -1).reverse(),
+            aggregate(marketPrice, aggregation, sellers, computeBinIndexAsk, 1)
+        ]
+        setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
         setRowStyle([
-            aggregateBuyers.map(({price, amount}) => {
-                const per = String(new Decimal(100.0).sub(amount.div(totalAmountBuyers).mul(100)));
+            nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
+                const per = String(100.0 - (amount / totalAmountBuyers) * 100.0);
                 return { background: `linear-gradient(90deg, #FFFFFF ${per}%, #08FF6B ${per}%)` }
             }),
-            aggregateSellers.map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
-                String(amount.div(totalAmountSellers).mul(100))}%, #FFFFFF 0%)`
+            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
+                String(amount * 100 / totalAmountSellers)}%, #FFFFFF 0%)`
             }))
-        ])
-    }, [aggregateBuyers])
+        ])        
+    }, [ flag, updateSignal ])
 
     const generateTableHead = (alignment: TableCellProps["align"], labels: string[]) => {
         return (
@@ -217,7 +183,7 @@ export default function Orderbook()
             <OrderbookColumn 
                 tableRow={generateTableHead("left", ["amount", "bid"])}
                 alignment={"left"}
-                orderbookEntries={flag ? aggregateBuyers : buyers }
+                orderbookEntries={aggregateBuyers.slice(-sliceEnd)}
                 entryToColumnMap={{ 0: "amount", 1: "price"}}
                 rowStyle={rowStyleBuyers}
                 />
@@ -226,15 +192,18 @@ export default function Orderbook()
             <OrderbookColumn
                 tableRow={generateTableHead("right", ["ask", "amount"])}
                 alignment={"right"}
-                orderbookEntries={flag ? aggregateSellers : sellers}
+                orderbookEntries={aggregateSellers.slice(0, sliceEnd)}
                 entryToColumnMap={{ 0: "price", 1: "amount"}}
                 rowStyle={rowStyleSellers}
             />
         </Grid>
         </Grid>
-        <button onClick={() => setFlag(!flag)}>
-            Activate
-        </button>
+        <AggregationDisplay 
+            index={aggregationIndex} 
+            maxIndex={aggregationValues.length}
+            setIndex={setAggregationIndex}
+            displayText={aggregationValues[aggregationIndex].toString()}
+        />
         </Box>
     )
 }
