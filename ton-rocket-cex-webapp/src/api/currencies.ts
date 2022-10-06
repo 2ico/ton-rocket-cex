@@ -315,7 +315,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
     return updateMarketState
 }
 
-const myMarket = marketGenerator(40, 40)
+const myMarket = marketGenerator(60, 60)
 
 function getOrderbook(baseCurrency: string, priceCurrency: string) {
     return wrapWithTimeout(

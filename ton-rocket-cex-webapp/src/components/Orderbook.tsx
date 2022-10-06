@@ -128,7 +128,6 @@ export default function Orderbook( {updateSignal, marketState} : Props)
 
     const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers).toNumber(), computeTotalAmount(sellers).toNumber()]
 
-    const [flag, setFlag] = useState(false)
     const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
         [{ price: number, amount: number }[], { price: number, amount: number }[]]>([[], []])
     const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
@@ -164,7 +163,7 @@ export default function Orderbook( {updateSignal, marketState} : Props)
                 String(amount * 100 / totalAmountSellers)}%, #FFFFFF 0%)`
             }))
         ])        
-    }, [ flag, updateSignal ])
+    }, [ aggregationIndex, updateSignal ])
 
     const generateTableHead = (alignment: TableCellProps["align"], labels: string[]) => {
         return (
