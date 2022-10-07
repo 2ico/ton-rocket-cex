@@ -55,7 +55,6 @@ function OrderbookColumn({tableRow, rowGenerator, count} : OrderbookComumnProp)
         setPage(0);
       };
 
-    // TODO SET MAXHEIGHT TO 100%
     return (
         <TableContainer component={Box} >
         <Table stickyHeader sx={{ minWidth: 100, height: "100%" }} size="small" aria-label="sticky table">

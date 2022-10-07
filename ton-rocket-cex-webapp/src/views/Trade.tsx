@@ -17,6 +17,8 @@ import telegramHooks from '@/hooks/telegram';
 import { useEffect, useState } from 'react';
 import Orderbook from '@/components/Orderbook';
 import CustomToolbar from '@/components/CustomToolbar';
+import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
+
 
 const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
@@ -58,7 +60,8 @@ export default function Trade() {
     
     const [orderIssued, setOrderIssued] = useState(false)
     const [firstUse, setFirstUse] = useState(true)
-    const [orderbookPrice, setOrderbookPrice] = useState(new Decimal(0))
+    const [[orderbookPrice, orderbookOrderAction], setOrderbookOrder] = 
+        useState([new Decimal(0), OrderAction.Buy])
 
     const { isReady, telegram } = telegramHooks();
 
@@ -103,7 +106,7 @@ export default function Trade() {
         () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
             setUpdateSignal(!updateSignal)
-            setOrderbookPrice(data.data.results.marketPrice)
+            setOrderbookOrder([data.data.results.marketPrice, orderbookOrderAction])
         },
         refetchInterval: 60000, 
     });
@@ -134,11 +137,11 @@ export default function Trade() {
         <Box>
             {/* <Grid container divider={<Divider flexItem />}> */}
             <Grid container alignItems="center" position={'relative'}
-  direction={"column"} flexWrap={'nowrap'} height={'100%'}>
+                    direction={"column"} flexWrap={'nowrap'} height={'100%'}>
                 <Grid item xs={6} overflow={'hidden'} sx={{position: 'relative' }}>
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
-                        onClick={setOrderbookPrice}
+                        onClick={setOrderbookOrder}
                         updateSignal={updateSignal}
                         marketState={data.data.results}
                     />
@@ -146,13 +149,15 @@ export default function Trade() {
                 <Grid item xs={6} overflow={'hidden'}>
                     <OrderForm 
                         baseCurrency={baseCurrency} 
-                        priceCurrency={tradeCurrency} 
+                        priceCurrency={tradeCurrency}
+                        precision={data.data.results.precision}
                         totalAmout={totalTmp} 
-                        orderbookPrice={tradePrice}
-                        handleIssueOrder={handleIssueOrder}
-                        orderIssued={orderIssued}
-                        firstUse={firstUse}
-                        setFirstUse={setFirstUse}
+                        orderbookPrice={orderbookPrice}
+                        orderbookOrderAction={orderbookOrderAction}
+                        handleIssueOrder = {handleIssueOrder}
+                        orderIssued = {orderIssued}
+                        firstUse = {firstUse}
+                        setFirstUse = {setFirstUse}
                     />
                 </Grid>
             </Grid>

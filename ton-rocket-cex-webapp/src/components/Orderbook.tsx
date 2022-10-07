@@ -19,6 +19,8 @@ import IconButton, { IconButtonClasses } from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
+
 
 import { useTranslation } from 'react-i18next';
 
@@ -116,7 +118,7 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
 type Props = {
     updateSignal: boolean,  // useEffect on marketState won't work
     marketState: MarketState,
-    onClick: (price: Decimal) => void
+    onClick: ([price, orderAction] : [Decimal, OrderAction]) => void
 };
 
 export default function Orderbook( {updateSignal, marketState, onClick: selectOrderbookPrice} : Props)
@@ -153,10 +155,6 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
         ])        
     }, [ aggregationIndex, updateSignal ])
 
-    if (aggregateBuyers.length == 0) return (
-        <div></div>
-    )
-
     const tableHeadGenerator = (labels: [string, TableCellProps["align"]][]) => {
         return (
             <TableRow>
@@ -179,13 +177,13 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
         CellComponent: React.ComponentType<any>,
         cellProps: {[ket:string]: any}
     ) => {
-        const buyerEntry = aggregateBuyers[aggregateBuyers.length - sliceEnd + index]
+        const buyerEntry = aggregateBuyers[aggregateBuyers.length - index - 1]
         const sellerEntry = aggregateSellers[index]
 
         const b = String(50 - (buyerEntry.amount * 50.0 / totalAmountBuyers))
         const s = String(50 + sellerEntry.amount * 50.0 / totalAmountSellers)
-        const onBuyerClick = (() => selectOrderbookPrice(new Decimal(buyerEntry.price)))
-        const onSellerClick = (() => selectOrderbookPrice(new Decimal(sellerEntry.price)))
+        const onBuyerClick = (() => selectOrderbookPrice([new Decimal(buyerEntry.price), OrderAction.Buy]))
+        const onSellerClick = (() => selectOrderbookPrice([new Decimal(sellerEntry.price), OrderAction.Sell]))
 
         // add sell/buy suport!
         const orderShareBar = `linear-gradient(90deg, #FFFFFF ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF ${s}%)`
@@ -242,7 +240,7 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
              tableRow={tableHeadGenerator([["amount", "left"], ["bid", "left"],
                  ["ask", "right"], ["amount", "right"]])}
             rowGenerator={tableRowGenerator}
-             count={sliceEnd}
+             count={Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length)}
          />
         </Grid>
         </Grid>
