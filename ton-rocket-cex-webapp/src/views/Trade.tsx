@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Decimal from 'decimal.js';
 
 
@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import Orderbook from '@/components/Orderbook';
 import CustomToolbar from '@/components/CustomToolbar';
 
-const baseCurrencyTmp: Currency = {
+const baseCurrencyTmp : Currency = {
     "currency": "TONCOIN",
     "name": "TON",
     "minTransfer": 0.00001,
@@ -31,7 +31,7 @@ const baseCurrencyTmp: Currency = {
     }
 }
 
-const tradeCurrencyTmp: Currency = {
+const tradeCurrencyTmp : Currency = {
     "currency": "SCALE",
     "name": "SCALE",
     "minTransfer": 0.00001,
@@ -50,19 +50,20 @@ const totalTmp = new Decimal(100.0)
 export default function Trade() {
     const { pair } = useParams();
     const navigate = useNavigate();
-
+    
     // const location = useLocation();
     // location.state.test
 
     const [isValidOrder, setIsValidOrder] = useState(false);
-
-    const [orderIssued, setOrderIssued] = useState(false);
+    
+    const [orderIssued, setOrderIssued] = useState(false)
     const [firstUse, setFirstUse] = useState(true)
+    const [orderbookPrice, setOrderbookPrice] = useState(new Decimal(0))
 
     const { isReady, telegram } = telegramHooks();
 
     if (pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
-
+    
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
 
@@ -80,10 +81,10 @@ export default function Trade() {
             text: "PLACE ORDER",
             is_visible: true,
             is_active: false,
-        });
-    }, [telegram, isReady]);
+          });
+      }, [telegram, isReady]);
 
-    useEffect(() => {
+      useEffect(() => {
         if (!isReady) return
 
         if (isValidOrder) {
@@ -95,36 +96,34 @@ export default function Trade() {
         } else {
             telegram.MainButton.disable();
         }
-    }, [isValidOrder, telegram, isReady]);
-
+      }, [isValidOrder, telegram, isReady]);
+    
     const [updateSignal, setUpdateSignal] = useState(false)
-    const { data, error, isLoading } = useQuery("orderBook",
+    const { data, error, isLoading } = useQuery("orderBook", 
         () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
             setUpdateSignal(!updateSignal)
-            // console.log(data.data.results)
-            // let baseCurrencies = data.data.results;
-            // setBaseCurrency(baseCurrencies[0]);
+            setOrderbookPrice(data.data.results.marketPrice)
         },
-        refetchInterval: 60000,
+        refetchInterval: 60000, 
     });
 
-    if (isLoading)
+    if (isLoading) 
         return (<CustomBackdrop />);
-    else if (error)
+    else if (error) 
         return <div>Error loading orderbook</div>;
-
+   
 
     const result = data.data.results
     const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]    
 
     const handleIssueOrder = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
         if (isOrderValid) {
-            console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid)
+            console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
         }
-        else
+        else 
             setOrderIssued(false)
-        setFirstUse(false)
+            setFirstUse(false)
     }
 
     return (
@@ -139,16 +138,17 @@ export default function Trade() {
                 <Grid item xs={6} overflow={'hidden'} sx={{position: 'relative' }}>
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
+                        onClick={setOrderbookPrice}
                         updateSignal={updateSignal}
                         marketState={data.data.results}
                     />
                 </Grid>
                 <Grid item xs={6} overflow={'hidden'}>
-                    <OrderForm
-                        baseCurrency={baseCurrency}
-                        priceCurrency={tradeCurrency}
-                        totalAmout={totalTmp}
-                        defaultPrice={tradePrice}
+                    <OrderForm 
+                        baseCurrency={baseCurrency} 
+                        priceCurrency={tradeCurrency} 
+                        totalAmout={totalTmp} 
+                        orderbookPrice={tradePrice}
                         handleIssueOrder={handleIssueOrder}
                         orderIssued={orderIssued}
                         firstUse={firstUse}

@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,6 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
+import TablePagination from '@mui/material/TablePagination';
 
 
 import { useTranslation } from 'react-i18next';
@@ -18,39 +21,53 @@ interface entryPair {
     amount: Decimal
 }
 
-interface OrderbookComumnProp {
-    tableRow: JSX.Element,
-    alignment: TableCellProps["align"],
-    orderbookEntries: {price: number; amount: number}[],
-    entryToColumnMap: { [id: number] : keyof entryPair },
-    rowStyle : CSSProperties[]
+interface RowGenerator {
+    index: number,
+    RowComponent: React.ComponentType<any>,
+    CellComponent: React.ComponentType<any>,
+    rowProps: {[key:string]: any},
+    cellProps: {[ket:string]: any}
 }
 
-function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMap, rowStyle} : OrderbookComumnProp) {
-    const { t } = useTranslation();
-      
-    // const genGradient = (index: number) => {
-    //     return (
-    //         "linear-gradient(90deg, #FFC0CBFF " + String(20 * index + 10) + "%, #FFFFFF00 0%)"
-    //     );
-    // };      
+interface OrderbookComumnProp {
+    tableRow: JSX.Element,
+    rowGenerator: (index: number,
+        RowComponent: React.ComponentType<any>,
+        rowProps: {[key:string]: any},
+        CellComponent: React.ComponentType<any>,
+        cellProps: {[ket:string]: any}
+        ) => JSX.Element,
+    count: number,
+}
 
+function OrderbookColumn({tableRow, rowGenerator, count} : OrderbookComumnProp) 
+{
+    const { t } = useTranslation();
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+      };
+    
+      const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+      };
+
+    // TODO SET MAXHEIGHT TO 100%
     return (
         <TableContainer component={Box} >
-        <Table sx={{ minWidth: 100 }} size="small">
+        <Table stickyHeader sx={{ minWidth: 100, height: "100%" }} size="small" aria-label="sticky table">
             <TableHead>
                 {tableRow}
             </TableHead>
             <TableBody>
-                {orderbookEntries.map((entryPair, index) => (
-                    <TableRow key={index} sx={rowStyle[index]}>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[0]]}</TableCell>
-                        <TableCell align={alignment}>{entryPair[entryToColumnMap[1]]}</TableCell>
-                    </TableRow>
-                 ))}                
+                {[... Array(count).keys()].map((index) => 
+                    rowGenerator(index, TableRow, { key: index }, TableCell, {}))}
             </TableBody>
         </Table>
-      </TableContainer>
+        </TableContainer>
     )
 }
 

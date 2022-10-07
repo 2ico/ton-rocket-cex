@@ -19,7 +19,7 @@ type Props = {
     totalAmout: Decimal
     baseCurrency: string,
     priceCurrency: string,
-    defaultPrice: Decimal,
+    orderbookPrice: Decimal,
     handleIssueOrder: (orderState: Order, isOrderValid: boolean) => void,
     orderIssued: boolean
     firstUse: boolean,
@@ -27,19 +27,19 @@ type Props = {
 };
 
 const OrderForm = ({totalAmout, baseCurrency, 
-    priceCurrency, defaultPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse} : Props) 
+    priceCurrency, orderbookPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse} : Props) 
     : JSX.Element => 
 {
     // const [amount, setAmount] = useState(0.0)
     const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
-    const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
+    const [[price, isPriceValid], setPriceState] = useState([orderbookPrice, true])
     const [orderAction, setOrderAction] = useState(OrderAction.Buy)
     const [orderType, setOrderType] = useState(OrderType.Limit)
  
     const handleOrderTypeChange = (newOrderType : OrderType) => {
         setOrderType(newOrderType)
         if(newOrderType == OrderType.Market) 
-            setPriceState([defaultPrice, true])
+            setPriceState([orderbookPrice, true])
     }
 
     useEffect(() => {
@@ -48,9 +48,14 @@ const OrderForm = ({totalAmout, baseCurrency,
             isPriceValid && isAmountValid)
     }, [ orderIssued ])
 
+    useEffect(() => {
+        setPriceState([orderbookPrice, true])
+    }, [orderbookPrice])
+
     return (
         <Box
             sx={{
+                maxWidth: 480,
                 m: 3
             }}
         >
