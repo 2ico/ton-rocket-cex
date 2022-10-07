@@ -90,9 +90,9 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     : JSX.Element => 
 {
     return (
-        <div style={{float: "left"}}>
+        <div>
             <div style={{display: "inline-block"}}>
-                <p > Aggregation: </p>
+                Aggregation:
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -101,7 +101,7 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
                 </IconButton>
             </div>
             <div style={{display: "inline-block"}}>
-                <p> {displayText} </p>
+                {displayText}
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -157,10 +157,10 @@ export default function Orderbook( {updateSignal, marketState} : Props)
         setRowStyle([
             nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
                 const per = String(100.0 - (amount / totalAmountBuyers) * 100.0);
-                return { background: `linear-gradient(90deg, #FFFFFF ${per}%, #08FF6B ${per}%)` }
+                return { background: `linear-gradient(90deg, #FFFFFF00 ${per}%, #08FF6B88 ${per}%)` }
             }),
-            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
-                String(amount * 100 / totalAmountSellers)}%, #FFFFFF 0%)`
+            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
+                String(amount * 100 / totalAmountSellers)}%, #FFFFFF00 0%)`
             }))
         ])        
     }, [ aggregationIndex, updateSignal ])
@@ -178,7 +178,7 @@ export default function Orderbook( {updateSignal, marketState} : Props)
     return (
         <Box>
         <Grid container>
-        <Grid sx={{mr: 2}}>
+        <Grid item overflow={'scroll'}>
             <OrderbookColumn 
                 tableRow={generateTableHead("left", ["amount", "bid"])}
                 alignment={"left"}
@@ -187,7 +187,7 @@ export default function Orderbook( {updateSignal, marketState} : Props)
                 rowStyle={rowStyleBuyers}
                 />
         </Grid>
-        <Grid sx={{mr: 2}}>
+        <Grid item>
             <OrderbookColumn
                 tableRow={generateTableHead("right", ["ask", "amount"])}
                 alignment={"right"}

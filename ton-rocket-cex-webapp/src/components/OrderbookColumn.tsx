@@ -31,7 +31,7 @@ function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMa
       
     const genGradient = (index: number) => {
         return (
-            "linear-gradient(90deg, #FFC0CB " + String(20 * index + 10) + "%, #FFFFFF 0%)"
+            "linear-gradient(90deg, #FFC0CBFF " + String(20 * index + 10) + "%, #FFFFFF00 0%)"
         );
     };      
 
