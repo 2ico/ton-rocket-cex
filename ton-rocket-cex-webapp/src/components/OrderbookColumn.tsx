@@ -29,11 +29,11 @@ interface OrderbookComumnProp {
 function OrderbookColumn({tableRow, alignment, orderbookEntries, entryToColumnMap, rowStyle} : OrderbookComumnProp) {
     const { t } = useTranslation();
       
-    const genGradient = (index: number) => {
-        return (
-            "linear-gradient(90deg, #FFC0CBFF " + String(20 * index + 10) + "%, #FFFFFF00 0%)"
-        );
-    };      
+    // const genGradient = (index: number) => {
+    //     return (
+    //         "linear-gradient(90deg, #FFC0CBFF " + String(20 * index + 10) + "%, #FFFFFF00 0%)"
+    //     );
+    // };      
 
     return (
         <TableContainer component={Box} >

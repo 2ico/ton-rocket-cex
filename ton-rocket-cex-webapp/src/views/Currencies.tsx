@@ -17,6 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
 import telegramHooks from '@/hooks/telegram';
+import CustomToolbar from '@/components/CustomToolbar';
 
 
 export default function Trade() {
@@ -123,42 +124,43 @@ export default function Trade() {
   
   return (
     <Box>
-    <Box position="sticky">
-      <Tabs
-        value={tabValue}
-        onChange={handleChange}
-        variant="scrollable"
-        // scrollButtons
-        // allowScrollButtonsMobile
-        aria-label="base currencies"
-      >
-
-        {baseCurrencies?.map((currency, index): JSX.Element => (
-          <Tab
-            key={currency.currency}
-            label={currency.name}
-            value={index}
-          />
-        ))}
-      </Tabs>
-    <SearchBar sx={{mx: 4}} onChange={handleChangeSearchBar} />
-    </Box>
-    <Box>
-    <SwipeableViews
-        marginWidth={0}
-        cellPadding={0}
-        marginHeight={0}
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={tabValue}
-        onChangeIndex={handleChangeIndex}
+      <CustomToolbar>Pick a pair</CustomToolbar>
+      <Box>
+        <Tabs
+          value={tabValue}
+          onChange={handleChange}
+          variant="scrollable"
+          // scrollButtons
+          // allowScrollButtonsMobile
+          aria-label="base currencies"
         >
+
           {baseCurrencies?.map((currency, index): JSX.Element => (
-          <TabPanel value={tabValue} index={index} dir={theme.direction}>
-            <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
-         </TabPanel>
-        ))}
-      </SwipeableViews>
-    </Box>
+            <Tab
+              key={currency.currency}
+              label={currency.name}
+              value={index}
+            />
+          ))}
+        </Tabs>
+      <SearchBar sx={{mx: 4}} onChange={handleChangeSearchBar} />
+      </Box>
+      <Box>
+      <SwipeableViews
+          marginWidth={0}
+          cellPadding={0}
+          marginHeight={0}
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={tabValue}
+          onChangeIndex={handleChangeIndex}
+          >
+            {baseCurrencies?.map((currency, index): JSX.Element => (
+            <TabPanel value={tabValue} index={index} dir={theme.direction}>
+              <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
+          </TabPanel>
+          ))}
+        </SwipeableViews>
+      </Box>
     </Box>
   );
 }

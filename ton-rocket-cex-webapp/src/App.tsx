@@ -8,15 +8,25 @@ import './App.css'
 
 // import { withTelegramWebApp, useTelegramWebApp } from 'react-telegram-webapp';
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Currencies from '@/views/Currencies';
+import CustomBackdrop from '@/components/CustomBackdrop';
 
 function App() {
   const queryClient = new QueryClient();
 
   const {isReady, telegram} = telegramHooks();
+  const navigate = useNavigate();
 
   // const [userReady, setUserReady] = useState(false);
+
+  useEffect(() => {
+    if(!isReady) return
+    //@ts-ignore
+    telegram.onEvent('settingsButtonClicked', () => {
+      navigate("/settings")
+    }) 
+  }, [isReady, telegram]);
 
   // useEffect(() => {
   //   if (isReady) {
@@ -26,6 +36,9 @@ function App() {
   //     });
   //   }
   // }, [telegram, isReady]);
+  if(!isReady) return (
+    <CustomBackdrop />
+  );
 
   return (
      <QueryClientProvider client={queryClient}>

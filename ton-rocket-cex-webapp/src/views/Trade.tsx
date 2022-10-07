@@ -12,10 +12,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import { useNavigate, useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
-import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
+import { AppBar, Box, Divider, Grid, Stack, Toolbar, Typography } from '@mui/material';
 import telegramHooks from '@/hooks/telegram';
 import { useEffect, useState } from 'react';
 import Orderbook from '@/components/Orderbook';
+import CustomToolbar from '@/components/CustomToolbar';
 
 const baseCurrencyTmp: Currency = {
     "currency": "TONCOIN",
@@ -127,23 +128,22 @@ export default function Trade() {
     }
 
     return (
-        <Box sx={{ height: "100vh", position: 'relative' }}>
-            <Typography variant="h4">
-                {baseCurrency}/{tradeCurrency}
-            </Typography>
+        <Box>
+        <Box sx={{ flexGrow: 1 }}>
+            <CustomToolbar>{baseCurrency}/{tradeCurrency}</CustomToolbar>
+      </Box>
+        <Box>
             {/* <Grid container divider={<Divider flexItem />}> */}
             <Grid container alignItems="center"
   direction={"column"} height={'100vh'}>
-                <Grid item maxHeight={'50%'}>
+                <Grid item height={'50%'} overflow={'scroll'} sx={{position: 'relative' }}>
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
                         updateSignal={updateSignal}
                         marketState={data.data.results}
                     />
                 </Grid>
-                <Grid item xs wrap={'wrap'}>
-
-
+                <Grid item height={'50%'}>
                     <OrderForm
                         baseCurrency={baseCurrency}
                         priceCurrency={tradeCurrency}
@@ -156,6 +156,7 @@ export default function Trade() {
                     />
                 </Grid>
             </Grid>
+        </Box>
         </Box>
     )
 }
