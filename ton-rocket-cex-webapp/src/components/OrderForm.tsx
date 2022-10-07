@@ -5,8 +5,8 @@ import AmountSelector from '@/components/OrderInputs/AmoutSelector';
 import PriceSelector from '@/components/OrderInputs/PriceSelector'
 import Box from '@mui/material/Box';
 
-import {OrderAction, ToggleBuySell} from '@/components/OrderInputs/ToggleBuySell';
-import {OrderType, OrderSelector} from '@/components/OrderInputs/OrderTypeSelector'
+import { OrderAction, ToggleBuySell } from '@/components/OrderInputs/ToggleBuySell';
+import { OrderType, OrderSelector } from '@/components/OrderInputs/OrderTypeSelector'
 
 type Order = {
     price: Decimal,
@@ -28,27 +28,25 @@ type Props = {
     setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const OrderForm = ({totalAmout, baseCurrency, 
-    priceCurrency, orderbookPrice, orderbookOrderAction, precision, handleIssueOrder, orderIssued, firstUse, setFirstUse} : Props) 
-    : JSX.Element => 
-{
+const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice, orderbookOrderAction, precision, handleIssueOrder, orderIssued, firstUse, setFirstUse }: Props)
+    : JSX.Element => {
     // const [amount, setAmount] = useState(0.0)
     const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
     const [[price, isPriceValid], setPriceState] = useState([orderbookPrice, true])
     const [orderAction, setOrderAction] = useState(orderbookOrderAction)
     const [orderType, setOrderType] = useState(OrderType.Limit)
- 
-    const handleOrderTypeChange = (newOrderType : OrderType) => {
+
+    const handleOrderTypeChange = (newOrderType: OrderType) => {
         setOrderType(newOrderType)
-        if(newOrderType == OrderType.Market) 
+        if (newOrderType == OrderType.Market)
             setPriceState([orderbookPrice, true])
     }
 
     useEffect(() => {
         if (!orderIssued) return
-        handleIssueOrder({ price, amount, orderType, orderAction }, 
+        handleIssueOrder({ price, amount, orderType, orderAction },
             isPriceValid && isAmountValid)
-    }, [ orderIssued ])
+    }, [orderIssued])
 
     useEffect(() => {
         setPriceState([orderbookPrice, true])
@@ -63,8 +61,8 @@ const OrderForm = ({totalAmout, baseCurrency,
             }}
         >
             <div>
-            <ToggleBuySell currentValue={orderAction} handleChange={setOrderAction} />
-            <OrderSelector currentOrderType={orderType} handleChange={handleOrderTypeChange} />
+                <ToggleBuySell currentValue={orderAction} handleChange={setOrderAction} />
+                <OrderSelector currentOrderType={orderType} handleChange={handleOrderTypeChange} />
             </div>
 
             <PriceSelector
@@ -72,12 +70,13 @@ const OrderForm = ({totalAmout, baseCurrency,
                 setPriceState={setPriceState}
                 isDisabled={orderType === OrderType.Market}
                 amountType={priceCurrency}
+                precision={precision}
             />
 
             <AmountSelector
                 amountState={[amount, isAmountValid]}
                 setAmountState={setAmountState}
-                totalAmount={totalAmout} 
+                totalAmount={totalAmout}
                 amountType={priceCurrency}
                 firstUse={firstUse}
                 setFirstUse={setFirstUse}
@@ -86,5 +85,5 @@ const OrderForm = ({totalAmout, baseCurrency,
     )
 }
 
-export {OrderForm};
-export type {Order};
+export { OrderForm };
+export type { Order };

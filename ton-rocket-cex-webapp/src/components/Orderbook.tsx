@@ -7,7 +7,6 @@ import {TableCellProps} from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {OrderbookColumn} from "@/components/OrderbookColumn";
 import { MarketState } from '@/api/currencies';
 import { CSSProperties } from '@emotion/serialize';
 import IncrementButton from '@/components/OrderInputs/IncrementButton'
@@ -25,7 +24,6 @@ import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 import { useTranslation } from 'react-i18next';
 
 import Decimal from 'decimal.js';
-import { count } from 'console';
 import { Grid } from '@mui/material';
 
 const sliceEnd: number = 12;
@@ -92,9 +90,9 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     : JSX.Element => 
 {
     return (
-        <div style={{float: "left"}}>
+        <div>
             <div style={{display: "inline-block"}}>
-                <p > Aggregation: </p>
+                 Aggregation:
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -103,7 +101,7 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
                 </IconButton>
             </div>
             <div style={{display: "inline-block"}}>
-                <p> {displayText} </p>
+                 {displayText}
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -118,10 +116,10 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
 type Props = {
     updateSignal: boolean,  // useEffect on marketState won't work
     marketState: MarketState,
-    onClick: ([price, orderAction] : [Decimal, OrderAction]) => void
+    onRowClick: ([price, orderAction] : [Decimal, OrderAction]) => void
 };
 
-export default function Orderbook( {updateSignal, marketState, onClick: selectOrderbookPrice} : Props)
+export default function Orderbook( {updateSignal, marketState, onRowClick: selectOrderbookPrice} : Props)
 {
     const { t } = useTranslation();
 
@@ -136,6 +134,18 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
     
     const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
         [CSSProperties[], CSSProperties[]]>([[], []])
+
+        const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+      };
+    
+      const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+      };
+
 
     useEffect(() => {
         const aggregation = aggregationValues[aggregationIndex]
@@ -182,11 +192,14 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
 
         const b = String(50 - (buyerEntry.amount * 50.0 / totalAmountBuyers))
         const s = String(50 + sellerEntry.amount * 50.0 / totalAmountSellers)
+
+        //TODO CSS animation
+        // focus price cell
         const onBuyerClick = (() => selectOrderbookPrice([new Decimal(buyerEntry.price), OrderAction.Buy]))
         const onSellerClick = (() => selectOrderbookPrice([new Decimal(sellerEntry.price), OrderAction.Sell]))
 
-        // add sell/buy suport!
-        const orderShareBar = `linear-gradient(90deg, #FFFFFF ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF ${s}%)`
+        // TODO add sell/buy support!
+        const orderShareBar = `linear-gradient(90deg, #FFFFFF00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
         return (
             <RowComponent style={{ background: orderShareBar }} {... rowProps}> 
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
@@ -205,6 +218,8 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
         )
     
     }
+
+    let count = Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length);
 
     // return (
     //     <div>
@@ -226,7 +241,20 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
     // )
 
     return (
-        <Grid container>
+        <Grid container width={'100%'}>
+        <Grid item overflow={'scroll'} width={'100%'}>
+        <TableContainer component={Box} >
+        <Table stickyHeader sx={{height: "100%" }} size="small" aria-label="sticky table">
+            <TableHead>
+                {tableHeadGenerator([["amount", "left"],["bid", "left"], ["ask","right"],["amount","right"]])}
+            </TableHead>
+            <TableBody>
+                {[... Array(count).keys()].map((index) => 
+                    tableRowGenerator(index, TableRow, { key: index }, TableCell, {}))}
+            </TableBody>
+        </Table>
+        </TableContainer>    
+        </Grid>
         <Grid item>
         <AggregationDisplay 
             index={aggregationIndex} 
@@ -235,14 +263,14 @@ export default function Orderbook( {updateSignal, marketState, onClick: selectOr
             displayText={aggregationValues[aggregationIndex].toString()}
         />
         </Grid>
-        <Grid item overflow={'scroll'}>
+        {/* <Grid item overflow={'scroll'}>
          <OrderbookColumn 
              tableRow={tableHeadGenerator([["amount", "left"], ["bid", "left"],
                  ["ask", "right"], ["amount", "right"]])}
             rowGenerator={tableRowGenerator}
              count={Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length)}
-         />
-        </Grid>
+         /> 
+        </Grid> */}
         </Grid>
     );
 }

@@ -130,23 +130,23 @@ export default function Trade() {
     }
 
     return (
-        <Box height={'100vh'} position={"static"} overflow={'hidden'}>
+        <Box height={'100vh'} position={"static"} overflow={'scroll'}> {/* TODO overflow hidden */} 
         <Box>
             <CustomToolbar>{baseCurrency}/{tradeCurrency}</CustomToolbar>
         </Box>
         <Box>
             {/* <Grid container divider={<Divider flexItem />}> */}
-            <Grid container alignItems="center" position={'relative'}
-                    direction={"column"} flexWrap={'nowrap'} height={'100%'}>
-                <Grid item xs={6} overflow={'hidden'} sx={{position: 'relative' }}>
+            <Grid container alignItems="center" position={'relative'} justifyContent="center"
+  direction={"column"} flexWrap={'nowrap'} height={'100%'}>
+                <Grid item xs={6} overflow={'scroll'} position="relative">
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
-                        onClick={setOrderbookOrder}
+                        onRowClick={setOrderbookOrder}
                         updateSignal={updateSignal}
                         marketState={data.data.results}
                     />
                 </Grid>
-                <Grid item xs={6} overflow={'hidden'}>
+                <Grid item xs={6} overflow={'scroll'} position="relative">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
                         priceCurrency={tradeCurrency}

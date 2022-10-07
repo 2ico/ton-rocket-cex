@@ -1,25 +1,40 @@
-import React, { isValidElement, useEffect, useState } from "react";
+import React, { isValidElement, useEffect, useMemo, useState } from "react";
 import Decimal from 'decimal.js';
 
 import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
+import FormControl, { useFormControl } from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import IncrementButton from './IncrementButton'
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { useThemeProps } from "@mui/system";
 import { useTranslation } from 'react-i18next';
+
+
+function PriceTextField(props: TextFieldProps){
+    const { focused } = useFormControl() || {};
+    // const helperText = useMemo(() => {
+    //     if (focused) {
+    //       return 'This field is being focused';
+    //     }
+    
+    //     return 'Helper text';
+    //   }, [focused]);
+    if(focused == true) console.log("focused: true")
+    return <TextField {...props}/>
+}
 
 
 interface PriceSelectorProp {
     priceState: [Decimal, boolean],
     setPriceState: ([newPrice, isValid]: [Decimal, boolean]) => void,
     amountType: string,
-    isDisabled: boolean
+    isDisabled: boolean,
+    precision: Decimal
 }
 
-const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : PriceSelectorProp)
+const PriceSelector = ({ priceState, setPriceState, isDisabled, amountType, precision } : PriceSelectorProp)
     : JSX.Element => 
 {
     const { t } = useTranslation();
@@ -53,7 +68,7 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
     
     const handleButtonChange = (sign: number) => {
         if(isValid)
-            setPriceState([price.plus(sign), true])
+            setPriceState([price.plus(precision.times(sign)), true])
     }
 
     return (
@@ -63,8 +78,8 @@ const PriceSelector = ({ priceState, setPriceState, amountType, isDisabled } : P
                 m: 3
             }}
         >   
-            <FormControl sx={{ width: "100%" }}  >
-            <TextField
+            <FormControl>
+            <PriceTextField
                 InputProps={{
                     startAdornment:
                         <InputAdornment position="start">

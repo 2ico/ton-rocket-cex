@@ -72,8 +72,10 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
 
     const handleButtonChange = (sign: number) => {
         setFirstUse(false)
-        if (amountText !== "")
-            setAmountState([amount.plus(sign), isAmountValid(amount.plus(sign))])
+        if (amountText !== ""){
+            let newAmount = amount.plus(totalAmount.times(sign).times(0.01));
+            setAmountState([newAmount, isAmountValid(newAmount)])
+        }
     }
 
     const handleSliderChange = (amount: Decimal) => {
@@ -88,7 +90,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, 
                 m: 3
             }}
         >
-            <FormControl sx={{ width: "100%" }} variant="outlined">
+            <FormControl>
             <TextField
                 InputProps={{
                     startAdornment:
