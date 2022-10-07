@@ -289,7 +289,8 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
 
         } else {
             // generate market pair
-            const marketPrice = randomAmount(defaultMaxMarketPrice).add(precision.mul(defaultMaxOffset))
+            const marketPrice = randomAmount(defaultMaxMarketPrice).add(
+                precision.mul(defaultMaxOffset)).toNearest(precision)
             console.log(marketPrice.toNumber())
             marketGlobalState[pair] = {
                 marketPrice: marketPrice,
@@ -315,7 +316,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
     return updateMarketState
 }
 
-const myMarket = marketGenerator(60, 60)
+const myMarket = marketGenerator(100, 100)
 
 function getOrderbook(baseCurrency: string, priceCurrency: string) {
     return wrapWithTimeout(

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Component, useEffect, useState } from 'react';
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,6 +11,7 @@ import {OrderbookColumn} from "@/components/OrderbookColumn";
 import { MarketState } from '@/api/currencies';
 import { CSSProperties } from '@emotion/serialize';
 import IncrementButton from '@/components/OrderInputs/IncrementButton'
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -22,9 +23,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useTranslation } from 'react-i18next';
 
 import Decimal from 'decimal.js';
-import { Box, Grid } from '@mui/material';
-const randomMarketPrice = (min: number, max: number) => Math.random() * (max - min) + min;
-const randomPriceChange = (min: number, max: number) => Math.random() * (max - min) + min;
+import { count } from 'console';
 
 const sliceEnd: number = 12;
 
@@ -90,9 +89,9 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     : JSX.Element => 
 {
     return (
-        <div>
+        <div style={{float: "left"}}>
             <div style={{display: "inline-block"}}>
-                Aggregation:
+                <p > Aggregation: </p>
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -101,7 +100,7 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
                 </IconButton>
             </div>
             <div style={{display: "inline-block"}}>
-                {displayText}
+                <p> {displayText} </p>
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
@@ -115,10 +114,11 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
 
 type Props = {
     updateSignal: boolean,  // useEffect on marketState won't work
-    marketState: MarketState
+    marketState: MarketState,
+    selectOrderbookPrice: (price: Decimal) => void
 };
 
-export default function Orderbook( {updateSignal, marketState} : Props)
+export default function Orderbook( {updateSignal, marketState, selectOrderbookPrice} : Props)
 {
     const { t } = useTranslation();
 
@@ -130,22 +130,9 @@ export default function Orderbook( {updateSignal, marketState} : Props)
 
     const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
         [{ price: number, amount: number }[], { price: number, amount: number }[]]>([[], []])
+    
     const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
         [CSSProperties[], CSSProperties[]]>([[], []])
-
-    /*
-    const [aggregateBuyers, aggregateSellers] = [ 
-            aggregate(marketPrice, precision.mul(flag ? 200 : 1), buyers, computeBinIndexBid, -1).reverse(),
-            aggregate(marketPrice, precision.mul(flag ? 200 : 1), sellers, computeBinIndexAsk, 1)]
-    const [rowStyleBuyers, rowStyleSellers] = [
-        aggregateBuyers.map(({price, amount}) => {
-            const per = String(new Decimal(100.0).sub(amount.div(totalAmountBuyers).mul(100)));
-            return { background: `linear-gradient(90deg, #FFFFFF ${per}%, #08FF6B ${per}%)` }
-        }),
-        aggregateSellers.map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
-            String(amount.div(totalAmountSellers).mul(100))}%, #FFFFFF 0%)`
-        }))]
-    */
 
     useEffect(() => {
         const aggregation = aggregationValues[aggregationIndex]
@@ -156,54 +143,84 @@ export default function Orderbook( {updateSignal, marketState} : Props)
         setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
         setRowStyle([
             nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
-                const per = String(100.0 - (amount / totalAmountBuyers) * 100.0);
-                return { background: `linear-gradient(90deg, #FFFFFF00 ${per}%, #08FF6B88 ${per}%)` }
+                const per = String(100.0 - (amount / totalAmountBuyers) * 100.0)
+                return { background: `linear-gradient(90deg, #FFFFFF ${per}%, #08FF6B ${per}%)` }
             }),
-            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
-                String(amount * 100 / totalAmountSellers)}%, #FFFFFF00 0%)`
+            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C ${
+                String(amount * 100 / totalAmountSellers)}%, #FFFFFF 0%)`
             }))
         ])        
     }, [ aggregationIndex, updateSignal ])
 
-    const generateTableHead = (alignment: TableCellProps["align"], labels: string[]) => {
+    if (aggregateBuyers.length == 0) return
+
+    const tableHeadGenerator = (labels: [string, TableCellProps["align"]][]) => {
         return (
             <TableRow>
-                {labels.map((label, index) => (  
+                {labels.map(([label, alignment], index) => (  
                     <TableCell key={index} align={alignment}>{t(label)}</TableCell>
                 ))}
             </TableRow>
         );
-    };    
+    };
+
+    interface tableRowGeneratorP {
+        index: number,
+        Component: React.ComponentType<any>,
+        props: {[key:string]: any}
+    }
+
+    const tableRowGenerator = (index: number,
+        RowComponent: React.ComponentType<any>,
+        rowProps: {[key:string]: any},
+        CellComponent: React.ComponentType<any>,
+        cellProps: {[ket:string]: any}
+    ) => {
+        const buyerEntry = aggregateBuyers[aggregateBuyers.length - sliceEnd + index]
+        const sellerEntry = aggregateSellers[index]
+
+        const b = String(50 - (buyerEntry.amount * 50.0 / totalAmountBuyers))
+        const s = String(50 + sellerEntry.amount * 50.0 / totalAmountSellers)
+        const onBuyerClick = (() => selectOrderbookPrice(new Decimal(buyerEntry.price)))
+        const onSellerClick = (() => selectOrderbookPrice(new Decimal(sellerEntry.price)))
+
+        // add sell/buy suport!
+        const orderShareBar = `linear-gradient(90deg, #FFFFFF ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF ${s}%)`
+        return (
+            <RowComponent style={{ background: orderShareBar }} {... rowProps}> 
+                <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
+                    buyerEntry.amount
+                } </CellComponent>
+                <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
+                    buyerEntry.price
+                } </CellComponent>
+                <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
+                    sellerEntry.price
+                } </CellComponent>
+                <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
+                    sellerEntry.amount
+                } </CellComponent>
+            </RowComponent>
+        )
+    }
 
     return (
-        <Box>
-        <Grid container>
-        <Grid item overflow={'scroll'}>
-            <OrderbookColumn 
-                tableRow={generateTableHead("left", ["amount", "bid"])}
-                alignment={"left"}
-                orderbookEntries={aggregateBuyers.slice(-sliceEnd)}
-                entryToColumnMap={{ 0: "amount", 1: "price"}}
-                rowStyle={rowStyleBuyers}
-                />
-        </Grid>
-        <Grid item>
-            <OrderbookColumn
-                tableRow={generateTableHead("right", ["ask", "amount"])}
-                alignment={"right"}
-                orderbookEntries={aggregateSellers.slice(0, sliceEnd)}
-                entryToColumnMap={{ 0: "price", 1: "amount"}}
-                rowStyle={rowStyleSellers}
-            />
-        </Grid>
-        </Grid>
+        <div>
+        <div style={{width:"100%", padding: "5%"}}>
+        </div>
         <AggregationDisplay 
             index={aggregationIndex} 
             maxIndex={aggregationValues.length}
             setIndex={setAggregationIndex}
             displayText={aggregationValues[aggregationIndex].toString()}
         />
-        </Box>
+        <OrderbookColumn 
+            tableRow={tableHeadGenerator([["amount", "left"], ["bid", "left"],
+                ["ask", "right"], ["amount", "right"]])}
+            rowGenerator={tableRowGenerator}
+            count={sliceEnd}
+        />
+        </div>
     )
 }
 
