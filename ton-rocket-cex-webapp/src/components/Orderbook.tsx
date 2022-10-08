@@ -49,14 +49,15 @@ function aggregate(
     }
 
     const adjustedMarketPrice = new Decimal(0.0).add(
-        new Decimal(computeBinIndex(marketPrice, new Decimal(0.0), aggregateStep)).mul(aggregateStep))
-    const computeBinPrice = (index: number) => adjustedMarketPrice.add(aggregateStep.mul(index).mul(sign))
+        new Decimal(computeBinIndex(marketPrice, new Decimal(0.0), aggregateStep) - sign).mul(aggregateStep))
+    // const computeBinPrice = (index: number) => adjustedMarketPrice.add(aggregateStep.mul(index).mul(sign))
+    const computeBinPrice = (index: number) => (adjustedMarketPrice).add(aggregateStep.mul(index).mul(sign))
 
     const newOrders = []
     for (const bin of Object.values(bins)) {
         newOrders.push({
-            price: computeBinPrice(bin[0]).toNumber(),
-            amount: bin[1].toDecimalPlaces(2).toNumber()
+            price: computeBinPrice(bin[0]),
+            amount: bin[1]
         })
         if(newOrders.length > sliceEnd) break;
     }
@@ -127,10 +128,10 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
     const aggregationValues = precisionMultiples.map((m) => precision.mul(m))
     const [aggregationIndex, setAggregationIndex] = useState(0)
 
-    const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers).toNumber(), computeTotalAmount(sellers).toNumber()]
+    const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers), computeTotalAmount(sellers)]
 
     const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
-        [{ price: number, amount: number }[], { price: number, amount: number }[]]>([[], []])
+        [{ price: Decimal, amount: Decimal }[], { price: Decimal, amount: Decimal }[]]>([[], []])
     
     const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
         [CSSProperties[], CSSProperties[]]>([[], []])
@@ -156,11 +157,11 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
         setRowStyle([
             nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
-                const per = String(100.0 - (amount / totalAmountBuyers) * 100.0);
+                const per = String(new Decimal(100.0).sub(amount.mul(100).div(totalAmountBuyers)));
                 return { background: `linear-gradient(90deg, #FFFFFF00 ${per}%, #08FF6B88 ${per}%)` }
             }),
             nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
-                String(amount * 100 / totalAmountSellers)}%, #FFFFFF00 0%)`
+                String(amount.mul(100).div(totalAmountSellers))}%, #FFFFFF00 0%)`
             }))
         ])        
     }, [ aggregationIndex, updateSignal ])
@@ -190,8 +191,9 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         const buyerEntry = aggregateBuyers[aggregateBuyers.length - index - 1]
         const sellerEntry = aggregateSellers[index]
 
-        const b = String(50 - (buyerEntry.amount * 50.0 / totalAmountBuyers))
-        const s = String(50 + sellerEntry.amount * 50.0 / totalAmountSellers)
+        const b = String(new Decimal(50).sub(buyerEntry.amount.mul(50.0).div(totalAmountBuyers)))
+        const s = String(new Decimal(50).add(sellerEntry.amount.mul(50.0).div(totalAmountSellers)))
+        const aggregation = aggregationValues[aggregationIndex]
 
         //TODO CSS animation
         // focus price cell
@@ -203,16 +205,16 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         return (
             <RowComponent style={{ background: orderShareBar }} {... rowProps}> 
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
-                    buyerEntry.amount
+                    buyerEntry.amount.toDecimalPlaces(2).toString()
                 } </CellComponent>
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
-                    buyerEntry.price
+                    buyerEntry.price.toString()
                 } </CellComponent>
                 <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
-                    sellerEntry.price
+                    sellerEntry.price.toString()
                 } </CellComponent>
                 <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
-                    sellerEntry.amount
+                    sellerEntry.amount.toDecimalPlaces(2).toString()
                 } </CellComponent>
             </RowComponent>
         )
