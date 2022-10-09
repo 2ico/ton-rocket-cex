@@ -97,7 +97,9 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
-                    onClick={() => setIndex(Math.max(0, index - 1))}>
+                    onClick={() => setIndex(Math.max(0, index - 1))}
+                    disabled={index == 0}
+                    >
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
@@ -106,7 +108,8 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
             </div>
             <div style={{display: "inline-block"}}>
                 <IconButton color="primary" size="small"
-                    onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}>
+                    onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}
+                    disabled={index == maxIndex - 1}>
                     <ChevronRightIcon />
                 </IconButton>            
             </div>
