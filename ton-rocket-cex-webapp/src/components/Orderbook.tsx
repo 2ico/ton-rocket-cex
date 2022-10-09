@@ -208,10 +208,10 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
                     buyerEntry.amount.toDecimalPlaces(2).toString()
                 } </CellComponent>
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
-                    buyerEntry.price.toString()
+                    buyerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
                 <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
-                    sellerEntry.price.toString()
+                    sellerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
                 <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
                     sellerEntry.amount.toDecimalPlaces(2).toString()
