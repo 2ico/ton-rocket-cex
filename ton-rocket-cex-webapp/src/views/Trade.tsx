@@ -61,7 +61,7 @@ export default function Trade() {
     const [orderIssued, setOrderIssued] = useState(false)
     const [firstUse, setFirstUse] = useState(true)
     const [[orderbookPrice, orderbookOrderAction], setOrderbookOrder] = 
-        useState([new Decimal(0), OrderAction.Buy])
+        useState([new Decimal(0.0), OrderAction.Buy])
 
     const { isReady, telegram } = telegramHooks();
 
@@ -106,7 +106,7 @@ export default function Trade() {
         () => getOrderbook(baseCurrency, tradeCurrency), {
         onSuccess: (data) => {
             setUpdateSignal(!updateSignal)
-            setOrderbookOrder([data.data.results.marketPrice, orderbookOrderAction])
+            // setOrderbookOrder([data.data.results.marketPrice, orderbookOrderAction])
         },
         refetchInterval: 10000, 
     });
@@ -118,7 +118,7 @@ export default function Trade() {
    
 
     const result = data.data.results
-    const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]    
+    const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]   
 
     const handleIssueOrder = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
         if (isOrderValid) {
@@ -152,6 +152,7 @@ export default function Trade() {
                         priceCurrency={tradeCurrency}
                         precision={data.data.results.precision}
                         totalAmout={totalTmp} 
+                        defaultPrice={tradePrice}
                         orderbookPrice={orderbookPrice}
                         orderbookOrderAction={orderbookOrderAction}
                         handleIssueOrder = {handleIssueOrder}

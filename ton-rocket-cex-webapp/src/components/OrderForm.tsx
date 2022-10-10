@@ -20,6 +20,7 @@ type Props = {
     baseCurrency: string,
     priceCurrency: string,
     precision: Decimal,
+    defaultPrice: Decimal,
     orderbookPrice: Decimal,
     orderbookOrderAction: OrderAction,
     handleIssueOrder: (orderState: Order, isOrderValid: boolean) => void,
@@ -28,18 +29,19 @@ type Props = {
     setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice, orderbookOrderAction, precision, handleIssueOrder, orderIssued, firstUse, setFirstUse }: Props)
+const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice, 
+        orderbookOrderAction, precision, defaultPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse }: Props)
     : JSX.Element => {
     // const [amount, setAmount] = useState(0.0)
     const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
-    const [[price, isPriceValid], setPriceState] = useState([orderbookPrice, true])
+    const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
     const [orderAction, setOrderAction] = useState(orderbookOrderAction)
     const [orderType, setOrderType] = useState(OrderType.Limit)
 
     const handleOrderTypeChange = (newOrderType: OrderType) => {
         setOrderType(newOrderType)
         if (newOrderType == OrderType.Market)
-            setPriceState([orderbookPrice, true])
+            setPriceState([defaultPrice, true])
     }
 
     useEffect(() => {
@@ -49,6 +51,7 @@ const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice, or
     }, [orderIssued])
 
     useEffect(() => {
+        if (orderbookPrice.equals(0)) return;
         setPriceState([orderbookPrice, true])
         setOrderAction(orderbookOrderAction)
     }, [orderbookPrice, orderbookOrderAction])
