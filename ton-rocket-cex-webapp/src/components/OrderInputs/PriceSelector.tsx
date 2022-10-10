@@ -3,16 +3,18 @@ import Decimal from 'decimal.js';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl, { useFormControl } from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
+import Input, { InputProps } from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import IncrementButton from './IncrementButton'
 import Box from '@mui/material/Box';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { useThemeProps } from "@mui/system";
 import { useTranslation } from 'react-i18next';
+import { Form } from "react-router-dom";
+import { FormHelperText } from "@mui/material";
 
 
-function PriceTextField(props: TextFieldProps){
+function FocusInput(props: InputProps){
     const { focused } = useFormControl() || {};
     // const helperText = useMemo(() => {
     //     if (focused) {
@@ -22,7 +24,7 @@ function PriceTextField(props: TextFieldProps){
     //     return 'Helper text';
     //   }, [focused]);
     if(focused == true) console.log("focused: true")
-    return <TextField {...props}/>
+    return <Input {...props}/>
 }
 
 
@@ -79,17 +81,18 @@ const PriceSelector = ({ priceState, setPriceState, isDisabled, amountType, prec
             }}
         >   
             <FormControl>
-            <PriceTextField
-                InputProps={{
-                    startAdornment:
+            <InputLabel>{t("price")}</InputLabel>
+            <FocusInput
+                autoFocus={true}
+                startAdornment={
                         <InputAdornment position="start">
                             <IncrementButton
                                 onClick={() => handleButtonChange(-1)}
                                 isPlusButton = {false}
                                 isDisabled={isDisabled}
                             />
-                        </InputAdornment>,
-                    endAdornment:
+                        </InputAdornment>}
+                endAdornment={
                         <InputAdornment position="end">
                         {""}
                         <IncrementButton
@@ -98,17 +101,14 @@ const PriceSelector = ({ priceState, setPriceState, isDisabled, amountType, prec
                             isDisabled={isDisabled}            
                         />
                         </InputAdornment>
-                
-                }}
+                }
                 value={priceText}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
                 error = {!isValid || price.lessThan(0)}
                 type='number'
-                variant="standard"
-                label={t("price")}
-                helperText={getErrorMessage()}
                 disabled={isDisabled}
             />
+            <FormHelperText>{getErrorMessage()}</FormHelperText>
             </FormControl>
         </Box>
     )
