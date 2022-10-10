@@ -7,6 +7,8 @@ import { AnyRecord } from "dns";
 
 import Decimal from 'decimal.js';
 import {Currency, CurrencyPair} from '@/api/types';
+import { makeUrlPair } from "@/utils/utils";
+
 
 const baseCurrencies: Array<Currency> = [
     {
@@ -269,9 +271,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
 
     const updateMarketState = (pair : string) => {
         if (pair in marketGlobalState) { 
-            // update existing market pair
-            // TEMPORARY STOP UPDATING
-            
+            // update existing market pair            
             const marketPrice = marketGlobalState[pair].marketPrice
             const precision = marketGlobalState[pair].precision
 
@@ -301,6 +301,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
         }
 
         // sort entries
+        // todo: sorting buyers high to low may save a call to .reverse() later on
         const currentMarket = marketGlobalState[pair]
         currentMarket.buyers.sort((
             {price: lPrice, amount: lAmount}, {price: rPrice, amount: rAmount}) =>
@@ -322,6 +323,31 @@ function getOrderbook(baseCurrency: string, priceCurrency: string) {
     return wrapWithTimeout(
         myMarket(baseCurrency + "-" + priceCurrency),
         "orderbook not found")
+}
+
+function userOrders(orderCount: number) {
+    // Pair format: TONCOIN_TAKE
+
+    /*
+
+    let userOrders = [ ]
+
+    const takeRandomly : [x] -> x
+
+    for (let i ..) {
+        const baseCurrency = takeRandomly(baseCurrencies)
+        const priceCurrency = takeRandomly(availablePairs.filter((pair) => pair.currency != baseCurrency.currency))        
+        userOrders.push({
+            baseCurrency: 
+            priceCurrency:
+            amount:
+            orderType:
+            oderAction:
+        })
+    }
+    
+    return userOrders
+    */
 }
 
 // ratesCurrencies(pair) {

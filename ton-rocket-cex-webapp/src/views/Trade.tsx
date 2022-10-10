@@ -108,7 +108,7 @@ export default function Trade() {
             setUpdateSignal(!updateSignal)
             setOrderbookOrder([data.data.results.marketPrice, orderbookOrderAction])
         },
-        refetchInterval: 60000, 
+        refetchInterval: 10000, 
     });
 
     if (isLoading) 
