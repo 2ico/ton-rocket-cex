@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Decimal from 'decimal.js';
-import AmountSelector from '@/components/OrderInputs/AmoutSelector';
+import AmountSelector from '@/components/OrderInputs/AmountSelector';
 import PriceSelector from '@/components/OrderInputs/PriceSelector'
 import Box from '@mui/material/Box';
 
@@ -16,7 +16,7 @@ type Order = {
 };
 
 type Props = {
-    totalAmout: Decimal
+    totalAmount: Decimal
     baseCurrency: string,
     priceCurrency: string,
     precision: Decimal,
@@ -29,7 +29,7 @@ type Props = {
     setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice, 
+const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice, 
         orderbookOrderAction, precision, defaultPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse }: Props)
     : JSX.Element => {
     // const [amount, setAmount] = useState(0.0)
@@ -79,7 +79,7 @@ const OrderForm = ({ totalAmout, baseCurrency, priceCurrency, orderbookPrice,
             <AmountSelector
                 amountState={[amount, isAmountValid]}
                 setAmountState={setAmountState}
-                totalAmount={totalAmout}
+                totalAmount={totalAmount}
                 amountType={priceCurrency}
                 firstUse={firstUse}
                 setFirstUse={setFirstUse}

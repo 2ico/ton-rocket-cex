@@ -151,7 +151,7 @@ export default function Trade() {
                         baseCurrency={baseCurrency} 
                         priceCurrency={tradeCurrency}
                         precision={data.data.results.precision}
-                        totalAmout={totalTmp} 
+                        totalAmount={totalTmp} 
                         defaultPrice={tradePrice}
                         orderbookPrice={orderbookPrice}
                         orderbookOrderAction={orderbookOrderAction}
