@@ -20,6 +20,7 @@ function App() {
   // const [userReady, setUserReady] = useState(false);
 
   useEffect(() => {
+    //TODO investigate how to enable settings button
     WebApp.onEvent('settingsButtonClicked', () => {
       navigate("/settings")
     }) 

@@ -246,10 +246,10 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
     // )
 
     return (
-        <Grid container width={'100%'}>
-        <Grid item overflow={'scroll'} width={'100%'}>
-        <TableContainer component={Box} >
-        <Table stickyHeader sx={{height: "100%" }} size="small" aria-label="sticky table">
+        <Grid container justifyContent="center">
+        <Grid item width={'100%'}>
+        <TableContainer sx={{ maxHeight: '240px' }}>
+        <Table stickyHeader size="small" aria-label="sticky table">
             <TableHead>
                 {tableHeadGenerator([["amount", "left"],["bid", "left"], ["ask","right"],["amount","right"]])}
             </TableHead>
