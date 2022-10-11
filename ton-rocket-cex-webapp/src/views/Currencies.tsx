@@ -48,14 +48,13 @@ export default function Trade() {
     setBaseCurrency(baseCurrencies[tabValue]);
   }, [tabValue, baseCurrencies])
 
-
   function handleMainButton() {
     if(pair){ 
       navigate("/trade/"+pair);
     }
     console.log("handleMainButton pressed")
   }
-
+  
   let showMainButton = false;
 
   useEffect( () => {
@@ -111,7 +110,6 @@ export default function Trade() {
           // allowScrollButtonsMobile
           aria-label="base currencies"
         >
-
           {baseCurrencies?.map((currency, index): JSX.Element => (
             <Tab
               key={currency.currency}
