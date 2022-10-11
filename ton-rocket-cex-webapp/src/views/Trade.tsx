@@ -22,6 +22,7 @@ import Orderbook from '@/components/Orderbook';
 import CustomToolbar from '@/components/CustomToolbar';
 import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 import { t } from 'i18next';
+import MenuLayout from '@/components/MenuLayout';
 
 
 const totalTmp = new Decimal(123.4)
@@ -86,11 +87,7 @@ export default function Trade() {
     }
 
     return (
-        <Grid container height={'100vh'} overflow={'scroll'} direction={"column"} flexWrap={"nowrap"}>
-        <Grid item>
-            <CustomToolbar location="/trade">{baseCurrency}/{tradeCurrency}</CustomToolbar>
-        </Grid>
-        <Grid item flex={1}>
+            <MenuLayout title={baseCurrency+"/"+tradeCurrency} location="/trade">
             <Grid container alignItems="center" position={'relative'} justifyContent="center"
                 direction={"column"} flexWrap={'nowrap'} height={'100%'}>
             {/* <Grid container divider={<Divider flexItem />}>  */}
@@ -109,7 +106,7 @@ export default function Trade() {
                         setFirstUse = {setFirstUse}
                     />
                 </Grid>
-                <Grid item flexBasis={'240px'} flexGrow={1} overflow={'scroll'} position="relative">
+                <Grid item flexBasis={'240px'} flexGrow={1} position="relative">
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
                         onRowClick={setOrderbookOrder}
@@ -118,8 +115,6 @@ export default function Trade() {
                     />
                 </Grid>
             </Grid>
-        </Grid>
-        <MainButton disabled={!isValidOrder} onClick={handleMainButton} text={t("PLACE_ORDER")}/>
-        </Grid>
+            </MenuLayout>
     )
 }

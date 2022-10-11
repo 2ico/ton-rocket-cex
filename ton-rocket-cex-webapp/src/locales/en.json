@@ -8,6 +8,7 @@
     "amount": "Amount",
     "bid": "Bid",
     "ask": "Ask",
+    "select_a_pair": "Select a pair",
     "order_history":"Order history",
     "settings": "Settings",
     "CONTINUE": "CONTINUE",

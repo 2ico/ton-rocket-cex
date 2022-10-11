@@ -21,6 +21,7 @@ import { MainButton } from '@twa-dev/sdk/react';
 
 import CustomToolbar from '@/components/CustomToolbar';
 import { useTranslation } from 'react-i18next';
+import MenuLayout from '@/components/MenuLayout';
 
 
 export default function Trade() {
@@ -99,8 +100,7 @@ export default function Trade() {
   // setBaseCurrency(baseCurrencies[0]);
   
   return (
-    <Box>
-      <CustomToolbar location="/">Pick a pair</CustomToolbar>
+      <MenuLayout location="/" title={t("select_a_pair")}>
       <Box>
         <Tabs
           value={tabValue}
@@ -140,6 +140,6 @@ export default function Trade() {
       {pair &&
         <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
       }
-    </Box>
+    </MenuLayout>
   );
 }
