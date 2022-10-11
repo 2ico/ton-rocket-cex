@@ -52,15 +52,16 @@ export default function Trade() {
   useEffect( () => {
     handleMainButton = () => {
       if(pair){ 
-        navigate("/trade/"+pair );
+        navigate("/trade/"+pair);
       }
-  }}, [pair]);
+    }
+    console.log("handleMainButton updated")
+  }, [pair]);
   
   let showMainButton = false;
 
   useEffect( () => {
     showMainButton = !!pair;
-    console.log(showMainButton)
   }, [pair]);
 
   if (isLoading) return (
