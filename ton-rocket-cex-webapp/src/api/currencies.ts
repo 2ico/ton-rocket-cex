@@ -325,7 +325,7 @@ function getOrderbook(baseCurrency: string, priceCurrency: string) {
         "orderbook not found")
 }
 
-function userOrders(orderCount: number) {
+function generateUserOrder (orderCount: number) {
     // Pair format: TONCOIN_TAKE
     const precision = new Decimal(0.01) // currently not in the pair
 
@@ -350,14 +350,16 @@ function userOrders(orderCount: number) {
     for (let i = 0; i < orderCount / 4; ++i) {
         const baseCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
         userOrders.push(...takeSome(availablePairs.filter((pair) => pair.currency != baseCurrency.currency), 4).map(
-            (pair) => makeOrder(baseCurrency, pair, new Decimal(pair.market_price + (Math.random() - 0.5) * 2))
+            (pair) => makeOrder(baseCurrency, pair, new Decimal(pair.market_price * (0.5 + Math.random())))
         ))
     }
 
     return userOrders
 }
 
-console.log(userOrders(12))
+function getUserOrders() {
+    return wrapWithTimeout(generateUserOrder(12), 'user order not retrived');
+}
 
-export { getBaseCurrencies, getAvailablePairs, getOrderbook };
+export { getBaseCurrencies, getAvailablePairs, getOrderbook, getUserOrders };
 export type { MarketState };
