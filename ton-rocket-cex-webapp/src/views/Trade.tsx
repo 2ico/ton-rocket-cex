@@ -41,7 +41,6 @@ export default function Trade() {
 
     if (pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
     
-    // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
 
     // //TODO onClose show confirm popup (see DurgerKing)
