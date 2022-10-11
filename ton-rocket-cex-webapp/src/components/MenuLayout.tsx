@@ -12,7 +12,7 @@ const MenuLayout: FC<{children?: React.ReactNode, title: string, location: strin
             <BackButton onClick={() => navigate("/")} />
         }
     <Grid item>
-        <CustomToolbar location="/trade">{title}</CustomToolbar>
+        <CustomToolbar location={location}>{title}</CustomToolbar>
     </Grid>
     <Grid item flex={1} sx={{overflowY: "scroll"}}>
     {children}
