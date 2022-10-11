@@ -16,7 +16,9 @@ import SearchBar from '@/components/SearchBar';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
-import telegramHooks from '@/hooks/telegram';
+import WebApp from '@twa-dev/sdk'
+import { MainButton } from '@twa-dev/sdk/react';
+
 import CustomToolbar from '@/components/CustomToolbar';
 import { useTranslation } from 'react-i18next';
 
@@ -31,7 +33,6 @@ export default function Trade() {
   const [searchQuery, setSearchQuery] = useState("");
   const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
-  const {isReady, telegram} = telegramHooks();
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
   onSuccess: (data) => {
@@ -40,59 +41,24 @@ export default function Trade() {
   }});
 
   let baseCurrencies : Array<any> | null = null;
-
+  
   useEffect(() => {
     if(baseCurrencies == null) return
     setBaseCurrency(baseCurrencies[tabValue]);
   }, [tabValue, baseCurrencies])
-
-  useEffect(() => {
-      if(!isReady) return
-        // @ts-ignore
-        telegram.BackButton.hide()
-        telegram.MainButton.setParams({
-          color: telegram.themeParams.button_color,
-          text: t("CONTINUE"),
-          is_visible: false,
-          is_active: true,
-        });
-    }, [telegram, isReady]);
   
-    useEffect( () => {
-      if(!isReady) return
-
-      const handleMainButton = () => {
-        //TOOD validate pair
-        // moveNavigation to /trade/
-          // @ts-ignore
-        // telegram.showPopup({title: "Pair", message: pair})
-        if(pair){ 
-          navigate("/trade/"+pair, 
-            { state: { test: 1 } }
-          );
-        }
-      }
-
-      telegram.MainButton.onClick(handleMainButton)
-
-      let isValid = !!pair;
-      if(isValid){
-        console.log("show MainButton")
-        telegram.MainButton.show()
-      }else{
-        console.log("hide MainButton")
-        telegram.MainButton.hide()
-      }
-    }, [pair, telegram, isReady]);
-
-  //if currency is selected, select right tab
-  
+  const handleMainButton = () => {
+    if(pair){ 
+      navigate("/trade/"+pair );
+    }
+  }
   
   if (isLoading) return (
     <Backdrop open sx={{ color: '#fff', zIndex: (theme: { zIndex: { drawer: number; }; }) => theme.zIndex.drawer + 1 }} >
       <CircularProgress color="inherit" />
     </Backdrop>
   );
+  
   if (error) return <div>{t("error_loading_currencies")}</div>;
 
   baseCurrencies = data.data.results;
@@ -126,7 +92,7 @@ export default function Trade() {
   
   return (
     <Box>
-      <CustomToolbar>Pick a pair</CustomToolbar>
+      <CustomToolbar location="/">Pick a pair</CustomToolbar>
       <Box>
         <Tabs
           value={tabValue}
@@ -163,6 +129,7 @@ export default function Trade() {
           ))}
         </SwipeableViews>
       </Box>
+      <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
     </Box>
   );
 }

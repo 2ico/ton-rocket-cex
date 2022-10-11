@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import telegramHooks from '@/hooks/telegram';
+import WebApp from '@twa-dev/sdk'
 import {Query, QueryClient, QueryClientProvider} from 'react-query';
 import Trade from "@/views/Trade";
 import Orders from '@/views/Orders';
@@ -15,31 +15,20 @@ import CustomBackdrop from '@/components/CustomBackdrop';
 
 function App() {
   const queryClient = new QueryClient();
-
-  const {isReady, telegram} = telegramHooks();
   const navigate = useNavigate();
 
   // const [userReady, setUserReady] = useState(false);
 
   useEffect(() => {
-    if(!isReady) return
-    //@ts-ignore
-    telegram.onEvent('settingsButtonClicked', () => {
+    WebApp.onEvent('settingsButtonClicked', () => {
       navigate("/settings")
     }) 
-  }, [isReady, telegram]);
+  }, [WebApp]);
 
-  // useEffect(() => {
-  //   if (isReady) {
-  //     telegram.MainButton.setParams({
-  //       text: "VIEW ORDER",
-  //       is_visible: true
-  //     });
-  //   }
-  // }, [telegram, isReady]);
-  if(!isReady) return (
-    <CustomBackdrop />
-  );
+  //TODO
+  // if() return (
+  //   <CustomBackdrop />
+  // );
 
   return (
      <QueryClientProvider client={queryClient}>

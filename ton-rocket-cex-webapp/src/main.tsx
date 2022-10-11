@@ -16,8 +16,8 @@ import ReactDOM from 'react-dom/client';
 import './i18n';
 import App from './App'
 import './index.css'
-import { TelegramWebApp } from 'react-telegram-webapp';
 
+//TODO validate user data hash
 async function validateHash(hash: string) {
     // TODO
     // const response = await fetch(`/api/validate`, {
@@ -35,10 +35,8 @@ async function validateHash(hash: string) {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-  <TelegramWebApp validateHash={validateHash}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </TelegramWebApp>
   </React.StrictMode>
 );

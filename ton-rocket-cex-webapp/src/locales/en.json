@@ -11,5 +11,6 @@
     "order_history":"Order history",
     "settings": "Settings",
     "CONTINUE": "CONTINUE",
+    "PLACE_ORDER": "PLACE ORDER",
     "error_loading_currencies": "Error loading currencies"
 }

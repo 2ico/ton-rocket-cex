@@ -13,11 +13,15 @@ import Backdrop from '@mui/material/Backdrop';
 import { useNavigate, useParams } from 'react-router-dom';
 import { separateUrlPair } from "@/utils/utils"
 import { AppBar, Box, Divider, Grid, Stack, Toolbar, Typography } from '@mui/material';
-import telegramHooks from '@/hooks/telegram';
+
+import WebApp from '@twa-dev/sdk'
+import { MainButton, BackButton } from '@twa-dev/sdk/react';
+
 import { useEffect, useState } from 'react';
 import Orderbook from '@/components/Orderbook';
 import CustomToolbar from '@/components/CustomToolbar';
 import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
+import { t } from 'i18next';
 
 
 const totalTmp = new Decimal(123.4)
@@ -36,43 +40,22 @@ export default function Trade() {
     const [[orderbookPrice, orderbookOrderAction], setOrderbookOrder] = 
         useState([new Decimal(0.0), OrderAction.Buy])
 
-    const { isReady, telegram } = telegramHooks();
-
     if (pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
     
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
 
     //TODO onClose show confirm popup (see DurgerKing)
+    WebApp.MainButton.setParams({
+        color: "rgb(49, 181, 69)",
+        text: "PLACE ORDER",
+        is_visible: true,
+        is_active: false,
+      });
 
-    useEffect(() => {
-        if (!isReady) return
-        // @ts-ignore
-        telegram.BackButton.onClick(() => navigate("/"));
-        // @ts-ignore
-        telegram.BackButton.show();
-
-        telegram.MainButton.setParams({
-            color: "rgb(49, 181, 69)",
-            text: "PLACE ORDER",
-            is_visible: true,
-            is_active: false,
-          });
-      }, [telegram, isReady]);
-
-      useEffect(() => {
-        if (!isReady) return
-
-        if (isValidOrder) {
-            telegram.MainButton.onClick(() => {
-                // @ts-ignore
-                telegram.showPopup({ title: "Order details", message: "TODO" })
-            })
-            telegram.MainButton.enable()
-        } else {
-            telegram.MainButton.disable();
-        }
-      }, [isValidOrder, telegram, isReady]);
+    const handleMainButton = () => {
+        WebApp.showPopup({ title: "Order details", message: "TODO" })
+    }
     
     const [updateSignal, setUpdateSignal] = useState(false)
     const { data, error, isLoading } = useQuery("orderBook", 
@@ -105,7 +88,7 @@ export default function Trade() {
     return (
         <Box height={'100vh'} position={"static"} overflow={'scroll'}> {/* TODO overflow hidden */} 
         <Box>
-            <CustomToolbar>{baseCurrency}/{tradeCurrency}</CustomToolbar>
+            <CustomToolbar location="/trade">{baseCurrency}/{tradeCurrency}</CustomToolbar>
         </Box>
         <Box>
             {/* <Grid container divider={<Divider flexItem />}> */}
@@ -136,6 +119,8 @@ export default function Trade() {
                 </Grid>
             </Grid>
         </Box>
+        <BackButton onClick={() => navigate("/")}/>
+        <MainButton disabled={!isValidOrder} onClick={handleMainButton} text={t("PLACE_ORDER")}/>
         </Box>
     )
 }

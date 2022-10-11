@@ -853,6 +853,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@twa-dev/sdk@npm:^0.0.12":
+  version: 0.0.12
+  resolution: "@twa-dev/sdk@npm:0.0.12"
+  dependencies:
+    "@twa-dev/types": ^6.2.4
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 424b935ac9eac66de7ca181c3320491a7ac8ec00abfc849344f99848c87a8163ee60d73a2a9a4f1dea089cb64fc8fb757513f8332fb666e63719fd72308072a1
+  languageName: node
+  linkType: hard
+
+"@twa-dev/types@npm:^6.2.4":
+  version: 6.2.4
+  resolution: "@twa-dev/types@npm:6.2.4"
+  checksum: f2e898eae5aa519e7796bc0fc90eac2506c5f4d500de77be311074ba1b17eb0fe2c2e3744549158d63023967605c121697301b2c34e2ed1fc222a9f8966a1851
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^18.7.23":
   version: 18.8.0
   resolution: "@types/node@npm:18.8.0"
@@ -2710,15 +2728,6 @@ axios@latest:
   languageName: node
   linkType: hard
 
-"react-telegram-webapp@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "react-telegram-webapp@npm:0.1.5"
-  peerDependencies:
-    react: ">=16"
-  checksum: 0bb6076650f4bec972d8df86a10e419b0ece87af6d15106edbc215a7b7127e7b056e6af412e369fe1aefb749b060c4bc3a2ed5aea8bfe13abf5657c67072401b
-  languageName: node
-  linkType: hard
-
 "react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
@@ -3124,6 +3133,7 @@ axios@latest:
     "@mui/icons-material": ^5.10.6
     "@mui/material": ^5.10.8
     "@mui/styled-engine-sc": ^5.10.6
+    "@twa-dev/sdk": ^0.0.12
     "@types/node": ^18.7.23
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
@@ -3140,7 +3150,6 @@ axios@latest:
     react-query: ^3.39.2
     react-router-dom: ^6.4.1
     react-swipeable-views: ^0.14.0
-    react-telegram-webapp: ^0.1.5
     styled-components: ^5.3.6
     typescript: ^4.6.4
     vite: ^3.1.0
