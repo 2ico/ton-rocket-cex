@@ -5,10 +5,10 @@ import { OrderType } from '@/api/types';
 
 interface OrderTypeProp {
     currentOrderType : OrderType,
-    handleChange : (selectedValue: OrderType) => void,
+    onChange : (selectedValue: OrderType) => void,
 }
 
-const OrderSelector = ({handleChange, currentOrderType} : OrderTypeProp) 
+const OrderSelector = ({onChange: handleChange, currentOrderType} : OrderTypeProp) 
     : JSX.Element => 
 {
     return (

@@ -31,17 +31,16 @@ interface AmountSelectorProp {
     totalAmount: Decimal,
     amountType: string,
     amountState: [Decimal, boolean],
-    setAmountState: ([newPrice, isValid]: [Decimal, boolean]) => void,
-    firstUse: boolean,
-    setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
+    onChange: ([newPrice, isValid]: [Decimal, boolean]) => void,
 }
 
-const AmountSelector = ({ totalAmount, amountType, amountState, setAmountState, firstUse, setFirstUse } : AmountSelectorProp) 
+const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmountState } : AmountSelectorProp) 
     : JSX.Element => 
 {
     const { t } = useTranslation();
     const [amount, isValid] = amountState
     const [amountText, setAmountText] = useState("0")
+    const [firstUse, setFirstUse] = useState(true)
 
     useEffect(() => {
         if (amountText == "" || !amount.equals(new Decimal(amountText)))

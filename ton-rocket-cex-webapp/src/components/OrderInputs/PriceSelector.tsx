@@ -30,13 +30,13 @@ function FocusInput(props: InputProps){
 
 interface PriceSelectorProp {
     priceState: [Decimal, boolean],
-    setPriceState: ([newPrice, isValid]: [Decimal, boolean]) => void,
+    onChange: ([newPrice, isValid]: [Decimal, boolean]) => void,
     amountType: string,
     isDisabled: boolean,
     precision: Decimal
 }
 
-const PriceSelector = ({ priceState, setPriceState, isDisabled, amountType, precision } : PriceSelectorProp)
+const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amountType, precision } : PriceSelectorProp)
     : JSX.Element => 
 {
     const { t } = useTranslation();

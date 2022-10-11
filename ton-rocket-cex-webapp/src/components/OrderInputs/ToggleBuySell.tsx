@@ -7,10 +7,10 @@ import { OrderAction } from '@/api/types';
 
 type Props = {
     currentValue: OrderAction,
-    handleChange : (selectedValue: OrderAction) => void,
+    onChange : (selectedValue: OrderAction) => void,
 };
 
-function ToggleBuySell({currentValue, handleChange}: Props) {
+function ToggleBuySell({currentValue, onChange: handleChange}: Props) {
     const { t } = useTranslation();
     const handleSelection = (
         event: React.MouseEvent<HTMLElement>,

@@ -23,14 +23,11 @@ type Props = {
     defaultPrice: Decimal,
     orderbookPrice: Decimal,
     orderbookOrderAction: OrderAction,
-    handleIssueOrder: (orderState: Order, isOrderValid: boolean) => void,
-    orderIssued: boolean
-    firstUse: boolean,
-    setFirstUse: React.Dispatch<React.SetStateAction<boolean>>
+    onChange: (orderState: Order, isOrderValid: boolean) => void,
 };
 
 const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice, 
-        orderbookOrderAction, precision, defaultPrice, handleIssueOrder, orderIssued, firstUse, setFirstUse }: Props)
+        orderbookOrderAction, precision, defaultPrice, onChange }: Props)
     : JSX.Element => {
     // const [amount, setAmount] = useState(0.0)
     const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
@@ -44,11 +41,15 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
             setPriceState([defaultPrice, true])
     }
 
-    useEffect(() => {
-        if (!orderIssued) return
-        handleIssueOrder({ price, amount, orderType, orderAction },
-            isPriceValid && isAmountValid)
-    }, [orderIssued])
+    // useEffect(() => {
+    //     if (!orderIssued) return
+    //     handleIssueOrder({ price, amount, orderType, orderAction },
+    //         isPriceValid && isAmountValid)
+    // }, [orderIssued])
+
+    useEffect(
+        () => { onChange({ price, amount, orderType, orderAction }, isPriceValid && isAmountValid) }
+    , [price, isPriceValid, amount, isAmountValid, orderType, orderAction])
 
     useEffect(() => {
         if (orderbookPrice.equals(0)) return;
@@ -64,13 +65,13 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
             }}
         >
             <div>
-                <ToggleBuySell currentValue={orderAction} handleChange={setOrderAction} />
-                <OrderSelector currentOrderType={orderType} handleChange={handleOrderTypeChange} />
+                <ToggleBuySell currentValue={orderAction} onChange={setOrderAction} />
+                <OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} />
             </div>
 
             <PriceSelector
                 priceState={[price, isPriceValid]}
-                setPriceState={setPriceState}
+                onChange={setPriceState}
                 isDisabled={orderType === OrderType.Market}
                 amountType={priceCurrency}
                 precision={precision}
@@ -78,11 +79,9 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
 
             <AmountSelector
                 amountState={[amount, isAmountValid]}
-                setAmountState={setAmountState}
+                onChange={setAmountState}
                 totalAmount={totalAmount}
                 amountType={priceCurrency}
-                firstUse={firstUse}
-                setFirstUse={setFirstUse}
             />
         </Box>
     )

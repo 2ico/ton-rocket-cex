@@ -34,10 +34,8 @@ export default function Trade() {
     // const location = useLocation();
     // location.state.test
 
-    const [isValidOrder, setIsValidOrder] = useState(false);
+    const [isOrderValid, setIsOrderValid] = useState(false);
     
-    const [orderIssued, setOrderIssued] = useState(false)
-    const [firstUse, setFirstUse] = useState(true)
     const [[orderbookPrice, orderbookOrderAction], setOrderbookOrder] = 
         useState([new Decimal(0.0), OrderAction.Buy])
 
@@ -46,13 +44,10 @@ export default function Trade() {
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
 
-    //TODO onClose show confirm popup (see DurgerKing)
-    WebApp.MainButton.setParams({
-        color: "rgb(49, 181, 69)",
-        text: "PLACE ORDER",
-        is_visible: true,
-        is_active: false,
-      });
+    // //TODO onClose show confirm popup (see DurgerKing)
+    // WebApp.MainButton.setParams({
+     
+    //   });
 
     const handleMainButton = () => {
         WebApp.showPopup({ title: "Order details", message: "TODO" })
@@ -77,13 +72,11 @@ export default function Trade() {
     const result = data.data.results
     const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]   
 
-    const handleIssueOrder = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
+    const handleChange = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
+        setIsOrderValid(isOrderValid);
         if (isOrderValid) {
             console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
         }
-        else 
-            setOrderIssued(false)
-            setFirstUse(false)
     }
 
     return (
@@ -100,10 +93,8 @@ export default function Trade() {
                         defaultPrice={tradePrice}
                         orderbookPrice={orderbookPrice}
                         orderbookOrderAction={orderbookOrderAction}
-                        handleIssueOrder = {handleIssueOrder}
-                        orderIssued = {orderIssued}
-                        firstUse = {firstUse}
-                        setFirstUse = {setFirstUse}
+                        // handleIssueOrder = {handleIssueOrder}
+                        onChange = {handleChange}
                     />
                 </Grid>
                 <Grid item flexBasis={'240px'} flexGrow={1} position="relative">
@@ -115,6 +106,7 @@ export default function Trade() {
                     />
                 </Grid>
             </Grid>
+            <MainButton onClick={handleMainButton} text={t("PLACE_ORDER")} color={"rgb(49, 181, 69)"} progress={false} />
             </MenuLayout>
     )
 }
