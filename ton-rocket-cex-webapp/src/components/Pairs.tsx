@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import { getAvailablePairs } from "@/api/currencies";
 import { makeUrlPair } from "@/utils/utils";
+import { Divider } from '@mui/material';
 
 const searchFilter = (elem: CurrencyPair, searchQuery: string) => {
   if (!searchQuery) return true;
@@ -59,6 +60,7 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
         <nav aria-label="currency pairs list">
           <List>
             {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((currency: any): JSX.Element => (
+              <div>
               <ListItem disablePadding key={currency.currency}     >
                 <ListItemButton component="div" sx={{ px: 4}} selected={selectedTradeCurrency === currency.currency}
               onClick={(event) => handleListItemClick(event, currency.currency)} >
@@ -66,6 +68,8 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
                     primary={baseCurrency.name + "/" + currency.name}/>
                 </ListItemButton>
               </ListItem>
+              <Divider />
+              </div>
             ))}
           </List>
         </nav>

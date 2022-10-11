@@ -86,7 +86,7 @@ export default function Trade() {
                 <Typography gutterBottom variant="h4" component="div">
                     Order
                 </Typography>
-                <Grid item flexBasis={'200px'} flexGrow={0} position="relative">
+                <Grid item flexBasis={'200px'} position="relative">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
                         priceCurrency={tradeCurrency}
@@ -102,7 +102,7 @@ export default function Trade() {
                 <Typography gutterBottom variant="h4" component="div">
                     Orderbook
                 </Typography>
-                <Grid item flexBasis={'240px'} flexGrow={1} position="relative">
+                <Grid item flexBasis={'240px'} position="relative">
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
                         onRowClick={setOrderbookOrder}
