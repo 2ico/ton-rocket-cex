@@ -47,12 +47,14 @@ export default function Trade() {
     if(baseCurrencies == null) return
     setBaseCurrency(baseCurrencies[tabValue]);
   }, [tabValue, baseCurrencies])
-  
-  const handleMainButton = () => {
-    if(pair){ 
-      navigate("/trade/"+pair );
-    }
-  }
+
+  let handleMainButton = () => {};
+  useEffect( () => {
+    handleMainButton = () => {
+      if(pair){ 
+        navigate("/trade/"+pair );
+      }
+  }}, [pair]);
   
   let showMainButton = false;
 
