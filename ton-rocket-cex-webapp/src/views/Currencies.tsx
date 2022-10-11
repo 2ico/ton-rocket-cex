@@ -58,7 +58,7 @@ export default function Trade() {
       <CircularProgress color="inherit" />
     </Backdrop>
   );
-  
+
   if (error) return <div>{t("error_loading_currencies")}</div>;
 
   baseCurrencies = data.data.results;
@@ -129,7 +129,9 @@ export default function Trade() {
           ))}
         </SwipeableViews>
       </Box>
-      <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
+      {pair &&
+        <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
+      }
     </Box>
   );
 }
