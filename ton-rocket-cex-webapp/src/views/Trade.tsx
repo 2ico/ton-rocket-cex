@@ -90,19 +90,10 @@ export default function Trade() {
         <Box>
             <CustomToolbar location="/trade">{baseCurrency}/{tradeCurrency}</CustomToolbar>
         </Box>
-        <Box>
-            {/* <Grid container divider={<Divider flexItem />}> */}
             <Grid container alignItems="center" position={'relative'} justifyContent="center"
-  direction={"column"} flexWrap={'nowrap'} height={'100%'}>
-                <Grid item flexBasis={'240px'} flexGrow={1} overflow={'scroll'} position="relative">
-                    {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
-                    <Orderbook
-                        onRowClick={setOrderbookOrder}
-                        updateSignal={updateSignal}
-                        marketState={data.data.results}
-                    />
-                </Grid>
-                <Grid item flexBasis={'200px'} flexGrow={0.1} position="relative">
+                direction={"column"} flexWrap={'nowrap'} height={'100%'}>
+            {/* <Grid container divider={<Divider flexItem />}>  */}
+                <Grid item flexBasis={'200px'} flexGrow={0} position="relative">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
                         priceCurrency={tradeCurrency}
@@ -117,8 +108,15 @@ export default function Trade() {
                         setFirstUse = {setFirstUse}
                     />
                 </Grid>
+                <Grid item flexBasis={'240px'} flexGrow={1} overflow={'scroll'} position="relative">
+                    {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
+                    <Orderbook
+                        onRowClick={setOrderbookOrder}
+                        updateSignal={updateSignal}
+                        marketState={data.data.results}
+                    />
+                </Grid>
             </Grid>
-        </Box>
         <BackButton onClick={() => navigate("/")}/>
         <MainButton disabled={!isValidOrder} onClick={handleMainButton} text={t("PLACE_ORDER")}/>
         </Box>
