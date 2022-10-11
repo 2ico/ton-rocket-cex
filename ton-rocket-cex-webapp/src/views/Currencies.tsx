@@ -137,7 +137,7 @@ export default function Trade() {
           ))}
         </SwipeableViews>
       </Box>
-      {showMainButton &&
+      {pair &&
         <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
       }
     </Box>
