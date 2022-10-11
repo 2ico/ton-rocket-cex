@@ -83,7 +83,7 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
             <FormControl>
             <InputLabel>{t("price")}</InputLabel>
             <FocusInput
-                autoFocus={true}
+                // autoFocus={true}
                 startAdornment={
                         <InputAdornment position="start">
                             <IncrementButton
