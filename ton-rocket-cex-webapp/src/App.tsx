@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import telegramHooks from '@/hooks/telegram';
 import {Query, QueryClient, QueryClientProvider} from 'react-query';
 import Trade from "@/views/Trade";
+import Orders from '@/views/Orders';
 import Settings from "@/views/Settings";
 import NotFound from "@/views/NotFound";
 import './App.css'
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Currencies />} />
             <Route path="/trade/:pair" element={<Trade />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

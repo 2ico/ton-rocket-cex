@@ -20,34 +20,7 @@ import CustomToolbar from '@/components/CustomToolbar';
 import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 
 
-const baseCurrencyTmp : Currency = {
-    "currency": "TONCOIN",
-    "name": "TON",
-    "minTransfer": 0.00001,
-    "minCheque": 0.005,
-    "minInvoice": 0.001,
-    "minWithdraw": 2,
-    "feeWithdraw": {
-        "fee": 0,
-        "currency": "TONCOIN"
-    }
-}
-
-const tradeCurrencyTmp : Currency = {
-    "currency": "SCALE",
-    "name": "SCALE",
-    "minTransfer": 0.00001,
-    "minCheque": 5,
-    "minInvoice": 0.001,
-    "minWithdraw": 1e-9,
-    "feeWithdraw": {
-        "fee": 0.05,
-        "currency": "TONCOIN"
-    }
-}
-
-const totalTmp = new Decimal(100.0)
-
+const totalTmp = new Decimal(123.4)
 
 export default function Trade() {
     const { pair } = useParams();
