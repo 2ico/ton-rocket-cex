@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 
 import { OrderAction, ToggleBuySell } from '@/components/OrderInputs/ToggleBuySell';
 import { OrderType, OrderSelector } from '@/components/OrderInputs/OrderTypeSelector'
+import { Typography } from '@mui/material';
 
 type Order = {
     price: Decimal,
@@ -61,13 +62,12 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
         <Box
             sx={{
                 maxWidth: 480,
-                m: 3
             }}
-        >
-            <div>
+        >   
+            <Box>
                 <ToggleBuySell currentValue={orderAction} onChange={setOrderAction} />
                 <OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} />
-            </div>
+            </Box>
 
             <PriceSelector
                 priceState={[price, isPriceValid]}

@@ -74,12 +74,7 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
     }
 
     return (
-        <Box
-            sx={{
-                maxWidth: 480,
-                m: 3
-            }}
-        >   
+        <Box>   
             <FormControl>
             <InputLabel>{t("price")}</InputLabel>
             <FocusInput

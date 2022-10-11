@@ -4,6 +4,7 @@ import Decimal from 'decimal.js';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
+import { SliderProps } from "@mui/material/Slider";
 
 import Input from '@mui/material/Input';
 import Divider from '@mui/material/Divider';
@@ -13,19 +14,19 @@ import IncrementButton from './IncrementButton'
 import InputLabel from "@mui/material/InputLabel";
 import TextField from '@mui/material/TextField';
 import { useTranslation } from 'react-i18next';
+import { FormHelperText } from "@mui/material";
 
 
-type RangeProp = {
+interface DecimalSliderProps {
+    sliderProps: SliderProps,
     value: Decimal,
     max: Decimal,
-    onChange: (amount : Decimal) => void,
+    onChange: (amount : Decimal) => void
 }
 
-const Range = ({ value, max, onChange }: RangeProp) : JSX.Element => 
-    <FormControl sx={{ width: "100%" }} variant="standard">
-        <Slider value={value.toNumber()} min = {0} max={max.toNumber()} size="small" step={0.01}
-            onChange={(event: Event, newValue : number | number[]) => { onChange(new Decimal(newValue as number)) }} />
-    </FormControl>
+const DecimalSlider = ({sliderProps, value: decimal_value, max: decimal_max, onChange}: DecimalSliderProps) => 
+        <Slider {...sliderProps} value={(decimal_value.dividedBy(decimal_max).toNumber())} min = {0} max={1.0} step={0.05}
+            onChange={(event: Event, newValue : number | number[]) => { onChange(decimal_max.times(newValue as number) ) }} />
 
 interface AmountSelectorProp {
     totalAmount: Decimal,
@@ -83,48 +84,38 @@ const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmo
     }
 
     return (
-        <Box
-            sx={{
-                maxWidth: 480,
-                m: 3
-            }}
-        >
+        <Box>
             <FormControl>
-            <TextField
-                InputProps={{
-                    startAdornment:
+            <InputLabel>{t("amount")}</InputLabel>
+            <Input               
+                    startAdornment={
                         <InputAdornment position="start">
                             <IncrementButton
                                 onClick={() => handleButtonChange(-1)}
                                 isPlusButton = {false}
                             />
-                        </InputAdornment>,
-                    endAdornment:
+                        </InputAdornment>}
+                    endAdornment={
                         <InputAdornment position="end">
                         {""}
                         <IncrementButton
                             onClick={() => handleButtonChange(1)}
                             isPlusButton = {true}       
                         />
-                        </InputAdornment>
-                }}
-                value={amountText}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
-                error = {!(isValid || firstUse)}
-                type='number'
-                label={t("amount")}
-                variant="standard"  
-                helperText={getErrorMessage()}
-            />
-            </FormControl>
-
-            <br />
-            
-            <Range 
-                value={amount}
-                max={totalAmount}
-                onChange={handleSliderChange}
-            />
+                        </InputAdornment>}
+                    value={amountText}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
+                    error = {!(isValid || firstUse)}
+                    type='number'
+                />
+                <DecimalSlider 
+                    sliderProps={{valueLabelFormat: (x) => (x*100.0).toFixed(0) + "%", valueLabelDisplay: "auto"}}
+                    value={amount}
+                    max={totalAmount}
+                    onChange={handleSliderChange}
+                />
+                <FormHelperText>{getErrorMessage()}</FormHelperText>
+            </FormControl>            
         </Box>
     )
 }

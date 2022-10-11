@@ -91,29 +91,20 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     : JSX.Element => 
 {
     return (
-        <div>
-            <div style={{display: "inline-block"}}>
-                 Aggregation:
-            </div>
-            <div style={{display: "inline-block"}}>
+        <Box>
                 <IconButton color="primary" size="small"
                     onClick={() => setIndex(Math.max(0, index - 1))}
                     disabled={index == 0}
                     >
                     <ChevronLeftIcon />
                 </IconButton>
-            </div>
-            <div style={{display: "inline-block"}}>
-                 {displayText}
-            </div>
-            <div style={{display: "inline-block"}}>
+                <div style={{minWidth: '2em', display: "inline-block", textAlign: 'center'}}> {displayText}</div>
                 <IconButton color="primary" size="small"
                     onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}
                     disabled={index == maxIndex - 1}>
                     <ChevronRightIcon />
                 </IconButton>            
-            </div>
-        </div>
+        </Box>
     )
 }
 
