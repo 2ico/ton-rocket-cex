@@ -53,6 +53,12 @@ export default function Trade() {
     }
   }
   
+  let showMainButton = false;
+
+  useEffect( () => {
+    showMainButton == !!pair
+  }, [pair]);
+
   if (isLoading) return (
     <Backdrop open sx={{ color: '#fff', zIndex: (theme: { zIndex: { drawer: number; }; }) => theme.zIndex.drawer + 1 }} >
       <CircularProgress color="inherit" />
@@ -81,6 +87,7 @@ export default function Trade() {
     console.log("setting pair to: "+pair)
     setPair(pair);
   }
+
   
   // useEffect(()=>{
   //     baseCurrencies = data.data.results;
@@ -129,7 +136,7 @@ export default function Trade() {
           ))}
         </SwipeableViews>
       </Box>
-      {pair &&
+      {showMainButton &&
         <MainButton onClick={handleMainButton} text={t("CONTINUE")} color={WebApp.themeParams.button_color}/>
       }
     </Box>
