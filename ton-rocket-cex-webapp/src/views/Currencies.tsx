@@ -48,16 +48,14 @@ export default function Trade() {
     setBaseCurrency(baseCurrencies[tabValue]);
   }, [tabValue, baseCurrencies])
 
-  let handleMainButton = () => {};
-  useEffect( () => {
-    handleMainButton = () => {
-      if(pair){ 
-        navigate("/trade/"+pair);
-      }
+
+  function handleMainButton() {
+    if(pair){ 
+      navigate("/trade/"+pair);
     }
-    console.log("handleMainButton updated")
-  }, [pair]);
-  
+    console.log("handleMainButton pressed")
+  }
+
   let showMainButton = false;
 
   useEffect( () => {
