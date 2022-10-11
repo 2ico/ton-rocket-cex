@@ -333,7 +333,10 @@ function userOrders(orderCount: number) {
     const takeSome = (source: Array<CurrencyPair>, count: number) => 
         source.sort(() => Math.random() - 0.5).slice(0, count)
 
+    let orderId = 0
+
     const makeOrder = (baseCurrecy: Currency, pair : CurrencyPair, price: Decimal) => ({
+        id: orderId += 1,
         baseCurrency: baseCurrecy,
         pair: pair,
         amount: randomDecimal(new Decimal(100)),
@@ -353,6 +356,8 @@ function userOrders(orderCount: number) {
 
     return userOrders
 }
+
+console.log(userOrders(12))
 
 export { getBaseCurrencies, getAvailablePairs, getOrderbook };
 export type { MarketState };

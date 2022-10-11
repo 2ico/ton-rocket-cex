@@ -56,6 +56,7 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
         if (orderbookPrice.equals(0)) return;
         setPriceState([orderbookPrice, true])
         setOrderAction(orderbookOrderAction)
+        setOrderType(OrderType.Limit)
     }, [orderbookPrice, orderbookOrderAction])
 
     return (

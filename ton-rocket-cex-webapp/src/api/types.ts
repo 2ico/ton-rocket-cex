@@ -32,6 +32,7 @@ enum OrderAction {
 }
 
 type Order = {
+    id: number,
     baseCurrency: Currency,
     pair: CurrencyPair,
     amount: Decimal,

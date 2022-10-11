@@ -114,7 +114,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmo
                     max={totalAmount}
                     onChange={handleSliderChange}
                 />
-                <FormHelperText>{getErrorMessage()}</FormHelperText>
+                <FormHelperText sx={{color: "#FF0000" }}>{getErrorMessage()}</FormHelperText>
             </FormControl>            
         </Box>
     )
