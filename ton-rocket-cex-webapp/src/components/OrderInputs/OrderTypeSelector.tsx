@@ -1,11 +1,7 @@
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
-
-enum OrderType {
-    Market = "Market",
-    Limit = "Limit"
-}
+import { OrderType } from '@/api/types';
 
 interface OrderTypeProp {
     currentOrderType : OrderType,

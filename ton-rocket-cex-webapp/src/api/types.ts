@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js';
+
 type Currency = {
     "currency": string,
     "name": string,
@@ -19,4 +21,24 @@ type CurrencyPair =   {
     "change_weekly": number,
 };
 
-export type { Currency, CurrencyPair };
+enum OrderType {
+    Market = "Market",
+    Limit = "Limit"
+}
+
+enum OrderAction {
+    Buy = "Buy",
+    Sell = "Sell"
+}
+
+type Order = {
+    baseCurrency: Currency,
+    pair: CurrencyPair,
+    amount: Decimal,
+    price: Decimal,
+    orderAction: OrderAction,
+    orderType: OrderType
+}
+
+export { OrderType, OrderAction }
+export type { Currency, CurrencyPair, Order };

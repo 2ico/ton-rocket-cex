@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-
-
-enum OrderAction {
-    Buy = "Buy",
-    Sell = "Sell"
-}
+import { OrderAction } from '@/api/types';
 
 type Props = {
     currentValue: OrderAction,

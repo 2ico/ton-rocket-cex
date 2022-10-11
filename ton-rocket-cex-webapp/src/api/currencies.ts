@@ -6,7 +6,7 @@
 import { AnyRecord } from "dns";
 
 import Decimal from 'decimal.js';
-import {Currency, CurrencyPair} from '@/api/types';
+import {Currency, CurrencyPair, Order, OrderAction, OrderType} from '@/api/types';
 import { makeUrlPair } from "@/utils/utils";
 
 
@@ -327,34 +327,32 @@ function getOrderbook(baseCurrency: string, priceCurrency: string) {
 
 function userOrders(orderCount: number) {
     // Pair format: TONCOIN_TAKE
+    const precision = new Decimal(0.01) // currently not in the pair
 
-    /*
+    const randomDecimal = (max: Decimal) => new Decimal(max.mul(Math.random()));
+    const takeSome = (source: Array<CurrencyPair>, count: number) => 
+        source.sort(() => Math.random() - 0.5).slice(0, count)
 
-    let userOrders = [ ]
-
-    const takeRandomly : [x] -> x
-
-    for (let i ..) {
-        const baseCurrency = takeRandomly(baseCurrencies)
-        const priceCurrency = takeRandomly(availablePairs.filter((pair) => pair.currency != baseCurrency.currency))        
-        userOrders.push({
-            baseCurrency: 
-            priceCurrency:
-            amount:
-            orderType:
-            oderAction:
-        })
-    }
+    const makeOrder = (baseCurrecy: Currency, pair : CurrencyPair, price: Decimal) => ({
+        baseCurrency: baseCurrecy,
+        pair: pair,
+        amount: randomDecimal(new Decimal(100)),
+        price: price.toNearest(precision),
+        orderAction: (price.greaterThan(pair.market_price)) ? OrderAction.Sell : OrderAction.Buy,
+        orderType: (Math.random() > 0.5) ? OrderType.Limit : OrderType.Market
+    })
     
+    let userOrders : Order[] = [];
+
+    for (let i = 0; i < orderCount / 4; ++i) {
+        const baseCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
+        userOrders.push(...takeSome(availablePairs.filter((pair) => pair.currency != baseCurrency.currency), 4).map(
+            (pair) => makeOrder(baseCurrency, pair, new Decimal(pair.market_price + (Math.random() - 0.5) * 2))
+        ))
+    }
+
     return userOrders
-    */
 }
-
-// ratesCurrencies(pair) {
-//     url = "/currencies/rate"
-
-// }
-
 
 export { getBaseCurrencies, getAvailablePairs, getOrderbook };
 export type { MarketState };
