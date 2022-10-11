@@ -86,7 +86,7 @@ export default function Trade() {
     }
 
     return (
-        <Box height={'100%'} position={"static"} overflow={'scroll'}>
+        <Box height={'100vh'} overflow={'scroll'}>
         <Box>
             <CustomToolbar location="/trade">{baseCurrency}/{tradeCurrency}</CustomToolbar>
         </Box>

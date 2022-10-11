@@ -6,7 +6,7 @@ export default function Orders() {
     const { t } = useTranslation();
     // const navigate = useNavigate();
     return (
-        <Box height={'100vh'} position={"static"} overflow={'scroll'}> {/* TODO overflow hidden */} 
+        <Box height={'100vh'} overflow={'scroll'}> {/* TODO overflow hidden */} 
             <Box>
                 <CustomToolbar location="/orders">{t("order_history")}</CustomToolbar>
             </Box>

@@ -6,7 +6,7 @@ export default function Settings() {
     const { t } = useTranslation();
 
     return (
-        <Box height={'100vh'} position={"static"} overflow={'scroll'}> {/* TODO overflow hidden */} 
+        <Box height={'100vh'} overflow={'scroll'}> {/* TODO overflow hidden */} 
             <Box>
                 <CustomToolbar location="/settings">{t("settings")}</CustomToolbar>
             </Box>
