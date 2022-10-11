@@ -56,7 +56,7 @@ export default function Trade() {
   let showMainButton = false;
 
   useEffect( () => {
-    showMainButton == !!pair
+    showMainButton = !!pair;
   }, [pair]);
 
   if (isLoading) return (
