@@ -42,7 +42,7 @@ export default function Trade() {
     if (pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
     
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
-    const { baseCurrency, tradeCurrency } = separateUrlPair(pair)
+    const { baseCurrency, quoteCurrency } = separateUrlPair(pair)
 
     // //TODO onClose show confirm popup (see DurgerKing)
     // WebApp.MainButton.setParams({
@@ -55,7 +55,7 @@ export default function Trade() {
     
     const [updateSignal, setUpdateSignal] = useState(false)
     const { data, error, isLoading } = useQuery("orderBook", 
-        () => getOrderbook(baseCurrency, tradeCurrency), {
+        () => getOrderbook(baseCurrency, quoteCurrency), {
         onSuccess: (data) => {
             setUpdateSignal(!updateSignal)
             // setOrderbookOrder([data.data.results.marketPrice, orderbookOrderAction])
@@ -80,7 +80,7 @@ export default function Trade() {
     }
 
     return (
-            <MenuLayout title={baseCurrency+"/"+tradeCurrency} location="/trade">
+            <MenuLayout title={baseCurrency+"/"+quoteCurrency} location="/trade">
             <Grid container position={'relative'}
                 direction={"column"} flexWrap={'nowrap'} height={'100%'} >
                 <Typography variant="h6" component="div">
@@ -89,7 +89,7 @@ export default function Trade() {
                 <Grid item flexBasis={'200px'} position="relative">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
-                        priceCurrency={tradeCurrency}
+                        priceCurrency={quoteCurrency}
                         precision={data.data.results.precision}
                         totalAmount={totalTmp} 
                         defaultPrice={tradePrice}

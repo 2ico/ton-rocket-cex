@@ -14,8 +14,10 @@ type Currency = {
 };
 
 type CurrencyPair =   {
-    "currency": string,
-    "name": string,
+    "base_currency": string,
+    "base_name": string,
+    "quote_currency": string,
+    "quote_name": string,
     "market_price": number,
     "change_daily": number,
     "change_weekly": number,
@@ -33,7 +35,6 @@ enum OrderAction {
 
 type Order = {
     id: number,
-    baseCurrency: Currency,
     pair: CurrencyPair,
     amount: Decimal,
     price: Decimal,

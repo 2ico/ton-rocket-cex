@@ -28,8 +28,8 @@ const OrderItem = ({ order, onClick } : OrderItemProp)
                 }
             >
                 <ListItemText sx = {{ display: "table", padding: "10px" }}>
-                    <ListItemText style={{display: "table-cell" }}> {order.baseCurrency.name} </ListItemText>
-                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.pair.name} </ListItemText>
+                    <ListItemText style={{display: "table-cell" }}> {order.pair.base_name} </ListItemText>
+                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.pair.quote_name} </ListItemText>
                     <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderAction} </ListItemText>
                     <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.amount.toNumber()} </ListItemText>
                     <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderType} </ListItemText>

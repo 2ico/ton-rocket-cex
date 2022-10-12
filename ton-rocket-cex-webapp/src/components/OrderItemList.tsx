@@ -68,7 +68,8 @@ interface UserOrderLstPromp {
 const OrderItemList = ({userOrders, onClick} : UserOrderLstPromp) 
     : JSX.Element => 
 {
-    const baseCurrencyList = Array.from(new Set(userOrders.map((order) => order.baseCurrency.name)).values())
+    //TODO doublecheck
+    const baseCurrencyList = Array.from(new Set(userOrders.map((order) => order.pair.quote_name)).values())
 
     if (baseCurrencyList.length == 0)
         return (<div> No orders placed </div>)
@@ -83,7 +84,8 @@ const OrderItemList = ({userOrders, onClick} : UserOrderLstPromp)
                 onChange={setSelectedCurrency}
             />
             <List>
-                {userOrders.filter((order) => (selectedCurrency.includes(order.baseCurrency.name) || selectedCurrency.length == 0))
+                {/* TODO doublecheck */}
+                {userOrders.filter((order) => (selectedCurrency.includes(order.pair.quote_name) || selectedCurrency.length == 0))
                     .map((order) => (
                         <div>
                         <OrderItem

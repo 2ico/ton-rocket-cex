@@ -22,6 +22,7 @@ import { MainButton } from '@twa-dev/sdk/react';
 import CustomToolbar from '@/components/CustomToolbar';
 import { useTranslation } from 'react-i18next';
 import MenuLayout from '@/components/MenuLayout';
+import { Currency } from '@/api/types';
 
 
 export default function Trade() {
@@ -30,23 +31,23 @@ export default function Trade() {
   const theme = useTheme()
   const { currency } = useParams()
   const [tabValue, setTabValue] = useState(0);
-  const [baseCurrency, setBaseCurrency] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
-  onSuccess: (data) => {
-    let baseCurrencies = data.data.results;
-    setBaseCurrency(baseCurrencies[0]);
-  }});
+  // onSuccess: (data) => {
+  //   let baseCurrencies = data.data.results;
+  //   setQuoteCurrency(baseCurrencies[0]);
+  // }
+  });
 
-  let baseCurrencies : Array<any> | null = null;
+  let quoteCurrencies : Array<Currency> | null = null;
   
-  useEffect(() => {
-    if(baseCurrencies == null) return
-    setBaseCurrency(baseCurrencies[tabValue]);
-  }, [tabValue, baseCurrencies])
+  // useEffect(() => {
+  //   if(quoteCurrencies == null) return
+  //   setQuoteCurrency(quoteCurrencies[tabValue]);
+  // }, [tabValue, quoteCurrencies])
 
   function handleMainButton() {
     if(pair){ 
@@ -69,7 +70,7 @@ export default function Trade() {
 
   if (error) return <div>{t("error_loading_currencies")}</div>;
 
-  baseCurrencies = data.data.results;
+  quoteCurrencies = data.data.results;
   
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
     setTabValue(newValue);
@@ -110,7 +111,8 @@ export default function Trade() {
           // allowScrollButtonsMobile
           aria-label="base currencies"
         >
-          {baseCurrencies?.map((currency, index): JSX.Element => (
+          <Tab key="*" label="All" value={-1} />
+          {quoteCurrencies?.map((currency, index): JSX.Element => (
             <Tab
               key={currency.currency}
               label={currency.name}
@@ -129,9 +131,9 @@ export default function Trade() {
           index={tabValue}
           onChangeIndex={handleChangeIndex}
           >
-            {baseCurrencies?.map((currency, index): JSX.Element => (
+            {quoteCurrencies?.map((currency, index): JSX.Element => (
             <TabPanel value={tabValue} index={index} dir={theme.direction}>
-              <Pairs baseCurrency={baseCurrency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
+              <Pairs quoteCurrency={currency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
           </TabPanel>
           ))}
         </SwipeableViews>

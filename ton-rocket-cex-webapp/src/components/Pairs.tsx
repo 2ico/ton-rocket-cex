@@ -14,38 +14,43 @@ import { getAvailablePairs } from "@/api/currencies";
 import { makeUrlPair } from "@/utils/utils";
 import { Divider } from '@mui/material';
 
-const searchFilter = (elem: CurrencyPair, searchQuery: string) => {
+const searchFilter = (pair: CurrencyPair, searchQuery: string) => {
   if (!searchQuery) return true;
   console.log(searchQuery)
-  let searchQueryLower = searchQuery.toLowerCase();
-  return elem.currency.toLowerCase().includes(searchQueryLower) || elem.name.toLowerCase().includes(searchQueryLower)
+  const searchQueryLower = searchQuery.toLowerCase();
+  const baseNameLower = pair.base_name.toLowerCase();
+  const baseCurrencyLower = pair.base_currency.toLowerCase();
+  const quoteNameLower = pair.quote_name.toLowerCase();
+  const quoteCurrencyLower = pair.quote_currency.toLowerCase();
+  let pairStrings = [baseNameLower, baseCurrencyLower, quoteNameLower, quoteCurrencyLower, baseNameLower + '/'  + quoteNameLower, baseNameLower + '_'  + quoteNameLower, baseNameLower + '-' + quoteNameLower, baseNameLower + ' ' + quoteNameLower, baseCurrencyLower + '/' + quoteCurrencyLower, baseCurrencyLower + '_' + quoteCurrencyLower, baseCurrencyLower + '-' + quoteCurrencyLower, baseCurrencyLower + ' ' + quoteCurrencyLower];
+  return pairStrings.some(x => x.includes(searchQueryLower))
 }
 
-function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSelectionChange: any }) {
+function Pairs(props: { quoteCurrency: Currency | null, searchQuery: string, onSelectionChange: any }) {
 
-  const [selectedTradeCurrency, setSelectedTradeCurrency] = useState<string | null>(null);
+  const [selectedPair, setSelectedTradeCurrency] = useState<string | null>(null);
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    currencyString: string,
+    pairString: string,
   ) => {
-    if(selectedTradeCurrency === currencyString){
+    if(selectedPair === pairString){
       setSelectedTradeCurrency(null)
       props.onSelectionChange("")
     }
     else {
-      setSelectedTradeCurrency(currencyString);
+      setSelectedTradeCurrency(pairString);
       //TODO validate tradeCurrency
-      let pair = makeUrlPair(baseCurrency.currency, currencyString)
+      let pair = makeUrlPair(quoteCurrency.currency, pairString)
       props.onSelectionChange(pair)
     }
   };
 
 
-  if (props.baseCurrency === null) return <div>No currency selected...</div>;
-  const baseCurrency: Currency = props.baseCurrency;
+  if (props.quoteCurrency === null) return <div>No currency selected...</div>;
+  const quoteCurrency: Currency = props.quoteCurrency;
 
-  const { data: availablePairs, error, isLoading } = useQuery('availableCurrencies', () => getAvailablePairs(baseCurrency));
+  const { data: availablePairs, error, isLoading } = useQuery('availableCurrencies', () => getAvailablePairs(quoteCurrency));
   // Error and Loading states
   if (error) return <div>Request Failed</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -59,18 +64,22 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
       
         <nav aria-label="currency pairs list">
           <List>
-            {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((currency: any): JSX.Element => (
-              <div>
-              <ListItem disablePadding key={currency.currency}     >
-                <ListItemButton component="div" sx={{ px: 4}} selected={selectedTradeCurrency === currency.currency}
-              onClick={(event) => handleListItemClick(event, currency.currency)} >
-                  <ListItemText
-                    primary={baseCurrency.name + "/" + currency.name}/>
-                </ListItemButton>
-              </ListItem>
-              <Divider sx={{ml: 4}}/>
-              </div>
-            ))}
+            {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((pair: CurrencyPair): JSX.Element => {
+                let pairString = pair.base_currency + "_" + pair.quote_currency;
+                return (
+                <div>
+                <ListItem disablePadding key={pairString}     >
+                  <ListItemButton component="div" sx={{ px: 4}} selected={selectedPair === pairString}
+                onClick={(event) => handleListItemClick(event, pairString)} >
+                    <ListItemText
+                      primary={pair.base_name + "/" + pair.quote_name}/>
+                  </ListItemButton>
+                </ListItem>
+                <Divider sx={{ml: 4}}/>
+                </div>
+              )
+              })
+            }
           </List>
         </nav>
       </Box>

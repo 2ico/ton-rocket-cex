@@ -124,67 +124,67 @@ const baseCurrencies: Array<Currency> = [
 const randomMarketPrice = (min: number, max: number) => Math.random() * (max - min) + min;
 const randomPriceChange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-const availablePairs: Array<CurrencyPair> =
+const availablePairs_incomplete: Array<any> =
     [
         {
-            "currency": "TONCOIN",
-            "name": "TON",
+            "base_currency": "TONCOIN",
+            "base_name": "TON",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "SCALE",
-            "name": "SCALE",
+            "base_currency": "SCALE",
+            "base_name": "SCALE",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "BOLT",
-            "name": "BOLT",
+            "base_currency": "BOLT",
+            "base_name": "BOLT",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "TGR",
-            "name": "TGR",
+            "base_currency": "TGR",
+            "base_name": "TGR",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "TIC",
-            "name": "TIC",
+            "base_currency": "TIC",
+            "base_name": "TIC",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "TAKE",
-            "name": "TAKE",
+            "base_currency": "TAKE",
+            "base_name": "TAKE",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "HEDGE",
-            "name": "HEDGE",
+            "base_currency": "HEDGE",
+            "base_name": "HEDGE",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "KOTE",
-            "name": "nKOTE",
+            "base_currency": "KOTE",
+            "base_name": "nKOTE",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
         },
         {
-            "currency": "TNX",
-            "name": "TNX",
+            "base_currency": "TNX",
+            "base_name": "TNX",
             "market_price": randomMarketPrice(0.1, 1.0),
             "change_daily": randomPriceChange(-0.5, 0.5),
             "change_weekly": randomPriceChange(-0.1, 0.1),
@@ -211,10 +211,10 @@ const wrapWithTimeout = (results: any, error_message: string) => {
 }
 
 
-function getAvailablePairs(baseCurrency: Currency) {
-    if(baseCurrency === null)
-        return wrapWithTimeout(null, "baseCurrency null")
-    return wrapWithTimeout(availablePairs.filter((pair) => pair.currency != baseCurrency.currency), 'pairs not found');
+function getAvailablePairs(quoteCurrency: Currency) {
+    if(quoteCurrency === null)
+        return wrapWithTimeout(null, "quoteCurrency null")
+    return wrapWithTimeout(availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency).map(pair => Object.assign(pair, {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name})), 'pairs not found');
 }
 
 function getBaseCurrencies() {
@@ -319,9 +319,9 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
 
 const myMarket = marketGenerator(100, 100)
 
-function getOrderbook(baseCurrency: string, priceCurrency: string) {
+function getOrderbook(baseCurrency: string, quoteCurrency: string) {
     return wrapWithTimeout(
-        myMarket(baseCurrency + "-" + priceCurrency),
+        myMarket(baseCurrency + "-" + quoteCurrency),
         "orderbook not found")
 }
 
@@ -335,9 +335,8 @@ function generateUserOrder (orderCount: number) {
 
     let orderId = 0
 
-    const makeOrder = (baseCurrecy: Currency, pair : CurrencyPair, price: Decimal) => ({
+    const makeOrder = (pair : CurrencyPair, price: Decimal) => ({
         id: orderId += 1,
-        baseCurrency: baseCurrecy,
         pair: pair,
         amount: randomDecimal(new Decimal(100)),
         price: price.toNearest(precision),
@@ -348,9 +347,9 @@ function generateUserOrder (orderCount: number) {
     let userOrders : Order[] = [];
 
     for (let i = 0; i < orderCount / 4; ++i) {
-        const baseCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
-        userOrders.push(...takeSome(availablePairs.filter((pair) => pair.currency != baseCurrency.currency), 4).map(
-            (pair) => makeOrder(baseCurrency, pair, new Decimal(pair.market_price * (0.5 + Math.random())))
+        const quoteCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
+        userOrders.push(...takeSome(availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency), 4).map(
+            (pair) => makeOrder(pair, new Decimal(pair.market_price * (0.5 + Math.random())))
         ))
     }
 
