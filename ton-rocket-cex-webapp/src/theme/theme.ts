@@ -26,7 +26,7 @@ declare module '@mui/material/styles' {
       },
       MuiTypography: {
         styleOverrides: {
-          subtitle1: {
+          h6: {
             color: "var(--tg-theme-link-color)"
             // color: WebApp.themeParams.link_color
           }

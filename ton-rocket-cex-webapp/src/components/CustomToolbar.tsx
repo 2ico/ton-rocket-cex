@@ -10,7 +10,7 @@ const CustomToolbar: FC<{children?: React.ReactNode, location: string }> = ({chi
       return (
         <AppBar position="relative">
         <Toolbar>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1, textAlign: "left" }}>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1, textAlign: "left" }}>
             {children}
           </Typography>
         {location == "/orders" || hideButtons ||
