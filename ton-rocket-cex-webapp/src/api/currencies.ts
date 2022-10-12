@@ -358,7 +358,7 @@ function generateUserOrder (orderCount: number) {
 }
 
 function getUserOrders() {
-    return wrapWithTimeout(generateUserOrder(12), 'user order not retrived');
+    return wrapWithTimeout(generateUserOrder(16), 'user order not retrived');
 }
 
 export { getBaseCurrencies, getAvailablePairs, getOrderbook, getUserOrders };

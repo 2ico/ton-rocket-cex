@@ -2,6 +2,8 @@ import { Order, OrderType } from "@/api/types"
 import { Box } from "@mui/system"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from "@mui/material";
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
 
 interface OrderItemProp {
     order: Order,
@@ -17,23 +19,23 @@ const OrderItem = ({ order, onClick } : OrderItemProp)
 
     return (
         <Box>
-            <Box display={"flex"} padding={"10px"} border={"1px solid"} >
-                <Box sx = {{ flex:1 }}>
-                    <Box sx = {{ display: "table" }}>
-                        <div style={{display: "table-cell", paddingLeft: "10px"}}> {order.baseCurrency.name} </div>
-                        <div style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderAction} </div>
-                        <div style={{display: "table-cell", paddingLeft: "10px"}}> {order.amount.toNumber()} </div>
-                        <div style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderType} </div>
-                        {priceDiv}
-                    </Box>
-                </Box>
-                <Box sx = {{ flex: 1 }}>
-                    <IconButton color="primary"
-                        onMouseDown={() => onClick(order.id)}>
+            <ListItem 
+                sx={{ width: "100%" }}
+                secondaryAction = {
+                    <IconButton color="primary" onMouseDown={() => onClick(order.id)}>
                         <DeleteIcon />
                     </IconButton>
-                </Box>
-            </Box>
+                }
+            >
+                <ListItemText sx = {{ display: "table",  border: "1px solid", padding: "10px" }}>
+                    <ListItemText style={{display: "table-cell" }}> {order.baseCurrency.name} </ListItemText>
+                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.pair.name} </ListItemText>
+                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderAction} </ListItemText>
+                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.amount.toNumber()} </ListItemText>
+                    <ListItemText style={{display: "table-cell", paddingLeft: "10px"}}> {order.orderType} </ListItemText>
+                    {priceDiv}
+                </ListItemText>
+            </ListItem>
         </Box>
     )
 }
