@@ -9,18 +9,22 @@ declare module '@mui/material/styles' {
   }
   
   const androidTheme = createTheme({
+    palette: {
+      
+    },
     components: {
       MuiButton: {
         styleOverrides: {
           root: {
-            textTransform: 'none'
+            textTransform: 'none',
+            color: "var(--tg-theme-link-color)"
           }
         }
       },
       MuiButtonBase: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-text-color)"
+            color: "var(--tg-theme-link-color)"
           }
         }
       },
@@ -62,7 +66,7 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             color: "var(--tg-theme-text-color)"
-          }
+          },
         }
       },
       MuiSvgIcon: {
