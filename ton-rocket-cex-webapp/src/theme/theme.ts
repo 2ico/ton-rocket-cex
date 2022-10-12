@@ -27,12 +27,15 @@ declare module '@mui/material/styles' {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: "var(--tg-theme-secondary-bg-color)"
+            backgroundColor: "var(--tg-theme-bg-color)"
           }
         }
       },
       MuiTypography: {
         styleOverrides: {
+          root: {
+            color: "var(--tg-theme-text-color)"
+          },
           h6: {
             color: "var(--tg-theme-link-color)"
             // color: WebApp.themeParams.link_color
