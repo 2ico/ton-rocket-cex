@@ -9,6 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from "@mui/material/InputLabel";
 import { Theme, useTheme } from "@mui/material/styles";
+import { Divider } from "@mui/material";
 
 
 
@@ -81,14 +82,17 @@ const OrderItemList = ({userOrders, onClick} : UserOrderLstPromp)
                 selectedCurrecies={selectedCurrency}
                 onChange={setSelectedCurrency}
             />
-            <List sx={{ width: '100%' }}>
+            <List>
                 {userOrders.filter((order) => (selectedCurrency.includes(order.baseCurrency.name) || selectedCurrency.length == 0))
                     .map((order) => (
+                        <div>
                         <OrderItem
                         key={order.id}
                         order={order}
                         onClick={onClick}
                         />
+                        <Divider sx={{ml: 4}} />
+                        </div>
                     ))}
             </List>
         </Box>

@@ -111,6 +111,7 @@ export default function Trade() {
                     />
                 </Grid>
             </Grid>
+            {/* TODO read color from theme */}
             <MainButton onClick={handleMainButton} text={t("PLACE_ORDER")} color={"rgb(49, 181, 69)"} progress={false} />
             </MenuLayout>
     )

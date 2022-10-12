@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material';
+import WebApp from '@twa-dev/sdk';
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -9,9 +10,21 @@ declare module '@mui/material/styles' {
   }
   
   const androidTheme = createTheme({
-    palette: {
-      
-    },
+    // palette: {
+    //   primary: {
+    //     main: WebApp.themeParams.bg_color
+    //   },
+    //   error: {},
+    //   warning: {
+    //     main: WebApp.themeParams.link_color 
+    //   },
+    //   info: {
+
+    //   },
+    //   success: {
+    //     main: "rgb(49, 181, 69)",
+    //   },
+    // },
     components: {
       MuiButton: {
         styleOverrides: {
