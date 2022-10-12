@@ -17,6 +17,13 @@ declare module '@mui/material/styles' {
           }
         }
       },
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-text-color)"
+          }
+        }
+      },
       MuiAppBar: {
         styleOverrides: {
           root: {
@@ -29,6 +36,35 @@ declare module '@mui/material/styles' {
           h6: {
             color: "var(--tg-theme-link-color)"
             // color: WebApp.themeParams.link_color
+          }
+        }
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-text-color)"
+          }
+        }
+      },
+      MuiTabs: {
+        styleOverrides: {
+          indicator: {
+            height: "4px",
+            borderRadius: "4px 4px 0 0"
+          }
+        }
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-text-color)"
+          }
+        }
+      },
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            fill: "var(--tg-theme-text-color)"
           }
         }
       }
