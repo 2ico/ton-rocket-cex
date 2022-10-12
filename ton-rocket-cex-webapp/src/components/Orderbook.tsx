@@ -108,13 +108,13 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     )
 }
 
-type Props = {
+type OrderbookProps = {
     updateSignal: boolean,  // useEffect on marketState won't work
     marketState: MarketState,
     onRowClick: ([price, orderAction] : [Decimal, OrderAction]) => void
 };
 
-export default function Orderbook( {updateSignal, marketState, onRowClick: selectOrderbookPrice} : Props)
+export default function Orderbook( {updateSignal, marketState, onRowClick: selectOrderbookPrice} : OrderbookProps)
 {
     const { t } = useTranslation();
 
@@ -180,7 +180,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         RowComponent: React.ComponentType<any>,
         rowProps: {[key:string]: any},
         CellComponent: React.ComponentType<any>,
-        cellProps: {[ket:string]: any}
+        cellProps: {[key:string]: any}
     ) => {
         const buyerEntry = aggregateBuyers[aggregateBuyers.length - index - 1]
         const sellerEntry = aggregateSellers[index]
@@ -196,8 +196,11 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
 
         // TODO add sell/buy support!
         const orderShareBar = `linear-gradient(90deg, #FFFFFF00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+        const orderShareBarOnBuyerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+        const orderShareBarOnSellerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+
         return (
-            <RowComponent style={{ background: orderShareBar }} {... rowProps}> 
+            <RowComponent style={{ background: orderShareBar }} {... rowProps}>
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.amount.toDecimalPlaces(2).toString()
                 } </CellComponent>

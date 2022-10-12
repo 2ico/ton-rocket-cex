@@ -68,7 +68,7 @@ function Pairs(props: { baseCurrency: Currency | null, searchQuery: string, onSe
                     primary={baseCurrency.name + "/" + currency.name}/>
                 </ListItemButton>
               </ListItem>
-              <Divider />
+              <Divider sx={{ml: 4}}/>
               </div>
             ))}
           </List>

@@ -83,7 +83,7 @@ export default function Trade() {
             <MenuLayout title={baseCurrency+"/"+tradeCurrency} location="/trade">
             <Grid container position={'relative'}
                 direction={"column"} flexWrap={'nowrap'} height={'100%'} >
-                <Typography gutterBottom variant="h4" component="div">
+                <Typography variant="h6" component="div">
                     Order
                 </Typography>
                 <Grid item flexBasis={'200px'} position="relative">
@@ -99,7 +99,7 @@ export default function Trade() {
                         onChange = {handleChange}
                     />
                 </Grid>
-                <Typography gutterBottom variant="h4" component="div">
+                <Typography variant="h6" component="div">
                     Orderbook
                 </Typography>
                 <Grid item flexBasis={'240px'} position="relative">
