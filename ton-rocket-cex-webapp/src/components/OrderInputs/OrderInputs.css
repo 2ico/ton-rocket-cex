@@ -1,43 +1,45 @@
 .buy-sell-toggle-button-group .MuiToggleButton-root{
+    height: 40px;
     border-width: 2px;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 8px 2px;
     min-width: 6em;
     background-color: none;
 }
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped{
     z-index: auto;   
+    position: relative;
 }
 
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped.Mui-selected{
     background: none;
-    /* z-index: 10; */
+    z-index: 10;
     color: inherit
 }
 
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped:not(:first-of-type) {
-    margin-left: -8px;
+    margin-left: -10px;
     border-left: 1px solid transparent;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped:not(:first-of-type).Mui-selected {
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     /* TODO */
     border-left: solid 2px rgb(211, 47, 47);
 }
 
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped:not(:last-of-type) {
-    margin-right: -8px;
+    margin-right: -10px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: none;
 }
 
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped:not(:last-of-type).Mui-selected {
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     /* TODO remove hardcoded color */
     border-right: solid 2px rgb(46, 125, 50);
 }

@@ -88,7 +88,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                       <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
                         <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
                           <Grid item>
-                            Daily
+                            24h change
                           </Grid>
                           <Grid item>
                             {formatPriceChange(pair.change_daily)}
@@ -98,7 +98,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                       <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
                         <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
                           <Grid item>
-                            Weekly
+                            7d change
                           </Grid>
                           <Grid item>
                             {formatPriceChange(pair.change_weekly)}
