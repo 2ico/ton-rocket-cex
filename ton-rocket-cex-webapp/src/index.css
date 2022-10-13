@@ -9,6 +9,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   background-color: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-text-color)
 }
 
 #root {

@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 
 import { OrderAction, ToggleBuySell } from '@/components/OrderInputs/ToggleBuySell';
 import { OrderType, OrderSelector } from '@/components/OrderInputs/OrderTypeSelector'
-import { Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import "@/components/OrderInputs/OrderInputs.css"
 
 type Order = {
@@ -61,16 +61,19 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
     }, [orderbookPrice, orderbookOrderAction])
 
     return (
-        <Box
+        <Grid container direction={"column"} spacing={2}
             sx={{
                 maxWidth: 480,
+                paddingRight: 2,
             }}
         >   
-            <Box className="Form-control-container">
-                <ToggleBuySell currentValue={orderAction} onChange={setOrderAction} />
-                <OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} />
-            </Box>
-
+            <Grid item>
+                <Grid container spacing={2} alignItems={'flex-end'}>
+                    <Grid item><ToggleBuySell currentValue={orderAction} onChange={setOrderAction} /></Grid>
+                    <Grid item><OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} /></Grid>
+                </Grid>
+            </Grid>
+            <Grid item>
             <PriceSelector
                 priceState={[price, isPriceValid]}
                 onChange={setPriceState}
@@ -78,14 +81,16 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
                 amountType={priceCurrency}
                 precision={precision}
             />
-
+            </Grid>
+            <Grid item>
             <AmountSelector
                 amountState={[amount, isAmountValid]}
                 onChange={setAmountState}
                 totalAmount={totalAmount}
                 amountType={priceCurrency}
             />
-        </Box>
+            </Grid>
+        </Grid>
     )
 }
 

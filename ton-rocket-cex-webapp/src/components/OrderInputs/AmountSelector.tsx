@@ -84,7 +84,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmo
     }
 
     return (
-        <Box>
+        <Box className="Form-control-container">
             <FormControl>
             <InputLabel>{t("amount")}</InputLabel>
             <Input               
@@ -114,7 +114,7 @@ const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmo
                     max={totalAmount}
                     onChange={handleSliderChange}
                 />
-                <FormHelperText sx={{color: "#FF0000" }}>{getErrorMessage()}</FormHelperText>
+                <FormHelperText error>{getErrorMessage()}</FormHelperText>
             </FormControl>            
         </Box>
     )

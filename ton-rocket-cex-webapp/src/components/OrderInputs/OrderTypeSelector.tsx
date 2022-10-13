@@ -12,7 +12,7 @@ const OrderSelector = ({onChange: handleChange, currentOrderType} : OrderTypePro
     : JSX.Element => 
 {
     return (
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+        <FormControl variant="standard" sx={{minWidth: "8em"}}>
         <Select
           value={currentOrderType.toString()}
           onChange={(e: SelectChangeEvent) => handleChange(
