@@ -72,7 +72,9 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                   <ListItem sx={{ position: "relative" }} disablePadding key={pairString} alignItems="flex-start">
                     <ListItemButton component="div" sx={{ px: 4 }} selected={selectedPair === pairString}
                       onClick={(event) => handleListItemClick(event, pairString)} >
-                      <ListItemAvatar sx={{objectFit: "contain"}}>
+                      <ListItemAvatar sx={{
+                          "img" : {objectFit: "contain"}
+                      }}>
                         <Avatar alt={`${pair.base_name} icon`} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=023" />
                       </ListItemAvatar>
                       <ListItemText sx={{ flexBasis: "200px" }} primary={pair.base_name + "/" + pair.quote_name}
