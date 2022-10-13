@@ -75,6 +75,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                       <ListItemAvatar sx={{
                           "img" : {objectFit: "contain"}
                       }}>
+                        {/* TODO use actual currency logos */}
                         <Avatar alt={`${pair.base_name} icon`} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=023" />
                       </ListItemAvatar>
                       <ListItemText sx={{ flexBasis: "200px" }} primary={pair.base_name + "/" + pair.quote_name}
@@ -86,21 +87,21 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                       />
                       {/* <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">PRICE GRAPH</Box> */}
                       <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
-                        <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
-                          <Grid item>
+                        <Grid container spacing={1}>
+                          <Grid item className="grid-label">
                             24h
                           </Grid>
-                          <Grid item>
+                          <Grid item color={(pair.change_daily >0)? "success.main" : "error.main"}>
                             {formatPriceChange(pair.change_daily)}
                           </Grid>
                         </Grid>
                       </Box>
                       <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
-                        <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
-                          <Grid item>
+                        <Grid container spacing={1}>
+                          <Grid item className="grid-label">
                             7d
                           </Grid>
-                          <Grid item>
+                          <Grid item color={(pair.change_daily >0)? "success.main" : "error.main"}>
                             {formatPriceChange(pair.change_weekly)}
                           </Grid>
                         </Grid>

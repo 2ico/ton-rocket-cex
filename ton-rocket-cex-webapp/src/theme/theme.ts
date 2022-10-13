@@ -106,7 +106,7 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             color: "var(--tg-theme-text-color)",
-            ":-:placeholder": { 
+            "::placeholder": { 
               color: "var(--tg-theme-hint-color)"
             },
           },
@@ -146,7 +146,16 @@ declare module '@mui/material/styles' {
             color: "var(--tg-theme-text-color)",
           },
           secondary: {
-            color: "var(--tg-theme-hint-color)"
+            color: "var(--tg-theme-hint-color)",
+          },
+        }
+      },
+      MuiListItem: {
+        styleOverrides: {
+          root: {
+            ".grid-label": {
+              color: "var(--tg-theme-hint-color)",
+            }
           }
         }
       },
