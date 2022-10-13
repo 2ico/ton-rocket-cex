@@ -83,9 +83,9 @@ export default function Trade() {
             <MenuLayout title={baseCurrency+"/"+quoteCurrency} location="/trade">
             <Grid container position={'relative'}
                 direction={"column"} flexWrap={'nowrap'} height={'100%'}>
-                <Typography variant="h6" component="div" className='SectionTitle'>
+                {/* <Typography variant="h6" component="div" className='SectionTitle'>
                     Order
-                </Typography>
+                </Typography> */}
                 <Grid item flexBasis={'200px'} position="relative" className="SectionContainer">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
@@ -99,9 +99,9 @@ export default function Trade() {
                         onChange = {handleChange}
                     />
                 </Grid>
-                <Typography variant="h6" component="div" className='SectionTitle'>
+                {/* <Typography variant="h6" component="div" className='SectionTitle'>
                     Orderbook
-                </Typography>
+                </Typography> */}
                 <Grid item flexBasis={'240px'} position="relative">
                     {/* <button onClick={() => setOrderIssued(true)}> PLACE ORDER </button> */}
                     <Orderbook
