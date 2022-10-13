@@ -14,106 +14,141 @@ import IncrementButton from './IncrementButton'
 import InputLabel from "@mui/material/InputLabel";
 import TextField from '@mui/material/TextField';
 import { useTranslation } from 'react-i18next';
-import { FormHelperText } from "@mui/material";
-
-
-interface DecimalSliderProps {
-    sliderProps: SliderProps,
-    value: Decimal,
-    max: Decimal,
-    onChange: (amount : Decimal) => void
-}
-
-const DecimalSlider = ({sliderProps, value: decimal_value, max: decimal_max, onChange}: DecimalSliderProps) => 
-        <Slider {...sliderProps} value={(decimal_value.dividedBy(decimal_max).toNumber())} min = {0} max={1.0} step={0.10}
-            onChange={(event: Event, newValue : number | number[]) => { onChange(decimal_max.times(newValue as number) ) }} />
+import { FormHelperText, Grid } from "@mui/material";
 
 interface AmountSelectorProp {
-    totalAmount: Decimal,
+    quoteMax: Decimal,
     amountType: string,
     amountState: [Decimal, boolean],
     onChange: ([newPrice, isValid]: [Decimal, boolean]) => void,
 }
 
-const AmountSelector = ({ totalAmount, amountType, amountState, onChange: setAmountState } : AmountSelectorProp) 
+function baseToQuote(baseAmount: Decimal, price: Decimal){
+    return baseAmount.div(price)
+}
+
+function quoteToBase(quoteAmount: Decimal, price: Decimal){
+    return quoteAmount.times(price)
+}
+
+const AmountSelector = ({ quoteMax, amountType, amountState, onChange: setAmountState } : AmountSelectorProp) 
     : JSX.Element => 
 {
     const { t } = useTranslation();
     const [amount, isValid] = amountState
-    const [amountText, setAmountText] = useState("0")
+    const [baseAmountText, setBaseAmountText] = useState("0")
+    const [quoteAmountText, setQuoteAmountText] = useState("0")
     const [firstUse, setFirstUse] = useState(true)
 
+    //prop
+    const price = new Decimal(0.432)
+    const precision = new Decimal(0.001)
+
     useEffect(() => {
-        if (amountText == "" || !amount.equals(new Decimal(amountText)))
-            setAmountText(amount.toFixed())
+        if (baseAmountText == "" || !amount.equals(new Decimal(baseAmountText))){
+            setBaseAmountText(amount.toString())
+            setQuoteAmountText(baseToQuote(amount, price).toString())
+        }
     }, [ amount ])
 
     const isAmountValid = (newAmount: Decimal) => {
-        return newAmount.greaterThan(0) && (newAmount.lessThanOrEqualTo(totalAmount))
+        return newAmount.greaterThan(0) && (newAmount.lessThanOrEqualTo(quoteMax))
     }
 
     const getErrorMessage = () => {
         if (isValid || firstUse) return ""
-        else if (amountText == "" || amount.lessThanOrEqualTo(0)) return t("invalid_amount")
+        else if (baseAmountText == "" || amount.lessThanOrEqualTo(0)) return t("invalid_amount")
         return t("amount_exceeds_budget")
     }
 
-    const handleTextChange = (text: string) => {
+    const handleBaseTextChange = (text: string) => {
         setFirstUse(false)
-        setAmountText(text)
+        setBaseAmountText(text)
         if (text !== "") {
             const newAmount = new Decimal(Number(text))
             setAmountState([newAmount, isAmountValid(newAmount)])
         }
-        else {
-            setAmountState([amount, false])
+        // else {
+        //     //setAmountState([amount, false])
+        // }
+    }
+
+    const handleQuoteTextChange = (text: string) => {
+        setFirstUse(false)
+        setBaseAmountText(text)
+        if (text !== "") {
+            //TODO handle commission fee
+            const newAmount = new Decimal(Number(text)).times(price);
+            setAmountState([newAmount, isAmountValid(newAmount)])
         }
     }
 
     const handleButtonChange = (sign: number) => {
         setFirstUse(false)
-        if (amountText !== ""){
-            let newAmount = amount.plus(totalAmount.times(sign).times(0.01));
+        if (baseAmountText !== ""){
+            let newAmount = amount.plus(quoteMax.times(sign).times(precision));
             setAmountState([newAmount, isAmountValid(newAmount)])
         }
     }
 
-    const handleSliderChange = (amount: Decimal) => {
+    const handleSliderChange = (quoteAmount: Decimal) => {
         setFirstUse(false)
-        setAmountState([amount, isAmountValid(amount)])
+        let baseAmount = quoteToBase(quoteAmount, price)
+        setAmountState([baseAmount, isAmountValid(baseAmount)])
     }
 
     return (
         <Box className="Form-control-container">
             <FormControl>
             <InputLabel>{t("amount")}</InputLabel>
-            <Input               
-                    startAdornment={
-                        <InputAdornment position="start">
-                            <IncrementButton
-                                onClick={() => handleButtonChange(-1)}
-                                isPlusButton = {false}
-                            />
-                        </InputAdornment>}
-                    endAdornment={
-                        <InputAdornment position="end">
-                        {""}
-                        <IncrementButton
-                            onClick={() => handleButtonChange(1)}
-                            isPlusButton = {true}       
+            <Grid container spacing={2} mt={0.75}>
+                <Grid item flexBasis={"80px"} flexGrow={1}>
+                    <Input               
+                            // startAdornment={
+                            //     <InputAdornment position="start">
+                            //         <IncrementButton
+                            //             onClick={() => handleButtonChange(-1)}
+                            //             isPlusButton = {false}
+                            //         />
+                            //     </InputAdornment>}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    TON
+                                </InputAdornment>}
+                            value={baseAmountText}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleBaseTextChange(e.target.value)}}
+                            error = {!(isValid || firstUse)}
+                            type='number'
                         />
-                        </InputAdornment>}
-                    value={amountText}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleTextChange(e.target.value)}}
-                    error = {!(isValid || firstUse)}
-                    type='number'
-                />
-                <DecimalSlider 
+                </Grid>
+                <Grid item flexBasis={"80px"} flexGrow={1}>
+                    <Input               
+                        // startAdornment={
+                        //     <InputAdornment position="start">
+                        //         <IncrementButton
+                        //             onClick={() => handleButtonChange(-1)}
+                        //             isPlusButton = {false}
+                        //         />
+                        //     </InputAdornment>}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                SCALE
+                            </InputAdornment>}
+                        value={quoteAmountText}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {handleQuoteTextChange(e.target.value)}}
+                        error = {!(isValid || firstUse)}
+                        type='number'
+                    />
+                </Grid>
+            </Grid>
+            <Slider valueLabelFormat={(x) => (x*100.0).toFixed(0) + "%"} valueLabelDisplay="auto" value={(baseToQuote(amount, price).dividedBy(quoteMax).toNumber())} min={0} max={1.0} step={0.10}
+            onChange={(event: Event, newValue : number | number[]) => handleSliderChange(quoteMax.times(newValue as number) ) } />
+                {/* <DecimalSlider 
                     sliderProps={{valueLabelFormat: (x) => (x*100.0).toFixed(0) + "%", valueLabelDisplay: "auto"}}
                     value={amount}
                     max={totalAmount}
                     onChange={handleSliderChange}
-                />
+                /> */}
                 <FormHelperText error>{getErrorMessage()}</FormHelperText>
             </FormControl>            
         </Box>

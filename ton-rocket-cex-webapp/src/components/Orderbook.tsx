@@ -154,15 +154,16 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
             aggregate(marketPrice, aggregation, sellers, computeBinIndexAsk, 1)
         ]
         setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
-        setRowStyle([
-            nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
-                const per = String(new Decimal(100.0).sub(amount.mul(100).div(totalAmountBuyers)));
-                return { background: `linear-gradient(90deg, #FFFFFF00 ${per}%, #08FF6B88 ${per}%)` }
-            }),
-            nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
-                String(amount.mul(100).div(totalAmountSellers))}%, #FFFFFF00 0%)`
-            }))
-        ])        
+        //TODO clean comments
+        // setRowStyle([
+        //     nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
+        //         const perc = String(new Decimal(100.0).sub(amount.mul(100).div(totalAmountBuyers))));
+        //         return { background: `linear-gradient(90deg, #FFFFFF00 ${perc}%, #08FF6B88 ${perc}%)` }
+        //     }),
+        //     nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
+        //         String(amount.mul(100).div(totalAmountSellers))}%, #FFFFFF00 0%)`
+        //     }))
+        // ])        
     }, [ aggregationIndex, updateSignal ])
 
     const tableHeadGenerator = (labels: [string, TableCellProps["align"]][]) => {
@@ -183,20 +184,20 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
     ) => {
         const buyerEntry = aggregateBuyers[aggregateBuyers.length - index - 1]
         const sellerEntry = aggregateSellers[index]
-
-        const b = String(new Decimal(50).sub(buyerEntry.amount.mul(50.0).div(totalAmountBuyers)))
-        const s = String(new Decimal(50).add(sellerEntry.amount.mul(50.0).div(totalAmountSellers)))
+        
         const aggregation = aggregationValues[aggregationIndex]
+
+        const b = String(new Decimal(50).sub(buyerEntry.amount.mul(100.0).div(totalAmountBuyers)))
+        const s = String(new Decimal(50).add(sellerEntry.amount.mul(100.0).div(totalAmountSellers)))
 
         //TODO CSS animation
         // focus price cell
         const onBuyerClick = (() => selectOrderbookPrice([new Decimal(buyerEntry.price), OrderAction.Buy]))
         const onSellerClick = (() => selectOrderbookPrice([new Decimal(sellerEntry.price), OrderAction.Sell]))
 
-        // TODO add sell/buy support!
-        const orderShareBar = `linear-gradient(90deg, #FFFFFF00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
-        const orderShareBarOnBuyerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
-        const orderShareBarOnSellerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, #08FF6B ${b}%, #08FF6B 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+        const orderShareBar = `linear-gradient(90deg, #FFFFFF00 ${b}%, rgb(49, 181, 69) ${b}%, rgb(49, 181, 69) 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+        // const orderShareBarOnBuyerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, rgb(49, 181, 69) ${b}%, rgb(49, 181, 69) 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
+        // const orderShareBarOnSellerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, rgb(49, 181, 69) ${b}%, rgb(49, 181, 69) 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
 
         return (
             <RowComponent style={{ background: orderShareBar }} {... rowProps}>

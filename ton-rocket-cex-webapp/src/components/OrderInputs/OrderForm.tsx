@@ -86,7 +86,7 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
             <AmountSelector
                 amountState={[amount, isAmountValid]}
                 onChange={setAmountState}
-                totalAmount={totalAmount}
+                quoteMax={totalAmount}
                 amountType={priceCurrency}
             />
             </Grid>

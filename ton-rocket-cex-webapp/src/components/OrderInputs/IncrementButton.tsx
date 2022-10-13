@@ -20,7 +20,7 @@ const IncrementButton = ({ onClick, isPlusButton, isDisabled=false }: ButtonProp
 
     return (
         <>
-            <IconButton color="primary" sx={{ p: '10px', flex : 1}}
+            <IconButton color="primary" sx={{ p: 0, flex : 1}}
                 disabled={isDisabled} onMouseDown={handleMouseEvent}
             >
                 {isPlusButton ? <AddIcon /> : <RemoveIcon />}

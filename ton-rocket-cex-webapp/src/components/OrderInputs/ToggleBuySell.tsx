@@ -29,13 +29,13 @@ function ToggleBuySell({ currentValue, onChange: handleChange }: Props) {
             onChange={handleSelection}
             aria-label="text alignment"
         >
-            <ToggleButton value="Buy" sx={{ color: "rgb(46, 125, 50)", borderColor: "rgb(46, 125, 50)", // backgroundColor: "rgba(0, 0, 0, 0.08)",
+            <ToggleButton value="Buy" sx={{ color: "rgb(49, 181, 69)", borderColor: "rgb(49, 181, 69)", // backgroundColor: "rgba(0, 0, 0, 0.08)",
             "&.Mui-selected" : {
-                color: "rgb(46, 125, 50) !important",
-                backgroundColor: "rgba(46, 125, 50, 0.2) !important"
+                color: "rgb(49, 181, 69) !important",
+                backgroundColor: "rgba(49, 181, 69, 0.2) !important"
                 // background: "var(--tg-theme-bg-secondary-color)" 
             },
-            ":hover, &.Mui-selected:hover"  : { backgroundColor: "rgba(46, 125, 50, 0.2)" }
+            ":hover, &.Mui-selected:hover"  : { backgroundColor: "rgba(49, 181, 69, 0.2)" }
               }}>
                 {t("buy")}
             </ToggleButton>

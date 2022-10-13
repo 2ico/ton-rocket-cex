@@ -3,7 +3,7 @@
     border-width: 2px;
     border-radius: 20px;
     padding: 8px 2px;
-    min-width: 6em;
+    min-width: 8em;
     background-color: none;
 }
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped{
@@ -41,7 +41,7 @@
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     /* TODO remove hardcoded color */
-    border-right: solid 2px rgb(46, 125, 50);
+    border-right: solid 2px rgb(49, 181, 69);
 }
 
 .buy-sell-toggle-button-group .MuiButtonBase-root.MuiToggleButton-root.Mui-selected {

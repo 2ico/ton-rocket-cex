@@ -14,21 +14,6 @@ import { Form } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
 import "@/components/OrderInputs/OrderInputs.css";
 
-
-function FocusInput(props: InputProps){
-    const { focused } = useFormControl() || {};
-    // const helperText = useMemo(() => {
-    //     if (focused) {
-    //       return 'This field is being focused';
-    //     }
-    
-    //     return 'Helper text';
-    //   }, [focused]);
-    if(focused == true) console.log("focused: true")
-    return <Input {...props}/>
-}
-
-
 interface PriceSelectorProp {
     priceState: [Decimal, boolean],
     onChange: ([newPrice, isValid]: [Decimal, boolean]) => void,
@@ -78,18 +63,15 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
         <Box className="Form-control-container">   
             <FormControl>
             <InputLabel>{t("price")}</InputLabel>
-            <FocusInput
+            <Input
                 // autoFocus={true}
-                startAdornment={
-                        <InputAdornment position="start">
-                            <IncrementButton
-                                onClick={() => handleButtonChange(-1)}
-                                isPlusButton = {false}
-                                isDisabled={isDisabled}
-                            />
-                        </InputAdornment>}
                 endAdornment={
                         <InputAdornment position="end">
+                        <IncrementButton
+                        onClick={() => handleButtonChange(-1)}
+                        isPlusButton = {false}
+                        isDisabled={isDisabled}
+                        />
                         {""}
                         <IncrementButton
                             onClick={() => handleButtonChange(1)}
