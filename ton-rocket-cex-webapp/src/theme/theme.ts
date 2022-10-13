@@ -26,6 +26,15 @@ declare module '@mui/material/styles' {
     //   },
     // },
     components: {
+      MuiGrid: {
+        styleOverrides: {
+          root: {
+            "&.SectionContainer": {
+              marginLeft: "32px",
+            }
+          }
+        }
+      },
       MuiButton: {
         styleOverrides: {
           root: {
@@ -56,12 +65,14 @@ declare module '@mui/material/styles' {
       MuiTypography: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-text-color)"
+            color: "var(--tg-theme-text-color)",
+            "&.SectionTitle": {
+              color: "var(--tg-theme-link-color)",
+              marginLeft: "32px",
+              marginTop: "16px",
+              marginBottom: "8px",
+            }
           },
-          h6: {
-            color: "var(--tg-theme-link-color)"
-            // color: WebApp.themeParams.link_color
-          }
         }
       },
       MuiTab: {

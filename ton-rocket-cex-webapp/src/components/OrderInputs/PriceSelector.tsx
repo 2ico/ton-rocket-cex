@@ -12,6 +12,7 @@ import { useThemeProps } from "@mui/system";
 import { useTranslation } from 'react-i18next';
 import { Form } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
+import "@/components/OrderInputs/OrderInputs.css";
 
 
 function FocusInput(props: InputProps){
@@ -74,7 +75,7 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
     }
 
     return (
-        <Box>   
+        <Box className="Form-control-container">   
             <FormControl>
             <InputLabel>{t("price")}</InputLabel>
             <FocusInput

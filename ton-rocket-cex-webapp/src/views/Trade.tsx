@@ -2,7 +2,7 @@ import {useLocation} from 'react-router-dom';
 import Decimal from 'decimal.js';
 
 
-import { Order, OrderForm } from '@/components/OrderForm';
+import { Order, OrderForm } from '@/components/OrderInputs/OrderForm';
 import CustomBackdrop from "@/components/CustomBackdrop";
 import { getOrderbook } from "@/api/currencies";
 import { Currency } from "@/api/types"
@@ -75,18 +75,18 @@ export default function Trade() {
     const handleChange = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
         setIsOrderValid(isOrderValid);
         if (isOrderValid) {
-            console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
+            // console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
         }
     }
 
     return (
             <MenuLayout title={baseCurrency+"/"+quoteCurrency} location="/trade">
             <Grid container position={'relative'}
-                direction={"column"} flexWrap={'nowrap'} height={'100%'} >
-                <Typography variant="h6" component="div">
+                direction={"column"} flexWrap={'nowrap'} height={'100%'}>
+                <Typography variant="h6" component="div" className='SectionTitle'>
                     Order
                 </Typography>
-                <Grid item flexBasis={'200px'} position="relative">
+                <Grid item flexBasis={'200px'} position="relative" className="SectionContainer">
                     <OrderForm 
                         baseCurrency={baseCurrency} 
                         priceCurrency={quoteCurrency}
@@ -99,7 +99,7 @@ export default function Trade() {
                         onChange = {handleChange}
                     />
                 </Grid>
-                <Typography variant="h6" component="div">
+                <Typography variant="h6" component="div" className='SectionTitle'>
                     Orderbook
                 </Typography>
                 <Grid item flexBasis={'240px'} position="relative">

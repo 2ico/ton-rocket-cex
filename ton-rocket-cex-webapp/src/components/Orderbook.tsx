@@ -220,7 +220,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
     let count = Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length);
 
     return (
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="center" paddingX={2} position={"relative"}>
         <Grid item width={'100%'}>
         <TableContainer sx={{ maxHeight: '240px' }}>
         <Table stickyHeader size="small" sx={{tableLayout: "fixed"}} aria-label="sticky table">
@@ -234,8 +234,8 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         </Table>
         </TableContainer>    
         </Grid>
-        <Grid item>
-        <AggregationDisplay 
+        <Grid item sx={{marginY: 1}}>
+        <AggregationDisplay
             index={aggregationIndex} 
             maxIndex={aggregationValues.length}
             setIndex={setAggregationIndex}
