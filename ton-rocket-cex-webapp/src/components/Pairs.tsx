@@ -11,8 +11,9 @@ import Money from '@mui/icons-material/Money';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import { getAvailablePairs } from "@/api/currencies";
-import { makeUrlPair } from "@/utils/utils";
-import { Avatar, Divider } from '@mui/material';
+import { formatPriceChange } from "@/utils/utils";
+import { Avatar, Divider, Grid, Typography } from '@mui/material';
+import React from 'react';
 
 //TODO improve efficiency
 const searchFilter = (pair: CurrencyPair, searchQuery: string) => {
@@ -22,7 +23,7 @@ const searchFilter = (pair: CurrencyPair, searchQuery: string) => {
   const baseCurrencyLower = pair.base_currency.toLowerCase();
   const quoteNameLower = pair.quote_name.toLowerCase();
   const quoteCurrencyLower = pair.quote_currency.toLowerCase();
-  let pairStrings = [baseNameLower, baseCurrencyLower, quoteNameLower, quoteCurrencyLower, baseNameLower + '/'  + quoteNameLower, baseNameLower + '_'  + quoteNameLower, baseNameLower + '-' + quoteNameLower, baseNameLower + ' ' + quoteNameLower, baseCurrencyLower + '/' + quoteCurrencyLower, baseCurrencyLower + '_' + quoteCurrencyLower, baseCurrencyLower + '-' + quoteCurrencyLower, baseCurrencyLower + ' ' + quoteCurrencyLower];
+  let pairStrings = [baseNameLower, baseCurrencyLower, quoteNameLower, quoteCurrencyLower, baseNameLower + '/' + quoteNameLower, baseNameLower + '_' + quoteNameLower, baseNameLower + '-' + quoteNameLower, baseNameLower + ' ' + quoteNameLower, baseCurrencyLower + '/' + quoteCurrencyLower, baseCurrencyLower + '_' + quoteCurrencyLower, baseCurrencyLower + '-' + quoteCurrencyLower, baseCurrencyLower + ' ' + quoteCurrencyLower];
   return pairStrings.some(x => x.includes(searchQueryLower))
 }
 
@@ -34,7 +35,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     pairString: string,
   ) => {
-    if(selectedPair === pairString){
+    if (selectedPair === pairString) {
       setSelectedTradeCurrency(null)
       props.onSelectionChange("")
     }
@@ -58,30 +59,56 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
   return (
     <div>
       <Box sx={{ width: '100%' }}>
-      {/* <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+        {/* <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
       Available pairs
       </Typography> */}
-      
+
         <nav aria-label="currency pairs list">
           <List>
             {availablePairs.data.results.filter((elem: CurrencyPair) => searchFilter(elem, props.searchQuery)).map((pair: CurrencyPair): JSX.Element => {
-                let pairString = pair.base_currency + "_" + pair.quote_currency;
-                return (
+              let pairString = pair.base_currency + "_" + pair.quote_currency;
+              return (
                 <div>
-                <ListItem disablePadding key={pairString}     >
-                  <ListItemButton component="div" sx={{ px: 4}} selected={selectedPair === pairString}
-                onClick={(event) => handleListItemClick(event, pairString)} >
-                    <ListItemAvatar>
-                      <Avatar alt={`${pair.base_name} icon`} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=023" />
-                    </ListItemAvatar>
-                    <ListItemText secondary={pair.market_price}
-                      primary={pair.base_name + "/" + pair.quote_name}/>
-                  </ListItemButton>
-                </ListItem>
-                <Divider sx={{ml: 4}}/>
+                  <ListItem sx={{ position: "relative" }} disablePadding key={pairString} alignItems="flex-start">
+                    <ListItemButton component="div" sx={{ px: 4 }} selected={selectedPair === pairString}
+                      onClick={(event) => handleListItemClick(event, pairString)} >
+                      <ListItemAvatar sx={{objectFit: "contain"}}>
+                        <Avatar alt={`${pair.base_name} icon`} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=023" />
+                      </ListItemAvatar>
+                      <ListItemText sx={{ flexBasis: "200px" }} primary={pair.base_name + "/" + pair.quote_name}
+                        secondary={
+                          <React.Fragment>
+                            {pair.market_price.toPrecision(4)}
+                          </React.Fragment>
+                        }
+                      />
+                      <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">PRICE GRAPH</Box>
+                      <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
+                        <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
+                          <Grid item>
+                            Daily
+                          </Grid>
+                          <Grid item>
+                            {formatPriceChange(pair.change_daily)}
+                          </Grid>
+                        </Grid>
+                      </Box>
+                      <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
+                        <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
+                          <Grid item>
+                            Weekly
+                          </Grid>
+                          <Grid item>
+                            {formatPriceChange(pair.change_weekly)}
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider sx={{ ml: 4 }} />
                 </div>
               )
-              })
+            })
             }
           </List>
         </nav>

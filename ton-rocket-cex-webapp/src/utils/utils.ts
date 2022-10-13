@@ -8,4 +8,8 @@ function makeUrlPair(baseCurrency: string, quoteCurrency: string){
 }
 
 
-export { separateUrlPair, makeUrlPair }
+function formatPriceChange(n: number){
+    return (n<0?"":"+") + n.toFixed(2) + "%"
+}
+
+export { separateUrlPair, makeUrlPair, formatPriceChange }
