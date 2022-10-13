@@ -84,7 +84,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                           </React.Fragment>
                         }
                       />
-                      <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">PRICE GRAPH</Box>
+                      {/* <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">PRICE GRAPH</Box> */}
                       <Box flexGrow={1.5} flexShrink={1} flexBasis="auto">
                         <Grid container spacing={0.5} color={(pair.change_daily >0)? "success.main" : "error.main"}>
                           <Grid item>
