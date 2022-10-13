@@ -10,7 +10,6 @@ import {Currency, CurrencyPair, Order, OrderAction, OrderType} from '@/api/types
 import { makeUrlPair } from "@/utils/utils";
 import { CurrencyBitcoin } from "@mui/icons-material";
 
-
 const baseCurrencies: Array<Currency> = [
     {
         "currency": "TONCOIN",
@@ -216,14 +215,10 @@ function getAvailablePairs(quoteCurrencies: Currency[]) {
     if(quoteCurrencies === null)
         return wrapWithTimeout(null, "quoteCurrency null")
     let result = quoteCurrencies.flatMap((quoteCurrency: Currency) => {
-        console.log(quoteCurrency)
-        return availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency).map(
-            pair => {
-                return Object.assign(pair, {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name})
-            }
+        return availablePairs_incomplete.filter((pair) => pair.base_currency != quoteCurrency.currency).map(
+            pair => ({...pair, "quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name})
         )
     })
-    console.log(result)
     return wrapWithTimeout(result, 'pairs not found');
 }
 
@@ -359,15 +354,14 @@ function generateUserOrder (orderCount: number) {
     for (let i = 0; i < orderCount / 4; ++i) {
         const quoteCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
         userOrders.push(...takeSome(availablePairs_incomplete.filter((pair) => pair.base_currency !== quoteCurrency.currency), 4)          
-            .map((pair) => Object.assign(structuredClone(pair), {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name}))
+            .map((pair) => ({...pair, "quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name}))
             .map((pair) => makeOrder(pair, new Decimal(pair.market_price * (0.5 + Math.random())))))
     }
 
     return userOrders
 }
 
-const userOrders = generateUserOrder(16)
-console.log(userOrders)
+const userOrders = generateUserOrder(120)
 
 function getUserOrders() {
     return wrapWithTimeout(userOrders, 'user order not retrived');

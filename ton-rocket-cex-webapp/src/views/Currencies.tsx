@@ -24,6 +24,8 @@ import { useTranslation } from 'react-i18next';
 import MenuLayout from '@/components/MenuLayout';
 import { Currency } from '@/api/types';
 
+import { selectBaseCurrency, selectQuoteCurrency } from '@/context/currencyPairSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Trade() {
   //TODO if currency is set, setBaseCurrency to that value
@@ -34,6 +36,7 @@ export default function Trade() {
   const [searchQuery, setSearchQuery] = useState("");
   const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
+  const dispatch = useDispatch()
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
   // onSuccess: (data) => {
@@ -71,8 +74,10 @@ export default function Trade() {
   if (error) return <div>{t("error_loading_currencies")}</div>;
 
   quoteCurrencies = data.data.results;
-  
+
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
+    // dispatch(selectQuoteCurrency((quoteCurrencies || newValue == 0)? 
+    //    quoteCurrencies[newValue - 1].currency : null)) // tab-dependent filter
     setTabValue(newValue);
     setPair(null);
   };
@@ -89,6 +94,10 @@ export default function Trade() {
   const handleSelectionChangePairs = (pair: string | null) => {
     console.log("setting pair to: "+pair)
     setPair(pair);
+    
+    const [baseCurrency, quoteCurrency] = pair? pair.split('_') : ["",""]
+    dispatch(selectBaseCurrency(baseCurrency))
+    dispatch(selectQuoteCurrency(quoteCurrency))
   }
 
   

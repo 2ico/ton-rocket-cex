@@ -18,6 +18,8 @@ import App from './App'
 import './index.css'
 import {androidTheme} from '@/theme/theme'
 import { ThemeProvider } from '@mui/material';
+import { Provider } from 'react-redux'
+import { store } from "@/context/storeUserSelection"
 
 //TODO validate user data hash
 async function validateHash(hash: string) {
@@ -38,10 +40,12 @@ async function validateHash(hash: string) {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider theme={androidTheme}>
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={androidTheme}>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
