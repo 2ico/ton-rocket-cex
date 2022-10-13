@@ -97,7 +97,7 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
               "::after": { 
-                borderBottom: "2px solid var(--tg-theme-link-color)"
+                borderBottom: "2px solid var(--tg-theme-button-color)"
               }
           }
         }
@@ -116,6 +116,20 @@ declare module '@mui/material/styles' {
         styleOverrides:{
           root: {
             transform: "scale(0.75)"
+          }
+        }
+      },
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-text-color)",
+          }
+        }
+      },
+      MuiSlider: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-button-color)"
           }
         }
       },
@@ -139,7 +153,20 @@ declare module '@mui/material/styles' {
       MuiTableHead: {
         styleOverrides: {
           root: {
+            ".MuiTableCell-root": {
             backgroundColor: "var(--tg-theme-bg-color)",
+            color: "var(--tg-theme-text-color)"
+            }
+          }
+        }
+      },
+      MuiTableBody: {
+        styleOverrides: {
+          root: {
+            ".MuiTableCell-root": {
+                background: "none",
+                color: "var(--tg-theme-text-color)"
+            }
           }
         }
       }

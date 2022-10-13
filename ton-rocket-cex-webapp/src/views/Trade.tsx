@@ -86,7 +86,7 @@ export default function Trade() {
                 {/* <Typography variant="h6" component="div" className='SectionTitle'>
                     Order
                 </Typography> */}
-                <Grid item flexBasis={'200px'} position="relative" className="SectionContainer">
+                <Grid item flexBasis={'200px'} position="relative" className="SectionContainer" sx={{my: 4}}>
                     <OrderForm 
                         baseCurrency={baseCurrency} 
                         priceCurrency={quoteCurrency}
