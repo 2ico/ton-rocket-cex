@@ -30,7 +30,7 @@ export default function Trade() {
   const { t } = useTranslation();
   const theme = useTheme()
   const { currency } = useParams()
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
@@ -111,12 +111,12 @@ export default function Trade() {
           // allowScrollButtonsMobile
           aria-label="base currencies"
         >
-          <Tab key="*" label="All" value={-1} />
+          <Tab key="*" label="All" value={0} />
           {quoteCurrencies?.map((currency, index): JSX.Element => (
             <Tab
               key={currency.currency}
               label={currency.name}
-              value={index}
+              value={index+1}
             />
           ))}
         </Tabs>
@@ -131,9 +131,12 @@ export default function Trade() {
           index={tabValue}
           onChangeIndex={handleChangeIndex}
           >
+          <TabPanel value={tabValue} index={0} dir={theme.direction}>
+              <Pairs quoteCurrencies={quoteCurrencies} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
+          </TabPanel>
             {quoteCurrencies?.map((currency, index): JSX.Element => (
-            <TabPanel value={tabValue} index={index} dir={theme.direction}>
-              <Pairs quoteCurrency={currency} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
+            <TabPanel value={tabValue} index={index+1} dir={theme.direction}>
+              <Pairs quoteCurrencies={[currency]} searchQuery={searchQuery} onSelectionChange={handleSelectionChangePairs}/>
           </TabPanel>
           ))}
         </SwipeableViews>

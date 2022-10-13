@@ -211,10 +211,19 @@ const wrapWithTimeout = (results: any, error_message: string) => {
 }
 
 
-function getAvailablePairs(quoteCurrency: Currency) {
-    if(quoteCurrency === null)
+function getAvailablePairs(quoteCurrencies: Currency[]) {
+    if(quoteCurrencies === null)
         return wrapWithTimeout(null, "quoteCurrency null")
-    return wrapWithTimeout(availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency).map(pair => Object.assign(pair, {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name})), 'pairs not found');
+    let result = quoteCurrencies.flatMap((quoteCurrency: Currency) => {
+        console.log(quoteCurrency)
+        return availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency).map(
+            pair => {
+                return Object.assign(pair, {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name})
+            }
+        )
+    })
+    console.log(result)
+    return wrapWithTimeout(result, 'pairs not found');
 }
 
 function getBaseCurrencies() {

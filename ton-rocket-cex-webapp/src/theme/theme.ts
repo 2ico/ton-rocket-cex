@@ -31,14 +31,17 @@ declare module '@mui/material/styles' {
           root: {
             textTransform: 'none',
             color: "var(--tg-theme-link-color)"
-          }
+          },
         }
       },
       MuiButtonBase: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-link-color)"
-          }
+            color: "var(--tg-theme-link-color)",
+            // ":hover": {
+            //   backgroundColor: "" 
+            // },
+          },
         }
       },
       MuiAppBar: {
@@ -79,7 +82,8 @@ declare module '@mui/material/styles' {
       MuiInputBase: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-text-color)"
+            color: "var(--tg-theme-text-color)",
+            "::placeholder": " { color: #FF0000;}",
           },
         }
       },

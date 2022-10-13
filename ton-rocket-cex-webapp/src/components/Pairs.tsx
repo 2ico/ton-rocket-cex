@@ -7,16 +7,16 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import Money from '@mui/icons-material/Money';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import { getAvailablePairs } from "@/api/currencies";
 import { makeUrlPair } from "@/utils/utils";
-import { Divider } from '@mui/material';
+import { Avatar, Divider } from '@mui/material';
 
+//TODO improve efficiency
 const searchFilter = (pair: CurrencyPair, searchQuery: string) => {
   if (!searchQuery) return true;
-  console.log(searchQuery)
   const searchQueryLower = searchQuery.toLowerCase();
   const baseNameLower = pair.base_name.toLowerCase();
   const baseCurrencyLower = pair.base_currency.toLowerCase();
@@ -26,7 +26,7 @@ const searchFilter = (pair: CurrencyPair, searchQuery: string) => {
   return pairStrings.some(x => x.includes(searchQueryLower))
 }
 
-function Pairs(props: { quoteCurrency: Currency | null, searchQuery: string, onSelectionChange: any }) {
+function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string, onSelectionChange: any }) {
 
   const [selectedPair, setSelectedTradeCurrency] = useState<string | null>(null);
 
@@ -41,16 +41,16 @@ function Pairs(props: { quoteCurrency: Currency | null, searchQuery: string, onS
     else {
       setSelectedTradeCurrency(pairString);
       //TODO validate tradeCurrency
-      let pair = makeUrlPair(quoteCurrency.currency, pairString)
-      props.onSelectionChange(pair)
+      //let pair = makeUrlPair(quoteCurrency.currency, pairString)
+      props.onSelectionChange(pairString)
     }
   };
 
 
-  if (props.quoteCurrency === null) return <div>No currency selected...</div>;
-  const quoteCurrency: Currency = props.quoteCurrency;
+  if (props.quoteCurrencies === null) return <div>No currency selected...</div>;
+  const quoteCurrencies: Currency[] = props.quoteCurrencies;
 
-  const { data: availablePairs, error, isLoading } = useQuery('availableCurrencies', () => getAvailablePairs(quoteCurrency));
+  const { data: availablePairs, error, isLoading } = useQuery('availableCurrencies', () => getAvailablePairs(quoteCurrencies));
   // Error and Loading states
   if (error) return <div>Request Failed</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -71,7 +71,10 @@ function Pairs(props: { quoteCurrency: Currency | null, searchQuery: string, onS
                 <ListItem disablePadding key={pairString}     >
                   <ListItemButton component="div" sx={{ px: 4}} selected={selectedPair === pairString}
                 onClick={(event) => handleListItemClick(event, pairString)} >
-                    <ListItemText
+                    <ListItemAvatar>
+                      <Avatar alt={`${pair.base_name} icon`} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=023" />
+                    </ListItemAvatar>
+                    <ListItemText secondary={pair.market_price}
                       primary={pair.base_name + "/" + pair.quote_name}/>
                   </ListItemButton>
                 </ListItem>

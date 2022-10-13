@@ -42,5 +42,5 @@ type Order = {
     orderType: OrderType
 }
 
-export { OrderType, OrderAction }
-export type { Currency, CurrencyPair, Order };
+export {OrderAction, OrderType};
+export type { Currency, CurrencyPair, Order};
