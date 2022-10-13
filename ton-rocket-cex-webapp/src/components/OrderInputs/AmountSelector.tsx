@@ -75,7 +75,7 @@ const AmountSelector = ({ quoteMax, amountType, amountState, onChange: setAmount
 
     const handleQuoteTextChange = (text: string) => {
         setFirstUse(false)
-        setBaseAmountText(text)
+        setQuoteAmountText(text)
         if (text !== "") {
             //TODO handle commission fee
             const newAmount = new Decimal(Number(text)).times(price);
@@ -83,13 +83,13 @@ const AmountSelector = ({ quoteMax, amountType, amountState, onChange: setAmount
         }
     }
 
-    const handleButtonChange = (sign: number) => {
-        setFirstUse(false)
-        if (baseAmountText !== ""){
-            let newAmount = amount.plus(quoteMax.times(sign).times(precision));
-            setAmountState([newAmount, isAmountValid(newAmount)])
-        }
-    }
+    // const handleButtonChange = (sign: number) => {
+    //     setFirstUse(false)
+    //     if (baseAmountText !== ""){
+    //         let newAmount = amount.plus(quoteMax.times(sign).times(precision));
+    //         setAmountState([newAmount, isAmountValid(newAmount)])
+    //     }
+    // }
 
     const handleSliderChange = (quoteAmount: Decimal) => {
         setFirstUse(false)
