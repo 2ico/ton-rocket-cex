@@ -8,6 +8,7 @@ import { AnyRecord } from "dns";
 import Decimal from 'decimal.js';
 import {Currency, CurrencyPair, Order, OrderAction, OrderType} from '@/api/types';
 import { makeUrlPair } from "@/utils/utils";
+import { CurrencyBitcoin } from "@mui/icons-material";
 
 
 const baseCurrencies: Array<Currency> = [
@@ -357,15 +358,16 @@ function generateUserOrder (orderCount: number) {
 
     for (let i = 0; i < orderCount / 4; ++i) {
         const quoteCurrency = baseCurrencies[Math.floor(Math.random() * baseCurrencies.length)]
-        userOrders.push(...takeSome(availablePairs_incomplete.filter((pair) => pair.currency != quoteCurrency.currency), 4).map(
-            (pair) => makeOrder(pair, new Decimal(pair.market_price * (0.5 + Math.random())))
-        ))
+        userOrders.push(...takeSome(availablePairs_incomplete.filter((pair) => pair.base_currency !== quoteCurrency.currency), 4)          
+            .map((pair) => Object.assign(structuredClone(pair), {"quote_currency": quoteCurrency.currency, "quote_name": quoteCurrency.name}))
+            .map((pair) => makeOrder(pair, new Decimal(pair.market_price * (0.5 + Math.random())))))
     }
 
     return userOrders
 }
 
 const userOrders = generateUserOrder(16)
+console.log(userOrders)
 
 function getUserOrders() {
     return wrapWithTimeout(userOrders, 'user order not retrived');

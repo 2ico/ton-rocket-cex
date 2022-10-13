@@ -198,8 +198,6 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
                 filter: filterFunctions[key](value)
             })));
 
-    console.log(chipFilters)
-
     if (baseCurrencyList.length == 0)
         return (<div> No orders placed </div>)
 
