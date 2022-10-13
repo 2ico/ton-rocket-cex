@@ -73,6 +73,9 @@ declare module '@mui/material/styles' {
       },
       MuiTabs: {
         styleOverrides: {
+          root: {
+            backgroundColor: "var(--tg-theme-bg-color)",
+          },
           indicator: {
             height: "4px",
             borderRadius: "4px 4px 0 0"
@@ -83,7 +86,7 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             color: "var(--tg-theme-text-color)",
-            "::placeholder": " { color: #FF0000;}",
+            ":placeholder": " { color: #FF0000;}",
           },
         }
       },
@@ -91,6 +94,16 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             fill: "var(--tg-theme-text-color)"
+          }
+        }
+      },
+      MuiListItemText: {
+        styleOverrides: {
+          primary: {
+            color: "var(--tg-theme-text-color)",
+          },
+          secondary: {
+            color: "var(--tg-theme-hint-color)"
           }
         }
       }
