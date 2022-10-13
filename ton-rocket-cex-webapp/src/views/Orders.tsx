@@ -7,10 +7,21 @@ import { useQuery } from 'react-query';
 import { getUserOrders } from "@/api/currencies"
 import CustomBackdrop from "@/components/CustomBackdrop";
 
+import { useLocation } from 'react-router-dom';
+import { useMemo } from "react";
+import { Order } from "@/api/types";
+
+function useQueryParam() {
+    const { search } = useLocation();
+    return useMemo(() => new URLSearchParams(search), [search]);
+}
+
 
 export default function Orders() {
     const { t } = useTranslation();
     // const navigate = useNavigate();
+    const queryFilters = useQueryParam();
+    const filters : [string, string][] = Array.from(queryFilters.entries())
 
     const { data, error, isLoading } = useQuery("userOrders", getUserOrders);
 
@@ -26,6 +37,7 @@ export default function Orders() {
             <OrderItemList 
                 userOrders={userOrders}
                 onClick={(x) => console.log(x)}
+                filters={filters}
             />
         </MenuLayout>
     )

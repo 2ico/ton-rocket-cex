@@ -365,8 +365,10 @@ function generateUserOrder (orderCount: number) {
     return userOrders
 }
 
+const userOrders = generateUserOrder(16)
+
 function getUserOrders() {
-    return wrapWithTimeout(generateUserOrder(16), 'user order not retrived');
+    return wrapWithTimeout(userOrders, 'user order not retrived');
 }
 
 export { getBaseCurrencies, getAvailablePairs, getOrderbook, getUserOrders };
