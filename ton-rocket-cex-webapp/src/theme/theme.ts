@@ -82,21 +82,39 @@ declare module '@mui/material/styles' {
           }
         }
       },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+              "::after": { 
+                borderBottom: "2px solid var(--tg-theme-link-color)"
+              }
+          }
+        }
+      },
       MuiInputBase: {
         styleOverrides: {
           root: {
             color: "var(--tg-theme-text-color)",
-            ":placeholder": " { color: #FF0000;}",
+            ":-:placeholder": { 
+              color: "var(--tg-theme-hint-color)"
+            },
           },
         }
       },
-      MuiSvgIcon: {
-        styleOverrides: {
+      MuiInputLabel: {
+        styleOverrides:{
           root: {
-            fill: "var(--tg-theme-text-color)"
+            transform: "scale(0.75)"
           }
         }
       },
+      // MuiSvgIcon: {
+      //   styleOverrides: {
+      //     root: {
+      //       fill: "var(--tg-theme-hint-color)"
+      //     },
+      //   }
+      // },
       MuiListItemText: {
         styleOverrides: {
           primary: {
@@ -104,6 +122,13 @@ declare module '@mui/material/styles' {
           },
           secondary: {
             color: "var(--tg-theme-hint-color)"
+          }
+        }
+      },
+      MuiTableHead: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "var(--tg-theme-bg-color)",
           }
         }
       }

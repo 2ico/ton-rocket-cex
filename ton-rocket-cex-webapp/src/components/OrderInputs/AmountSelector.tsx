@@ -25,7 +25,7 @@ interface DecimalSliderProps {
 }
 
 const DecimalSlider = ({sliderProps, value: decimal_value, max: decimal_max, onChange}: DecimalSliderProps) => 
-        <Slider {...sliderProps} value={(decimal_value.dividedBy(decimal_max).toNumber())} min = {0} max={1.0} step={0.05}
+        <Slider {...sliderProps} value={(decimal_value.dividedBy(decimal_max).toNumber())} min = {0} max={1.0} step={0.10}
             onChange={(event: Event, newValue : number | number[]) => { onChange(decimal_max.times(newValue as number) ) }} />
 
 interface AmountSelectorProp {

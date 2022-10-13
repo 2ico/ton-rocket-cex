@@ -50,6 +50,7 @@ const BaseCurrencySelect = ({baseCurrencies, selectedCurrecies, onChange} : Base
                     <MenuItem
                         key={currency}
                         value={currency}
+                        //TODO remove style=, use sx if necessary
                         style={getStyles(currency, theme)}
                     >
                         {currency}

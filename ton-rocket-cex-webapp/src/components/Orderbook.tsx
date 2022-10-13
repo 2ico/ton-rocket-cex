@@ -24,7 +24,7 @@ import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 import { useTranslation } from 'react-i18next';
 
 import Decimal from 'decimal.js';
-import { Grid } from '@mui/material';
+import { Grid, InputLabel } from '@mui/material';
 
 const sliceEnd: number = 12;
 
@@ -91,7 +91,11 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
     : JSX.Element => 
 {
     return (
-        <Box>
+        <Box sx={{textAlign: "center"}}>
+            <InputLabel size="small" sx={{transform: "none", fontSize: "0.75em"}}>
+                Aggregation
+            </InputLabel>
+            <Box>
                 <IconButton color="primary" size="small"
                     onClick={() => setIndex(Math.max(0, index - 1))}
                     disabled={index == 0}
@@ -103,7 +107,8 @@ const AggregationDisplay = ({index, maxIndex, setIndex, displayText} : Aggregati
                     onClick={() => setIndex(Math.min(maxIndex - 1, index + 1))}
                     disabled={index == maxIndex - 1}>
                     <ChevronRightIcon />
-                </IconButton>            
+                </IconButton> 
+            </Box>         
         </Box>
     )
 }
@@ -170,12 +175,6 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         );
     };
 
-    interface tableRowGeneratorP {
-        index: number,
-        Component: React.ComponentType<any>,
-        props: {[key:string]: any}
-    }
-
     const tableRowGenerator = (index: number,
         RowComponent: React.ComponentType<any>,
         rowProps: {[key:string]: any},
@@ -220,30 +219,11 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
 
     let count = Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length);
 
-    // return (
-    //     <div>
-    //     <div style={{width:"100%", padding: "5%"}}>
-    //     </div>
-    //     <AggregationDisplay 
-    //         index={aggregationIndex} 
-    //         maxIndex={aggregationValues.length}
-    //         setIndex={setAggregationIndex}
-    //         displayText={aggregationValues[aggregationIndex].toString()}
-    //     />
-    //     <OrderbookColumn 
-    //         tableRow={tableHeadGenerator([["amount", "left"], ["bid", "left"],
-    //             ["ask", "right"], ["amount", "right"]])}
-    //         rowGenerator={tableRowGenerator}
-    //         count={sliceEnd}
-    //     />
-    //     </div>
-    // )
-
     return (
         <Grid container justifyContent="center">
         <Grid item width={'100%'}>
         <TableContainer sx={{ maxHeight: '240px' }}>
-        <Table stickyHeader size="small" aria-label="sticky table">
+        <Table stickyHeader size="small" sx={{tableLayout: "fixed"}} aria-label="sticky table">
             <TableHead>
                 {tableHeadGenerator([["amount", "left"],["bid", "left"], ["ask","right"],["amount","right"]])}
             </TableHead>
@@ -262,14 +242,6 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
             displayText={aggregationValues[aggregationIndex].toString()}
         />
         </Grid>
-        {/* <Grid item overflow={'scroll'}>
-         <OrderbookColumn 
-             tableRow={tableHeadGenerator([["amount", "left"], ["bid", "left"],
-                 ["ask", "right"], ["amount", "right"]])}
-            rowGenerator={tableRowGenerator}
-             count={Math.min(sliceEnd, aggregateBuyers.length, aggregateSellers.length)}
-         /> 
-        </Grid> */}
         </Grid>
     );
 }

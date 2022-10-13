@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { OrderAction } from '@/api/types';
+import "./OrderInputs.css";
 
 type Props = {
     currentValue: OrderAction,
@@ -22,6 +23,7 @@ function ToggleBuySell({currentValue, onChange: handleChange}: Props) {
   
     return (
         <ToggleButtonGroup
+            className="toggle-button buy-sell-toggle-button"
             value={currentValue}
             exclusive
             onChange={handleSelection}

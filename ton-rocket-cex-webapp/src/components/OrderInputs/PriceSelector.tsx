@@ -103,7 +103,8 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
                 type='number'
                 disabled={isDisabled}
             />
-            <FormHelperText sx={{color: "#FF0000" }}>{getErrorMessage()}</FormHelperText>
+            
+            <FormHelperText color="warning">{getErrorMessage()}</FormHelperText>
             </FormControl>
         </Box>
     )
