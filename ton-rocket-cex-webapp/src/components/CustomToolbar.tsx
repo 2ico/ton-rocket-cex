@@ -2,11 +2,16 @@ import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import {FC} from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/context/storeUserSelection";
+import { generateParams } from '@/components/OrderItemList'
 
 const CustomToolbar: FC<{children?: React.ReactNode, location: string }> = ({children, location}) => {  
     const { t } = useTranslation();
     // var currentLocation = this.props.location.pathname
     const hideButtons = location in ["/settings"]
+    const filters = useSelector((state : RootState) => state.filterParam.value)
+
       return (
         <AppBar position="relative">
         <Toolbar>
@@ -14,7 +19,7 @@ const CustomToolbar: FC<{children?: React.ReactNode, location: string }> = ({chi
             {children}
           </Typography>
         {location == "/orders" || hideButtons ||
-          <Button color="inherit" component={Link} to="/orders">{t("order_history")}</Button>
+          <Button color="inherit" component={Link} to={"/orders" + generateParams(filters)}>{t("order_history")}</Button>
         }
         </Toolbar>
       </AppBar>

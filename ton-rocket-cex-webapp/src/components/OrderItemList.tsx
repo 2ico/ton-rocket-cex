@@ -12,7 +12,7 @@ import { Theme, useTheme } from "@mui/material/styles";
 import { OrderAction } from "@/api/types";
 import { OrderType } from "@/api/types";
 import { styled } from '@mui/material/styles';
-import { Callback } from "i18next";
+import { Callback, StringMap } from "i18next";
 import Chip from '@mui/material/Chip';
 
 
@@ -79,9 +79,33 @@ const filterFunctions = {
     "CURRENCY": (name: string) => 
         ((order: Order) => filterFunctions["BASE"](name)(order) || filterFunctions["QUOTE"](name)(order)),
     "TYPE": (type: string) => 
-        ((order: Order) => order.orderType === (type !== "Limit" ? OrderType.Limit : OrderType.Market)),
+        ((order: Order) => order.orderType === (type === "Limit" ? OrderType.Limit : OrderType.Market)),
     "ACTION": (action: string) => 
-        ((order: Order) => order.orderAction === (action !== "Buy" ? OrderAction.Buy : OrderAction.Sell))
+        ((order: Order) => order.orderAction === (action === "Buy" ? OrderAction.Buy : OrderAction.Sell))
+}
+
+interface generateParamsProps {
+    baseCurrency?: string|null,
+    quoteCurrency?: string|null,
+    currency?: string|null,
+    type?: string|null,
+    action?: string|null
+}
+
+function generateParams ({
+    baseCurrency = null, 
+    quoteCurrency = null, 
+    currency = null, 
+    type = null, 
+    action = null
+} : generateParamsProps) {
+    const param = [baseCurrency, quoteCurrency, currency, type, action]
+    const queryParam = ["BASE", "QUOTE", "CURRENCY", "TYPE", "ACTION"]
+        .map((k, i) => [k, param[i]] as [string, string]) // zip
+        .filter(([f, v] : [string, string]) => v !== null)
+        .map(([f, v] : [string, string]) => `${f}=${v}`)
+        .join('&')
+    return queryParam.length > 0 ? '?' + queryParam : ""
 }
 
 interface ChipData {
@@ -223,4 +247,5 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
     )
 }
 
-export { OrderItemList }
+export { OrderItemList, generateParams }
+export type { generateParamsProps }
