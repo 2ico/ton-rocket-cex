@@ -135,14 +135,16 @@ declare module '@mui/material/styles' {
       MuiInputAdornment: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-hint-color) !important"
+            ".MuiTypography-root": {
+              color: "var(--tg-theme-hint-color)"
+            }
           }
         }
       },
       MuiFormLabel: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-text-color)",
+            color: "var(--tg-theme-hint-color)",
           }
         }
       },
