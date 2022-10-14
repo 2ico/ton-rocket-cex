@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 import MenuLayout from '@/components/MenuLayout';
 import { Currency } from '@/api/types';
 
-import { selectBaseCurrency, selectQuoteCurrency } from '@/context/currencyPairSlice';
+import { setBaseCurrency, setQuoteCurrency } from '@/context/currencyPairSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Trade() {
@@ -95,9 +95,10 @@ export default function Trade() {
     console.log("setting pair to: "+pair)
     setPair(pair);
     
+    //TODO use separateUrlPair
     const [baseCurrency, quoteCurrency] = pair? pair.split('_') : ["",""]
-    dispatch(selectBaseCurrency(baseCurrency))
-    dispatch(selectQuoteCurrency(quoteCurrency))
+    dispatch(setBaseCurrency(baseCurrency))
+    dispatch(setQuoteCurrency(quoteCurrency))
   }
 
   

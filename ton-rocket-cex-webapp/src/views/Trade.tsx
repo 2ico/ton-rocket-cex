@@ -23,12 +23,15 @@ import CustomToolbar from '@/components/CustomToolbar';
 import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 import { t } from 'i18next';
 import MenuLayout from '@/components/MenuLayout';
+import { useDispatch } from 'react-redux';
+import { setBaseCurrency, setQuoteCurrency } from '@/context/currencyPairSlice';
 
 
 const totalTmp = new Decimal(123.4)
 
 export default function Trade() {
     const { pair } = useParams();
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     
     // const location = useLocation();
@@ -43,11 +46,14 @@ export default function Trade() {
     
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, quoteCurrency } = separateUrlPair(pair)
+    dispatch(setBaseCurrency(baseCurrency))
+    dispatch(setQuoteCurrency(quoteCurrency))
 
     // //TODO onClose show confirm popup (see DurgerKing)
     // WebApp.MainButton.setParams({
      
     //   });
+
 
     const handleMainButton = () => {
         WebApp.showPopup({ title: "Order details", message: "TODO" })
