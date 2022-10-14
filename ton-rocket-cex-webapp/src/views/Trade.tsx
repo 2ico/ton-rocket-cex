@@ -4,7 +4,7 @@ import Decimal from 'decimal.js';
 
 import { Order, OrderForm } from '@/components/OrderInputs/OrderForm';
 import CustomBackdrop from "@/components/CustomBackdrop";
-import { getOrderbook } from "@/api/currencies";
+import { getOrderbook, getPairInfo } from "@/api/currencies";
 import { Currency } from "@/api/types"
 import { useQuery } from 'react-query';
 
@@ -24,12 +24,15 @@ import {OrderAction} from '@/components/OrderInputs/ToggleBuySell';
 import { t } from 'i18next';
 import MenuLayout from '@/components/MenuLayout';
 
+import { useDispatch } from 'react-redux';
+import { selectBaseCurrency, selectQuoteCurrency } from '@/context/currencyPairSlice';
 
 const totalTmp = new Decimal(123.4)
 
 export default function Trade() {
     const { pair } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     
     // const location = useLocation();
     // location.state.test
@@ -43,6 +46,10 @@ export default function Trade() {
     
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, quoteCurrency } = separateUrlPair(pair)
+    useEffect(() => {
+        dispatch(selectBaseCurrency(baseCurrency))
+        dispatch(selectQuoteCurrency(quoteCurrency))
+    }, [])
 
     // //TODO onClose show confirm popup (see DurgerKing)
     // WebApp.MainButton.setParams({
@@ -63,14 +70,18 @@ export default function Trade() {
         refetchInterval: 10000, 
     });
 
-    if (isLoading) 
+    const {data: pairInfo, error: pairInfoError, isLoading: pairInfoLoading} 
+        = useQuery("pairInfo", () => getPairInfo(baseCurrency, quoteCurrency))
+
+    if (isLoading || pairInfoLoading)
         return (<CustomBackdrop />);
-    else if (error) 
+    else if (error || pairInfoError) 
         return <div>Error loading orderbook</div>;
    
 
     const result = data.data.results
-    const tradePrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]   
+    const pairResult : { base: Currency, quote: Currency } = pairInfo.data.results
+    const marketPrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]   
 
     const handleChange = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
         setIsOrderValid(isOrderValid);
@@ -80,7 +91,7 @@ export default function Trade() {
     }
 
     return (
-            <MenuLayout title={baseCurrency+"/"+quoteCurrency} location="/trade">
+            <MenuLayout title={pairResult.base.name+"/"+pairResult.quote.name} location="/trade">
             <Grid container position={'relative'}
                 direction={"column"} flexWrap={'nowrap'} height={'100%'}>
                 {/* <Typography variant="h6" component="div" className='SectionTitle'>
@@ -88,11 +99,10 @@ export default function Trade() {
                 </Typography> */}
                 <Grid item flexBasis={'200px'} position="relative" className="SectionContainer" sx={{my: 4}}>
                     <OrderForm 
-                        baseCurrency={baseCurrency} 
-                        priceCurrency={quoteCurrency}
-                        precision={data.data.results.precision}
-                        totalAmount={totalTmp} 
-                        defaultPrice={tradePrice}
+                        baseCurrency={pairResult.base} 
+                        quoteCurrency={pairResult.quote}
+                        totalUserAmount={totalTmp} 
+                        marketPrice={marketPrice}
                         orderbookPrice={orderbookPrice}
                         orderbookOrderAction={orderbookOrderAction}
                         // handleIssueOrder = {handleIssueOrder}

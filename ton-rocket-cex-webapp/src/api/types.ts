@@ -10,7 +10,8 @@ type Currency = {
     "feeWithdraw": {
         "fee": number,
         "currency": string
-    }
+    },
+    "precision": number
 };
 
 type CurrencyPair =   {

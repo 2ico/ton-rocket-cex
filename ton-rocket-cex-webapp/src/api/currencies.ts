@@ -21,7 +21,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-3
     },
     {
         "currency": "SCALE",
@@ -33,7 +34,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-4
     },
     {
         "currency": "BOLT",
@@ -45,7 +47,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-2
     },
     {
         "currency": "TGR",
@@ -57,7 +60,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-3
     },
     {
         "currency": "TIC",
@@ -69,7 +73,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-4
     },
     {
         "currency": "TAKE",
@@ -81,7 +86,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-2
     },
     {
         "currency": "HEDGE",
@@ -93,7 +99,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-2
     },
     {
         "currency": "KOTE",
@@ -105,7 +112,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-3
     },
     {
         "currency": "TNX",
@@ -117,7 +125,8 @@ const baseCurrencies: Array<Currency> = [
         "feeWithdraw": {
             "fee": 0.05,
             "currency": "TONCOIN"
-        }
+        },
+        "precision": 1e-4
     }
 ];
 
@@ -226,6 +235,14 @@ function getBaseCurrencies() {
     return wrapWithTimeout(baseCurrencies, 'baseCurrencies not found');
 };
 
+function getPairInfo(baseCurrency: string, quoteCurrency: string) {
+    return wrapWithTimeout({
+        base: baseCurrencies[baseCurrencies.findIndex((currency) => currency.currency === baseCurrency)],
+        quote: baseCurrencies[baseCurrencies.findIndex((currency) => currency.currency === quoteCurrency)],
+        pair: availablePairs_incomplete.filter((pair) => pair.base_currency == baseCurrency)[0]
+    }, "pair info not found")
+}
+
 type MarketState = {
     marketPrice: Decimal;
     precision: Decimal;
@@ -299,7 +316,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
             console.log(marketPrice.toNumber())
             marketGlobalState[pair] = {
                 marketPrice: marketPrice,
-                precision: precision,
+                precision: precision, // TODO: precision on both
                 buyers : Array.from(ordersGenerator(buyerNumber, marketPrice, -1, precision, defaultMaxOffset)),
                 sellers : Array.from(ordersGenerator(sellerNumber, marketPrice, 1, precision, defaultMaxOffset))
             }
@@ -367,5 +384,5 @@ function getUserOrders() {
     return wrapWithTimeout(userOrders, 'user order not retrived');
 }
 
-export { getBaseCurrencies, getAvailablePairs, getOrderbook, getUserOrders };
+export { getBaseCurrencies, getAvailablePairs, getOrderbook, getUserOrders, getPairInfo };
 export type { MarketState };

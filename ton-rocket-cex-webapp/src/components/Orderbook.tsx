@@ -131,21 +131,6 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
 
     const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
         [{ price: Decimal, amount: Decimal }[], { price: Decimal, amount: Decimal }[]]>([[], []])
-    
-    const [[rowStyleBuyers, rowStyleSellers], setRowStyle] = useState<
-        [CSSProperties[], CSSProperties[]]>([[], []])
-
-        const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-      };
-    
-      const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-      };
-
 
     useEffect(() => {
         const aggregation = aggregationValues[aggregationIndex]
@@ -153,17 +138,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
             aggregate(marketPrice, aggregation, buyers, computeBinIndexBid, -1).reverse(),
             aggregate(marketPrice, aggregation, sellers, computeBinIndexAsk, 1)
         ]
-        setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])
-        //TODO clean comments
-        // setRowStyle([
-        //     nextAggregateBuyers.slice(-sliceEnd).map(({price, amount}) => {
-        //         const perc = String(new Decimal(100.0).sub(amount.mul(100).div(totalAmountBuyers))));
-        //         return { background: `linear-gradient(90deg, #FFFFFF00 ${perc}%, #08FF6B88 ${perc}%)` }
-        //     }),
-        //     nextAggregateSellers.slice(0, sliceEnd).map(({price, amount}) => ({ background : `linear-gradient(90deg, #FF4C4C88 ${
-        //         String(amount.mul(100).div(totalAmountSellers))}%, #FFFFFF00 0%)`
-        //     }))
-        // ])        
+        setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])      
     }, [ aggregationIndex, updateSignal ])
 
     const tableHeadGenerator = (labels: [string, TableCellProps["align"]][]) => {

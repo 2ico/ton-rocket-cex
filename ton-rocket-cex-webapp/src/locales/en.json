@@ -13,5 +13,6 @@
     "settings": "Settings",
     "CONTINUE": "CONTINUE",
     "PLACE_ORDER": "PLACE ORDER",
-    "error_loading_currencies": "Error loading currencies"
+    "error_loading_currencies": "Error loading currencies",
+    "quote_amount": "Quote Amount"
 }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Decimal from 'decimal.js';
 import AmountSelector from '@/components/OrderInputs/AmountSelector';
 import PriceSelector from '@/components/OrderInputs/PriceSelector'
+import { Currency } from '@/api/types';
 import Box from '@mui/material/Box';
 
 import { OrderAction, ToggleBuySell } from '@/components/OrderInputs/ToggleBuySell';
@@ -18,29 +19,28 @@ type Order = {
 };
 
 type Props = {
-    totalAmount: Decimal
-    baseCurrency: string,
-    priceCurrency: string,
-    precision: Decimal,
-    defaultPrice: Decimal,
+    totalUserAmount: Decimal
+    baseCurrency: Currency,
+    quoteCurrency: Currency,
+    marketPrice: Decimal,
     orderbookPrice: Decimal,
     orderbookOrderAction: OrderAction,
     onChange: (orderState: Order, isOrderValid: boolean) => void,
 };
 
-const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice, 
-        orderbookOrderAction, precision, defaultPrice, onChange }: Props)
+const OrderForm = ({ baseCurrency, quoteCurrency, orderbookPrice, totalUserAmount,
+        orderbookOrderAction, marketPrice, onChange }: Props)
     : JSX.Element => {
     // const [amount, setAmount] = useState(0.0)
     const [[amount, isAmountValid], setAmountState] = useState([new Decimal(0.0), false])
-    const [[price, isPriceValid], setPriceState] = useState([defaultPrice, true])
+    const [[price, isPriceValid], setPriceState] = useState([marketPrice, true])
     const [orderAction, setOrderAction] = useState(orderbookOrderAction)
     const [orderType, setOrderType] = useState(OrderType.Limit)
 
     const handleOrderTypeChange = (newOrderType: OrderType) => {
         setOrderType(newOrderType)
         if (newOrderType == OrderType.Market)
-            setPriceState([defaultPrice, true])
+            setPriceState([marketPrice, true])
     }
 
     // useEffect(() => {
@@ -78,16 +78,18 @@ const OrderForm = ({ totalAmount, baseCurrency, priceCurrency, orderbookPrice,
                 priceState={[price, isPriceValid]}
                 onChange={setPriceState}
                 isDisabled={orderType === OrderType.Market}
-                amountType={priceCurrency}
-                precision={precision}
+                amountType={quoteCurrency.name}
+                precision={new Decimal(quoteCurrency.precision)}
             />
             </Grid>
             <Grid item>
             <AmountSelector
                 amountState={[amount, isAmountValid]}
+                price={price}
                 onChange={setAmountState}
-                quoteMax={totalAmount}
-                amountType={priceCurrency}
+                totalUserQuote={totalUserAmount}
+                baseCurrency={baseCurrency}
+                quoteCurrency={quoteCurrency}
             />
             </Grid>
         </Grid>
