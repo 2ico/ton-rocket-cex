@@ -70,7 +70,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
               return (
                 <div>
                   <ListItem sx={{ position: "relative" }} disablePadding key={pairString} alignItems="flex-start">
-                    <ListItemButton component="div" sx={{ px: 4 }} selected={selectedPair === pairString}
+                    <ListItemButton component="div" sx={{ px: 2 }} selected={selectedPair === pairString}
                       onClick={(event) => handleListItemClick(event, pairString)} >
                       <ListItemAvatar sx={{
                           "img" : {objectFit: "contain"}

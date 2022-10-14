@@ -119,6 +119,13 @@ declare module '@mui/material/styles' {
           }
         }
       },
+      MuiInputAdornment: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-hint-color)"
+          }
+        }
+      },
       MuiFormLabel: {
         styleOverrides: {
           root: {
