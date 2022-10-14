@@ -26,6 +26,13 @@ export default function Orders() {
     
     WebApp.disableClosingConfirmation();
     
+    const handleDeleteOrder = (id: number) => {
+        WebApp.showConfirm("Cancel this Order?", (confirmed: boolean) => {
+            if (confirmed)
+                WebApp.showPopup({message: "Order canceled successfully"})
+        })
+    }
+
     const { data, error, isLoading } = useQuery("userOrders", getUserOrders);
 
     if (isLoading) 
@@ -39,7 +46,7 @@ export default function Orders() {
         <MenuLayout location="/orders" title={t("order_history")}>
             <OrderItemList 
                 userOrders={userOrders}
-                onClick={(x) => console.log(x)}
+                onClick={handleDeleteOrder}
                 filters={filters}
             />
         </MenuLayout>

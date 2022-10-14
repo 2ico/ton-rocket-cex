@@ -79,7 +79,6 @@ const AmountSelector = ({
         setFirstUse(false)
         setBaseAmountText(text)
         if (text !== "") {
-            console.log(text, "handled")
             const newAmount = roundUp(new Decimal(Number(text)), baseCurrency.precision)
             const newQuote = roundUp(baseToQuote(newAmount, price), quoteCurrency.precision)
             setQuoteAmountText(newQuote.toString())

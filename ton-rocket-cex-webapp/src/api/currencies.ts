@@ -298,7 +298,6 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
             (currency) => currency.currency == baseCurrency)].precision)
 
         const pair = baseCurrency + "_" + quoteCurrency
-        console.log(pair, quotePrecision.toNumber(), basePrecision.toNumber())
         if (pair in marketGlobalState) { 
             // update existing market pair            
             const marketPrice = marketGlobalState[pair].marketPrice
@@ -319,7 +318,6 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
             // generate market pair
             const marketPrice = randomAmount(defaultMaxMarketPrice).add(
                 quotePrecision.mul(defaultMaxOffset)).toNearest(quotePrecision)
-            console.log(marketPrice.toNumber())
             marketGlobalState[pair] = {
                 marketPrice: marketPrice,
                 quotePrecision: quotePrecision,
