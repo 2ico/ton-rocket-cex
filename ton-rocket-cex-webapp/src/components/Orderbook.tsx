@@ -179,16 +179,16 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
 
         return (
             <RowComponent style={{ background: orderShareBar }} {... rowProps}>
-                <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
+                <CellComponent align={"left"} style={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
+                <CellComponent align={"left"} style={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
+                <CellComponent align={"right"} style={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
                     sellerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
+                <CellComponent align={"right"} style={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
                     sellerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
             </RowComponent>
