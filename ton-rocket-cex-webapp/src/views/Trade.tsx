@@ -63,6 +63,8 @@ export default function Trade() {
         // WebApp.showPopup({ title: "Order details", message: "TODO" })
         if(order && isOrderValid){
             WebApp.sendData(order)
+        }else{
+            WebApp.showPopup({ title: "Invalid order", message: "Please fill in the details of your order." })
         }
     }
     
