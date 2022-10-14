@@ -62,7 +62,7 @@ export default function Trade() {
     const handleMainButton = () => {
         // WebApp.showPopup({ title: "Order details", message: "TODO" })
         if(order && isOrderValid){
-            WebApp.sendData(JSON.stringify(order))
+            WebApp.showPopup({title: "Order successful", message: JSON.stringify(order)})
         }else{
             WebApp.showPopup({ title: "Invalid order", message: "Please fill in the details of your order." })
         }
