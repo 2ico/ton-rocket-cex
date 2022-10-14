@@ -3,7 +3,8 @@
     border-width: 2px;
     border-radius: 20px;
     padding: 8px 2px;
-    min-width: 8em;
+    min-width: 6em;
+    max-width: 8em;
     background-color: none;
 }
 .buy-sell-toggle-button-group .MuiToggleButtonGroup-grouped{

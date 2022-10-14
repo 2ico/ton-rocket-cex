@@ -61,7 +61,7 @@ const PriceSelector = ({ priceState, onChange: setPriceState, isDisabled, amount
 
     return (
         <Box className="Form-control-container">   
-            <FormControl>
+            <FormControl fullWidth={true}>
             <InputLabel>{t("price")}</InputLabel>
             <Input
                 // autoFocus={true}

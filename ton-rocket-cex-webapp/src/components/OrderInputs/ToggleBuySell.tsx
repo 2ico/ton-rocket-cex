@@ -28,8 +28,9 @@ function ToggleBuySell({ currentValue, onChange: handleChange }: Props) {
             exclusive
             onChange={handleSelection}
             aria-label="text alignment"
+            sx={{width: "100%"}}
         >
-            <ToggleButton value="Buy" sx={{ color: "rgb(49, 181, 69)", borderColor: "rgb(49, 181, 69)", // backgroundColor: "rgba(0, 0, 0, 0.08)",
+            <ToggleButton value="Buy" sx={{ width: "50%", color: "rgb(49, 181, 69)", borderColor: "rgb(49, 181, 69)", // backgroundColor: "rgba(0, 0, 0, 0.08)",
             "&.Mui-selected" : {
                 color: "rgb(49, 181, 69) !important",
                 backgroundColor: "rgba(49, 181, 69, 0.2) !important"
@@ -39,7 +40,7 @@ function ToggleBuySell({ currentValue, onChange: handleChange }: Props) {
               }}>
                 {t("buy")}
             </ToggleButton>
-            <ToggleButton value="Sell" sx={{ color: "rgb(211, 47, 47)", borderColor: "rgb(211, 47, 47)",
+            <ToggleButton value="Sell" sx={{ width: "50%", color: "rgb(211, 47, 47)", borderColor: "rgb(211, 47, 47)",
             "&.Mui-selected" : {
                 color: "rgb(211, 47, 47) !important",
                 backgroundColor: "rgba(211, 47, 47, 0.2) !important",

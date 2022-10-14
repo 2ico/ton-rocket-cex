@@ -10,9 +10,11 @@
     "ask": "Ask",
     "select_a_pair": "Select a pair",
     "order_history":"Order history",
+    "order_type": "Order type",
     "settings": "Settings",
     "CONTINUE": "CONTINUE",
     "PLACE_ORDER": "PLACE ORDER",
     "error_loading_currencies": "Error loading currencies",
-    "quote_amount": "Quote Amount"
+    "quote_amount": "Quote Amount",
+    "order_history_empty": "The order history is empty."
 }

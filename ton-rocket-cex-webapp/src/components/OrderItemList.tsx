@@ -14,6 +14,10 @@ import { OrderType } from "@/api/types";
 import { styled } from '@mui/material/styles';
 import { Callback, StringMap } from "i18next";
 import Chip from '@mui/material/Chip';
+import { useTranslation } from "react-i18next";
+
+import {filterLabels, filterFunctions } from "@/utils/utils";
+import { Divider } from "@mui/material";
 
 
 interface BaseCurrencySelectProp {
@@ -63,51 +67,6 @@ const BaseCurrencySelect = ({baseCurrencies, selectedCurrecies, onChange} : Base
     )
 }
 
-const filterLables = {
-    "BASE": (name: string) => `Base curr: ${name}`,
-    "QUOTE": (name: string) => `Quote curr: ${name}`,
-    "CURRENCY": (name: string) => `Currency: ${name}`,
-    "TYPE": (name: string) => `${name}`,
-    "ACTION": (name: string) => `${name}`,
-}
-
-const filterFunctions = {
-    "BASE": (name: string) => 
-        ((order: Order) => order.pair.base_currency === name),
-    "QUOTE": (name: string) => 
-        ((order: Order) => order.pair.quote_currency === name),
-    "CURRENCY": (name: string) => 
-        ((order: Order) => filterFunctions["BASE"](name)(order) || filterFunctions["QUOTE"](name)(order)),
-    "TYPE": (type: string) => 
-        ((order: Order) => order.orderType === (type === "Limit" ? OrderType.Limit : OrderType.Market)),
-    "ACTION": (action: string) => 
-        ((order: Order) => order.orderAction === (action === "Buy" ? OrderAction.Buy : OrderAction.Sell))
-}
-
-interface generateParamsProps {
-    baseCurrency?: string|null,
-    quoteCurrency?: string|null,
-    currency?: string|null,
-    type?: string|null,
-    action?: string|null
-}
-
-function generateParams ({
-    baseCurrency = null, 
-    quoteCurrency = null, 
-    currency = null, 
-    type = null, 
-    action = null
-} : generateParamsProps) {
-    const param = [baseCurrency, quoteCurrency, currency, type, action]
-    const queryParam = ["BASE", "QUOTE", "CURRENCY", "TYPE", "ACTION"]
-        .map((k, i) => [k, param[i]] as [string, string]) // zip
-        .filter(([f, v] : [string, string]) => v !== null)
-        .map(([f, v] : [string, string]) => `${f}=${v}`)
-        .join('&')
-    return queryParam.length > 0 ? '?' + queryParam : ""
-}
-
 interface ChipData {
     key: number;
     label: string;
@@ -144,12 +103,10 @@ const ChipsFilter = ({ chipData, setChipData } : ChipsFilterProp)
         >
             {chipData.map((data) => {
                 return (
-                <ListItem key={data.key}>
                     <Chip
                     label={data.label}
                     onDelete={handleDelete(data)}
                     />
-                </ListItem>
                 );
             })}
         </Box>
@@ -167,6 +124,7 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
 {
     const baseCurrencyList = Array.from(new Set(userOrders.map((order) => order.pair.base_currency)).values())
 
+    const {t} = useTranslation();
     /*
     const tmpChipData : ChipData[] = []
     for (let i = 0; i < filters.length; i += 1) {
@@ -212,39 +170,41 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
     */
 
     const [chipFilters, setChipData] = useState(
-        filters.filter(([key, value] : [string, string]) => Object.keys(filterLables).includes(key))
+        filters.filter(([key, value] : [string, string]) => Object.keys(filterLabels).includes(key))
             .map(([key, value] : [string, string], idx) => ({
                 key: idx,
                 // @ts-ignore
-                label: filterLables[key](value),
+                label: filterLabels[key](value),
                 // @ts-ignore
                 filter: filterFunctions[key](value)
             })));
 
     if (baseCurrencyList.length == 0)
-        return (<div> No orders placed </div>)
+        return (<div>{t("order_history_empty")}</div>)
 
     const [selectedCurrency, setSelectedCurrency] = useState<string[]>([])
 
     return (
-        <Box>
+        <Box sx={{width: "100%"}}>
             <ChipsFilter 
                 chipData={chipFilters}
                 setChipData={setChipData}
             />
-            <List sx={{ width: '100%' }}>
+            <List>
                 {userOrders.filter((order) => chipFilters.every(({key, label, filter}) => filter(order)))
                     .map((order) => (
+                        <div>
                         <OrderItem
                             key={order.id}
                             order={order}
-                            onClick={onClick}
+                            onCancel={onClick}
                         />
+                        <Divider className="ListItemDivider"/>
+                        </div>
                     ))}
             </List>
         </Box>
     )
 }
 
-export { OrderItemList, generateParams }
-export type { generateParamsProps }
+export { OrderItemList }

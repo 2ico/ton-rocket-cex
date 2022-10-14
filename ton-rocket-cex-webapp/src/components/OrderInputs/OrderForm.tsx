@@ -68,9 +68,9 @@ const OrderForm = ({ baseCurrency, quoteCurrency, orderbookPrice, totalUserAmoun
             }}
         >   
             <Grid item>
-                <Grid container spacing={2} alignItems={'flex-end'}>
-                    <Grid item><ToggleBuySell currentValue={orderAction} onChange={setOrderAction} /></Grid>
-                    <Grid item><OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} /></Grid>
+                <Grid container maxWidth={"360px"} spacing={2} alignItems={'flex-end'}>
+                    <Grid item flex={1}><ToggleBuySell currentValue={orderAction} onChange={setOrderAction} /></Grid>
+                    <Grid item flex={0}><OrderSelector currentOrderType={orderType} onChange={handleOrderTypeChange} /></Grid>
                 </Grid>
             </Grid>
             <Grid item>
