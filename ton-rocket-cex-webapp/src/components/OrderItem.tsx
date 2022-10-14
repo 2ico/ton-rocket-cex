@@ -24,7 +24,7 @@ const OrderItem = ({ order, onCancel } : OrderItemProp)
                     </IconButton>
                 }
             >
-                <Box flexBasis={"32px"} sx={{ pr: 2, color: (order.orderAction == OrderAction.Buy ? "rgb(49, 181, 69)" : "#FF4C4C")}}>
+                <Box flexBasis={"32px"} sx={{ pr: 1, color: (order.orderAction == OrderAction.Buy ? "rgb(49, 181, 69)" : "#FF4C4C")}}>
                 <ListItemIcon sx={{minWidth: "0px"}}>
                     { order.orderAction == OrderAction.Buy ? <TrendingUp sx={{color: "rgb(49, 181, 69)"}}/> : <TrendingDown sx={{color: "#FF4C4C"}}/> }
                 </ListItemIcon>
