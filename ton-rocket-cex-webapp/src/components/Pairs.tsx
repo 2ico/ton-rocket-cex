@@ -108,7 +108,7 @@ function Pairs(props: { quoteCurrencies: Currency[] | null, searchQuery: string,
                       </Box>
                     </ListItemButton>
                   </ListItem>
-                  <Divider sx={{ ml: 4 }} />
+                  <Divider className="ListItemDivider"/>
                 </div>
               )
             })

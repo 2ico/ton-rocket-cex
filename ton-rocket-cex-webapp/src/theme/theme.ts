@@ -200,6 +200,15 @@ declare module '@mui/material/styles' {
             }
           }
         }
+      },
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            "&.ListItemDivider": {
+              marginLeft: "32px",
+            }
+          }
+        }
       }
     },
   });

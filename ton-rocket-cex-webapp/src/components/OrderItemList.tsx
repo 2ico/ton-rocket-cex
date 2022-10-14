@@ -17,6 +17,7 @@ import Chip from '@mui/material/Chip';
 import { useTranslation } from "react-i18next";
 
 import {filterLabels, filterFunctions } from "@/utils/utils";
+import { Divider } from "@mui/material";
 
 
 interface BaseCurrencySelectProp {
@@ -102,12 +103,10 @@ const ChipsFilter = ({ chipData, setChipData } : ChipsFilterProp)
         >
             {chipData.map((data) => {
                 return (
-                <ListItem key={data.key}>
                     <Chip
                     label={data.label}
                     onDelete={handleDelete(data)}
                     />
-                </ListItem>
                 );
             })}
         </Box>
@@ -187,19 +186,22 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
     const [selectedCurrency, setSelectedCurrency] = useState<string[]>([])
 
     return (
-        <Box>
+        <Box sx={{width: "100%"}}>
             <ChipsFilter 
                 chipData={chipFilters}
                 setChipData={setChipData}
             />
-            <List sx={{ width: '100%' }}>
+            <List>
                 {userOrders.filter((order) => chipFilters.every(({key, label, filter}) => filter(order)))
                     .map((order) => (
+                        <div>
                         <OrderItem
                             key={order.id}
                             order={order}
-                            onClick={onClick}
+                            onCancel={onClick}
                         />
+                        <Divider className="ListItemDivider"/>
+                        </div>
                     ))}
             </List>
         </Box>
