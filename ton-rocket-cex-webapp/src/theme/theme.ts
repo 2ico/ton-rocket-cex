@@ -209,6 +209,14 @@ declare module '@mui/material/styles' {
             }
           }
         }
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-hint-color)",
+            backgroundColor: "var(--tg-theme-secondary-bg-color)",
+          }
+        }
       }
     },
   });
