@@ -123,11 +123,9 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
 {
     const { t } = useTranslation();
 
-    const {marketPrice, precision, buyers, sellers} = marketState
-    const aggregationValues = precisionMultiples.map((m) => precision.mul(m))
+    const {marketPrice, quotePrecision, basePrecision, buyers, sellers} = marketState
+    const aggregationValues = precisionMultiples.map((m) => quotePrecision.mul(m))
     const [aggregationIndex, setAggregationIndex] = useState(0)
-
-    const [totalAmountBuyers, totalAmountSellers] = [computeTotalAmount(buyers), computeTotalAmount(sellers)]
 
     const [[aggregateBuyers, aggregateSellers], setAggregateOrders] = useState<
         [{ price: Decimal, amount: Decimal }[], { price: Decimal, amount: Decimal }[]]>([[], []])
@@ -137,7 +135,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         const [nextAggregateBuyers, nextAggregateSellers] = [
             aggregate(marketPrice, aggregation, buyers, computeBinIndexBid, -1).reverse(),
             aggregate(marketPrice, aggregation, sellers, computeBinIndexAsk, 1)
-        ]
+        ]  
         setAggregateOrders([nextAggregateBuyers, nextAggregateSellers])      
     }, [ aggregationIndex, updateSignal ])
 
@@ -162,6 +160,11 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         
         const aggregation = aggregationValues[aggregationIndex]
 
+        let indexTotalAmount = Math.min(sliceEnd * sliceEnd, aggregateBuyers.length, aggregateSellers.length);
+        const [totalAmountBuyers, totalAmountSellers] = [
+            computeTotalAmount(aggregateBuyers.slice(0, indexTotalAmount)), 
+            computeTotalAmount(aggregateSellers.slice(0, indexTotalAmount))]
+
         const b = String(new Decimal(50).sub(buyerEntry.amount.mul(100.0).div(totalAmountBuyers)))
         const s = String(new Decimal(50).add(sellerEntry.amount.mul(100.0).div(totalAmountSellers)))
 
@@ -177,7 +180,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         return (
             <RowComponent style={{ background: orderShareBar }} {... rowProps}>
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
-                    buyerEntry.amount.toDecimalPlaces(2).toString()
+                    buyerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
                 <CellComponent align={"left"} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
@@ -186,7 +189,7 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
                     sellerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
                 <CellComponent align={"right"} onClick={onSellerClick} {... cellProps}> { 
-                    sellerEntry.amount.toDecimalPlaces(2).toString()
+                    sellerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
             </RowComponent>
         )

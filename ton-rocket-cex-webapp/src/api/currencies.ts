@@ -245,7 +245,8 @@ function getPairInfo(baseCurrency: string, quoteCurrency: string) {
 
 type MarketState = {
     marketPrice: Decimal;
-    precision: Decimal;
+    quotePrecision: Decimal;
+    basePrecision: Decimal;
     buyers: {
         price: Decimal;
         amount: Decimal;
@@ -257,7 +258,8 @@ type MarketState = {
 };
 
 function marketGenerator(buyerNumber : number, sellerNumber : number) {
-    const precision = new Decimal(0.01)
+    const quotePrecision = new Decimal(0.001)
+    const basePrecision = new Decimal(0.01)
     const defaultMaxOffset = 8000
     const defaultMaxAmount = new Decimal(100)
     const defaultMaxMarketPrice = new Decimal(100)
@@ -295,7 +297,7 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
         if (pair in marketGlobalState) { 
             // update existing market pair            
             const marketPrice = marketGlobalState[pair].marketPrice
-            const precision = marketGlobalState[pair].precision
+            const precision = marketGlobalState[pair].quotePrecision
 
             for (let i = 0; i < Math.sqrt(buyerNumber); i += 1) {
                 const index = Math.floor(Math.random() * buyerNumber);
@@ -312,13 +314,14 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
         } else {
             // generate market pair
             const marketPrice = randomAmount(defaultMaxMarketPrice).add(
-                precision.mul(defaultMaxOffset)).toNearest(precision)
+                quotePrecision.mul(defaultMaxOffset)).toNearest(quotePrecision)
             console.log(marketPrice.toNumber())
             marketGlobalState[pair] = {
                 marketPrice: marketPrice,
-                precision: precision, // TODO: precision on both
-                buyers : Array.from(ordersGenerator(buyerNumber, marketPrice, -1, precision, defaultMaxOffset)),
-                sellers : Array.from(ordersGenerator(sellerNumber, marketPrice, 1, precision, defaultMaxOffset))
+                quotePrecision: quotePrecision,
+                basePrecision: basePrecision,
+                buyers : Array.from(ordersGenerator(buyerNumber, marketPrice, -1, quotePrecision, defaultMaxOffset)),
+                sellers : Array.from(ordersGenerator(sellerNumber, marketPrice, 1, quotePrecision, defaultMaxOffset))
             }
         }
 
