@@ -178,19 +178,19 @@ export default function Orderbook( {updateSignal, marketState, onRowClick: selec
         // const orderShareBarOnSellerClick = `linear-gradient(90deg, #CCCCCC00 ${b}%, rgb(49, 181, 69) ${b}%, rgb(49, 181, 69) 50%, #FF4C4C 50%, #FF4C4C ${s}%, #FFFFFF00 ${s}%)`
 
         return (
-            <RowComponent style={{ background: orderShareBar }} {... rowProps}>
-                <CellComponent align={"left"} style={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
+            <RowComponent sx={{ background: orderShareBar }} {... rowProps}>
+                <CellComponent align={"left"} sx={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"left"} style={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
+                <CellComponent align={"left"} sx={{ background: "none" }} onClick={onBuyerClick} {... cellProps}> { 
                     buyerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"right"} style={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
+                <CellComponent align={"right"} sx={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
                     sellerEntry.price.toFixed(Math.max(-aggregation.log(new Decimal(10)).floor().toNumber(), 0))
                 } </CellComponent>
-                <CellComponent align={"right"} style={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
+                <TableCell align={"right"} sx={{ background: "none" }} onClick={onSellerClick} {... cellProps}> { 
                     sellerEntry.amount.toFixed(Math.max(-basePrecision.log(new Decimal(10)).floor().toNumber(), 0))
-                } </CellComponent>
+                } </TableCell>
             </RowComponent>
         )
     
