@@ -18,6 +18,8 @@ bot.on("text", ctx => ctx.reply(`Hello ${ctx.from.first_name}!`, {
         ]
     }}));
 
+bot.on('web_app_data', ctx => ctx.reply("```\n"+ctx.webAppData.data.text()+"\n```", {parse_mode: 'MarkdownV2'}))
+
 // Start webhook via launch method (preferred)
 bot.launch({
   webhook: {
