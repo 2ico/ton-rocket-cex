@@ -53,6 +53,16 @@ declare module '@mui/material/styles' {
           },
         }
       },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            color: "var(--tg-theme-button-color)",
+            "&.Mui-disabled": {
+              color: "var(--tg-theme-hint-color)"
+            }
+          }
+        }
+      },
       MuiAppBar: {
         styleOverrides: {
           root: {
@@ -96,7 +106,7 @@ declare module '@mui/material/styles' {
       MuiInput: {
         styleOverrides: {
           root: {
-              "::after": { 
+              "&::after": { 
                 borderBottom: "2px solid var(--tg-theme-button-color)"
               }
           }
@@ -106,7 +116,7 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             color: "var(--tg-theme-text-color)",
-            "::placeholder": { 
+            "&::placeholder": { 
               color: "var(--tg-theme-hint-color)"
             },
           },
@@ -115,14 +125,17 @@ declare module '@mui/material/styles' {
       MuiInputLabel: {
         styleOverrides:{
           root: {
-            transform: "scale(0.75)"
+            transform: "scale(0.75)",
+            "&.Mui-focused": {
+              color: "var(--tg-theme-button-color)"
+            }
           }
         }
       },
       MuiInputAdornment: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-hint-color)"
+            color: "var(--tg-theme-hint-color) !important"
           }
         }
       },

@@ -14,6 +14,7 @@ import { OrderType } from "@/api/types";
 import { styled } from '@mui/material/styles';
 import { Callback, StringMap } from "i18next";
 import Chip from '@mui/material/Chip';
+import { useTranslation } from "react-i18next";
 
 
 interface BaseCurrencySelectProp {
@@ -64,8 +65,8 @@ const BaseCurrencySelect = ({baseCurrencies, selectedCurrecies, onChange} : Base
 }
 
 const filterLables = {
-    "BASE": (name: string) => `Base curr: ${name}`,
-    "QUOTE": (name: string) => `Quote curr: ${name}`,
+    "BASE": (name: string) => `Base currency.: ${name}`,
+    "QUOTE": (name: string) => `Quote currency: ${name}`,
     "CURRENCY": (name: string) => `Currency: ${name}`,
     "TYPE": (name: string) => `${name}`,
     "ACTION": (name: string) => `${name}`,
@@ -167,6 +168,7 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
 {
     const baseCurrencyList = Array.from(new Set(userOrders.map((order) => order.pair.base_currency)).values())
 
+    const {t} = useTranslation();
     /*
     const tmpChipData : ChipData[] = []
     for (let i = 0; i < filters.length; i += 1) {
@@ -223,7 +225,7 @@ const OrderItemList = ({userOrders, onClick, filters} : UserOrderLstPromp)
             })));
 
     if (baseCurrencyList.length == 0)
-        return (<div> No orders placed </div>)
+        return (<div>{t("order_history_empty")}</div>)
 
     const [selectedCurrency, setSelectedCurrency] = useState<string[]>([])
 
