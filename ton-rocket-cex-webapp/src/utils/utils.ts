@@ -32,7 +32,7 @@ function generateParams ({
 }
 
 const filterLabels = {
-    "BASE": (name: string) => `Base currency.: ${name}`,
+    "BASE": (name: string) => `Base currency: ${name}`,
     "QUOTE": (name: string) => `Quote currency: ${name}`,
     "CURRENCY": (name: string) => `Currency: ${name}`,
     "TYPE": (name: string) => `${name}`,
