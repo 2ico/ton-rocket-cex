@@ -37,17 +37,20 @@ export default function Trade() {
   const [pair, setPair] = useState<string|null>(null);
   let navigate = useNavigate();
   const dispatch = useDispatch()
+
+  WebApp.disableClosingConfirmation();
+  
   
   const { data, error, isLoading } = useQuery('baseCurrencies', getBaseCurrencies, {
-  // onSuccess: (data) => {
-  //   let baseCurrencies = data.data.results;
-  //   setQuoteCurrency(baseCurrencies[0]);
-  // }
-  });
-
-  let quoteCurrencies : Array<Currency> | null = null;
-  
-  // useEffect(() => {
+    // onSuccess: (data) => {
+      //   let baseCurrencies = data.data.results;
+      //   setQuoteCurrency(baseCurrencies[0]);
+      // }
+    });
+    
+    let quoteCurrencies : Array<Currency> | null = null;
+    
+    // useEffect(() => {
   //   if(quoteCurrencies == null) return
   //   setQuoteCurrency(quoteCurrencies[tabValue]);
   // }, [tabValue, quoteCurrencies])

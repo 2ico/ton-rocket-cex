@@ -10,6 +10,7 @@ import CustomBackdrop from "@/components/CustomBackdrop";
 import { useLocation } from 'react-router-dom';
 import { useMemo } from "react";
 import { Order } from "@/api/types";
+import WebApp from "@twa-dev/sdk";
 
 function useQueryParam() {
     const { search } = useLocation();
@@ -20,9 +21,11 @@ function useQueryParam() {
 export default function Orders() {
     const { t } = useTranslation();
     // const navigate = useNavigate();
-    const queryFilters = useQueryParam();
+    const queryFilters = useQueryParam();    
     const filters : [string, string][] = Array.from(queryFilters.entries())
-
+    
+    WebApp.disableClosingConfirmation();
+    
     const { data, error, isLoading } = useQuery("userOrders", getUserOrders);
 
     if (isLoading) 

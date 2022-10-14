@@ -37,16 +37,19 @@ export default function Trade() {
     // location.state.test
 
     const [isOrderValid, setIsOrderValid] = useState(false);
+    const [order, setOrder] = useState<Order | null>(null);
     
     const [[orderbookPrice, orderbookOrderAction], setOrderbookOrder] = 
         useState([new Decimal(0.0), OrderAction.Buy])
 
+    WebApp.enableClosingConfirmation();
+        
     if (pair == null) return (<div>Pair not specified</div>); //TODO make proper error component
-    
+        
     // TODO? pass pair via useLocation together with market price etc (already at hand in Currency.tsx)
     const { baseCurrency, quoteCurrency } = separateUrlPair(pair)
     useEffect(() => {
-        dispatch(setBaseCurrency(baseCurrency))
+            dispatch(setBaseCurrency(baseCurrency))
         dispatch(setQuoteCurrency(quoteCurrency))
     }, [])
 
@@ -57,7 +60,10 @@ export default function Trade() {
 
 
     const handleMainButton = () => {
-        WebApp.showPopup({ title: "Order details", message: "TODO" })
+        // WebApp.showPopup({ title: "Order details", message: "TODO" })
+        if(order && isOrderValid){
+            WebApp.sendData(order)
+        }
     }
     
     const [updateSignal, setUpdateSignal] = useState(false)
@@ -83,10 +89,11 @@ export default function Trade() {
     const pairResult : { base: Currency, quote: Currency } = pairInfo.data.results
     const marketPrice = result.marketPrice //data.results["marketPrice"] // data["marketPrice"]   
 
-    const handleChange = ({ price, amount, orderType, orderAction }: Order, isOrderValid: boolean) => {
+    const handleChange = (newOrder: Order, isOrderValid: boolean) => {
         setIsOrderValid(isOrderValid);
         if (isOrderValid) {
-            // console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid) 
+            // console.log(price, amount, orderAction.toString(), orderAction.toString(), isOrderValid)
+            setOrder(newOrder)
         }
     }
 

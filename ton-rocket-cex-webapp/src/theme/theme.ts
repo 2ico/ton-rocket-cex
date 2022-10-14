@@ -39,14 +39,14 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             textTransform: 'none',
-            color: "var(--tg-theme-link-color)"
+            color: "var(--tg-theme-button-color)"
           },
         }
       },
       MuiButtonBase: {
         styleOverrides: {
           root: {
-            color: "var(--tg-theme-link-color)",
+            color: "var(--tg-theme-button-color)",
             // ":hover": {
             //   backgroundColor: "" 
             // },
@@ -215,6 +215,10 @@ declare module '@mui/material/styles' {
           root: {
             color: "var(--tg-theme-hint-color)",
             backgroundColor: "var(--tg-theme-secondary-bg-color)",
+            ".MuiButtonBase-root": {
+              //TODO
+              color: "var(--tg-theme-button-color) !important",
+            }
           }
         }
       }
