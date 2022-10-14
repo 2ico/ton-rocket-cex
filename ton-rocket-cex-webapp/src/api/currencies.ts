@@ -258,8 +258,6 @@ type MarketState = {
 };
 
 function marketGenerator(buyerNumber : number, sellerNumber : number) {
-    const quotePrecision = new Decimal(0.001)
-    const basePrecision = new Decimal(0.01)
     const defaultMaxOffset = 8000
     const defaultMaxAmount = new Decimal(100)
     const defaultMaxMarketPrice = new Decimal(100)
@@ -293,22 +291,28 @@ function marketGenerator(buyerNumber : number, sellerNumber : number) {
 
     let marketGlobalState : { [pair: string] : MarketState } = { }
 
-    const updateMarketState = (pair : string) => {
+    const updateMarketState = (baseCurrency: string, quoteCurrency : string) => {
+        const quotePrecision = new Decimal(baseCurrencies[baseCurrencies.findIndex(
+            (currency) => currency.currency == quoteCurrency)].precision)
+        const basePrecision = new Decimal(baseCurrencies[baseCurrencies.findIndex(
+            (currency) => currency.currency == baseCurrency)].precision)
+
+        const pair = baseCurrency + "_" + quoteCurrency
+        console.log(pair, quotePrecision.toNumber(), basePrecision.toNumber())
         if (pair in marketGlobalState) { 
             // update existing market pair            
             const marketPrice = marketGlobalState[pair].marketPrice
-            const precision = marketGlobalState[pair].quotePrecision
 
             for (let i = 0; i < Math.sqrt(buyerNumber); i += 1) {
                 const index = Math.floor(Math.random() * buyerNumber);
                 marketGlobalState[pair].buyers[index] = 
-                    randomOrder(marketPrice, -1, precision, defaultMaxOffset)                
+                    randomOrder(marketPrice, -1, quotePrecision, defaultMaxOffset)                
             }
 
             for (let i = 0; i < Math.sqrt(sellerNumber); i += 1) {
                 const index = Math.floor(Math.random() * sellerNumber);
                 marketGlobalState[pair].sellers[index] = 
-                    randomOrder(marketPrice, 1, precision, defaultMaxOffset)                
+                    randomOrder(marketPrice, 1, quotePrecision, defaultMaxOffset)                
             }
 
         } else {
@@ -346,7 +350,7 @@ const myMarket = marketGenerator(100, 100)
 
 function getOrderbook(baseCurrency: string, quoteCurrency: string) {
     return wrapWithTimeout(
-        myMarket(baseCurrency + "-" + quoteCurrency),
+        myMarket(baseCurrency, quoteCurrency),
         "orderbook not found")
 }
 
