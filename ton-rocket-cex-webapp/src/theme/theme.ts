@@ -195,8 +195,8 @@ declare module '@mui/material/styles' {
         styleOverrides: {
           root: {
             ".MuiTableCell-root": {
-                background: "none",
-                color: "var(--tg-theme-text-color)"
+              backgroundColor: "var(--tg-theme-secondary-bg-color)",
+              color: "var(--tg-theme-text-color)"
             }
           }
         }
